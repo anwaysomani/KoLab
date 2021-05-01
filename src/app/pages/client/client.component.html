@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-3 client-list">
+    <div class="list-group">
+      <div *ngIf="entity.length > 0">
+        <a href="#" class="list-group-item list-group-item-action p-l-2e" aria-current="true"
+           (click)="loadDocInfo(item.id)" *ngFor="let item of entity">
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="mb-1">{{item.name}}</h6>
+          </div>
+        </a>
+      </div>
+      <div class="text-center list-group-item list-group-item-action p-l-2e m-t-1e pt-0 pb-0" aria-current="true"
+           *ngIf="entity.length < 1">
+        <h5 class="mb-1">No clients registered yet</h5>
+      </div>
+    </div>
+  </div>
+  <div class="col-9"> <!-- DETAILS -->
+    <div class="row">
+      <div class="col-2"> <!-- CURRENT DATE -->
+        <div class="date-box">
+          <select>
+            <option value="date" *ngFor="let date of datesInMonth(dates)">{{date}}</option>
+          </select>
+          {{currMonYear}}
+        </div>
+      </div>
+      <div class="col-9 text-end"> <!-- CLIENT NAME -->
+        <h3>NORTH EAST CLIENT HULED</h3>
+      </div>
+    </div>
+    <div class="row">
+
+
+    </div>
+  </div>
+</div>
