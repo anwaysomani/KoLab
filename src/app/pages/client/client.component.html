@@ -1,37 +1,104 @@
 <div class="row">
   <div class="col-3 client-list">
     <div class="list-group">
-      <div *ngIf="entity.length > 0">
+      <div *ngIf="(isEmployees ? employeeList : clientList).length > 0">
         <a href="#" class="list-group-item list-group-item-action p-l-2e" aria-current="true"
-           (click)="loadDocInfo(item.id)" *ngFor="let item of entity">
+           (click)="loadDocInfo(item.id)" *ngFor="let item of (isEmployees ? employeeList : clientList)">
           <div class="d-flex w-100 justify-content-between">
             <h6 class="mb-1">{{item.name}}</h6>
           </div>
         </a>
       </div>
       <div class="text-center list-group-item list-group-item-action p-l-2e m-t-1e pt-0 pb-0" aria-current="true"
-           *ngIf="entity.length < 1">
+           *ngIf="(isEmployees ? employeeList : clientList).length < 1">
         <h5 class="mb-1">No clients registered yet</h5>
       </div>
     </div>
   </div>
-  <div class="col-9"> <!-- DETAILS -->
-    <div class="row">
+
+  <!-- CLIENT's DETAILS -->
+  <div class="col-9" *ngIf="!isEmployees"> <!-- DETAILS -->
+    <div class="row pt-3">
       <div class="col-2"> <!-- CURRENT DATE -->
         <div class="date-box">
-          <select>
+          <select class="dir-rtl hide-border-select">
             <option value="date" *ngFor="let date of datesInMonth(dates)">{{date}}</option>
           </select>
           {{currMonYear}}
         </div>
       </div>
-      <div class="col-9 text-end"> <!-- CLIENT NAME -->
-        <h3>NORTH EAST CLIENT HULED</h3>
+      <div class="col-8 text-end"> <!-- CLIENT'S SITE NAME -->
+        <select class="hide-border-select">
+          <option value="0">NORTH EAST WAYDOWN HULED</option>
+          <option value="1">NORTH EAST WAYDOWN HULED 1</option>
+          <option value="2">NORTH EAST WAYDOWN HULED 2</option>
+          <option value="3">NORTH EAST WAYDOWN HULED 3</option>
+        </select>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-primary">
+          <i class="fa fa-plus-square"></i>&nbsp;
+          Add Site
+        </button>
       </div>
     </div>
+    <hr>
     <div class="row">
 
+    </div>
+  </div>
 
+  <!-- USER's DETAILS -->
+  <div class="col-9" *ngIf="isEmployees"> <!-- DETAILS -->
+    <div class="row pt-3">
+      <div class="col-12">
+        <span class="font-xlarge"><i class="fa fa-map-marker"></i>&nbsp;Hello World</span>
+        &nbsp;<span class="change-text" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                    (click)="changeLocation()">
+          Change
+        </span>
+      </div>
+      <div class="col-9 text-end"> <!-- CLIENT'S SITE NAME -->
+
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+
+    </div>
+  </div>
+</div>
+
+<!-- Update Employee's Site -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Change Site</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class=" mb-3">
+            <label for="client" class="form-label"><b>Client</b></label>
+            <select class="form-select" id="client" (change)="onClientSelectionChange($event.target)">
+              <option *ngFor="let site of clientList" value="{{site.name}}">{{site.name}}</option>
+            </select>
+          </div>
+          <div class=" mb-3">
+            <label for="sites" class="form-label"><b>Sites</b></label>
+            <select class="form-select" id="sites">
+              <option *ngFor="let site of changeSiteDropdownList" [disabled]="changeSiteDropdownList.length < 1"
+                      value="{{site.name}}">{{site.name}}</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Update Site</button>
+      </div>
     </div>
   </div>
 </div>

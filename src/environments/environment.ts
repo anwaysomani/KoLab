@@ -9,5 +9,6 @@ export const environment = {
     appId: '1:741522451019:web:7497b0a44db2599c9a3bce',
     measurementId: 'G-PNPNRLV09Y',
     databaseURL: 'https://kolab-01-default-rtdb.asia-southeast1.firebasedatabase.app'
-  }
+  },
+  allowSubsLogin: false
 };
