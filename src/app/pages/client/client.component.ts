@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
-
+import {AngularFireAuth} from '@angular/fire/auth';
+import auth from 'firebase/app';
+import 'firebase/auth';
 
 @Component({
   selector: 'app-client',
@@ -19,7 +21,30 @@ export class ClientComponent implements OnInit {
   sitesList: Array<string> = [];
   changeSiteDropdownList: any = [];
 
-  constructor(private db: AngularFirestore, private router: Router) {
+  constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth) {
+    this.afAuth.authState.subscribe(user => {
+      if (user) {
+        console.log(user.displayName);
+      } else {
+        this.afAuth.signInWithPopup(new auth.auth.GoogleAuthProvider()).then((data) => {
+          console.log(data);
+          if (data.additionalUserInfo?.isNewUser) {
+            // new user. create new entry in firestore
+            const dataSet = data.additionalUserInfo;
+            // db.collection('users').doc(dataSet.profile.email).set({
+            //   name: dataSet.profile.name,
+            //   email: dataSet.profile.email
+            // });
+          } else {
+            // existing user. fetch data from firestore
+          }
+          // todo: create new user entry in firestore
+          // db.collection('users').doc(data.)
+
+        });
+      }
+    });
+
     this.db = db;
     this.isEmployees = (router.url === '/employees');
     if (this.isEmployees) {
