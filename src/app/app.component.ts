@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {AngularFireDatabase} from '@angular/fire/database';
-import {Observable} from 'rxjs';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,25 +9,29 @@ import {Router} from '@angular/router';
 })
 export class AppComponent {
   title = 'KoLab';
-  private items: any;
-
   routes = [
     {
-      text: 'Clients',
+      text: 'CLIENTS',
       route: 'clients'
     },
     {
-      text: 'Employees',
+      text: 'EMPLOYEES',
       route: 'employees'
     },
   ];
   router: any;
+  private items: any;
 
   constructor(private db: AngularFireDatabase, private route: Router) {
-    this.router = route.url;
-    // this.items = db.list('/restaurant_menu').valueChanges();
-    // this.items.subscribe((valueOfItems: any) => {
-    //   console.log(valueOfItems);
-    // });
+    route.events.subscribe((data) => {
+      if (data instanceof NavigationEnd) {
+        this.router = route.url;
+      }
+    });
   }
+
+  // this.items = db.list('/restaurant_menu').valueChanges();
+  // this.items.subscribe((valueOfItems: any) => {
+  //   console.log(valueOfItems);
+  // });
 }
