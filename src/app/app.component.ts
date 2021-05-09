@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {NavigationEnd, Router} from '@angular/router';
+import {environment} from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -21,8 +22,10 @@ export class AppComponent {
   ];
   router: any;
   private items: any;
+  brand: string;
 
   constructor(private db: AngularFireDatabase, private route: Router) {
+    this.brand = environment.brand;
     route.events.subscribe((data) => {
       if (data instanceof NavigationEnd) {
         this.router = route.url;

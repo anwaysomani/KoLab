@@ -1,6 +1,7 @@
-<div class="row">
+<!-- hide on authentication screens -->
+<div class="row" *ngIf="router !== '/login'">
   <div class="col-3">
-    <h1 class="text-center">XYZERE</h1>
+    <h1 class="text-center">{{brand}}</h1>
   </div>
   <div class="col-4 pt-1">
     <ul class="nav nav-pills nav-fill">
@@ -24,6 +25,6 @@
     </div>
   </div>
 </div>
-<hr class="mb-0 mt-1">
+<hr class="mb-0 mt-1" *ngIf="router !== '/login'">
 
 <router-outlet></router-outlet>

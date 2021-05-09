@@ -10,5 +10,6 @@ export const environment = {
     measurementId: 'G-PNPNRLV09Y',
     databaseURL: 'https://kolab-01-default-rtdb.asia-southeast1.firebasedatabase.app'
   },
-  allowSubsLogin: false
+  allowSubsLogin: false,
+  brand: 'XYZ ERE Cons.'
 };

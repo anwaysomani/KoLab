@@ -1,13 +1,30 @@
 <div class="row">
   <div class="col-3 client-list">
+
+    <!-- add customization here for search filter + client designation sort + add button -->
+    <div class="mb-2 mt-2 row">
+      <div class="col-10 p-l-2e">
+        <input class="form-control" placeholder="Search here...">
+      </div>
+      <div class="col-2 p-0">
+        <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addUserModal">
+          <i class="fa fa-user-plus"></i>
+        </button>
+      </div>
+    </div>
+
     <div class="list-group">
       <div *ngIf="(isEmployees ? employeeList : clientList).length > 0">
-        <a href="#" class="list-group-item list-group-item-action p-l-2e" aria-current="true"
-           (click)="loadDocInfo(item.id)" *ngFor="let item of (isEmployees ? employeeList : clientList)">
+        <li class="arrow-pointer list-group-item list-group-item-action p-l-2e" aria-current="true"
+            (click)="loadDocInfo(item)" *ngFor="let item of (isEmployees ? employeeList : clientList)"
+            [ngClass]="{'highlight-row': item.isSelected}">
           <div class="d-flex w-100 justify-content-between">
             <h6 class="mb-1">{{item.name}}</h6>
+            <span class="highlighted-item-row" *ngIf="item.isSelected"> <!-- selected item highlight -->
+              <i class="fa fa-angle-right"></i>
+            </span>
           </div>
-        </a>
+        </li>
       </div>
       <div class="text-center list-group-item list-group-item-action p-l-2e m-t-1e pt-0 pb-0" aria-current="true"
            *ngIf="(isEmployees ? employeeList : clientList).length < 1">
@@ -18,31 +35,128 @@
 
   <!-- CLIENT's DETAILS -->
   <div class="col-9" *ngIf="!isEmployees"> <!-- DETAILS -->
-    <div class="row pt-3">
-      <div class="col-2"> <!-- CURRENT DATE -->
-        <div class="date-box">
-          <select class="dir-rtl hide-border-select">
-            <option value="date" *ngFor="let date of datesInMonth(dates)">{{date}}</option>
-          </select>
-          {{currMonYear}}
+    <div class="row pt-3 m-0">
+
+      <div *ngIf="selectedClient.sites.length < 1" style="top: 35%; position: absolute; left: 50%;">
+        <img src="assets/icons/menu.svg" width="250" height="250" style="opacity: 30%;"/>
+      </div>
+
+      <div class="row" *ngIf="selectedClient.sites !== undefined">
+        <h1 class="text-center" style="text-align: center" *ngIf="selectedClient.sites.length < 1">No Sites
+          Available</h1>
+      </div>
+
+      <div *ngIf="selectedClient.sites.length > 0">
+        <div class="row">
+          <div class="col-3">
+            <h3>SITES</h3>
+          </div>
+          <div class="col-5"></div>
+          <div class="col-4 text-end mb-3">
+            <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addSiteModal">
+              Add Site <i class="fa fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        <hr>
+        <div class="accordion" id="client-sites" *ngIf="selectedClient['sites']">
+          <div class="card mb-2" *ngFor="let item of selectedClient['sites']">
+            <div class="card-header" id="site-listing" data-toggle="collapse"
+                 aria-expanded="false" aria-controls="collapseOnce" [attr.data-target]="'#collapse-' + item['refNo']">
+              <h5 class="mb-0 row">
+                <div class="col-10">
+                  <label>{{item['name']}}</label>
+                </div>
+                <div class="col-2 text-end">
+                  <i class="fa fa-chevron-down"></i>
+                </div>
+              </h5>
+            </div>
+
+            <div id="collapse-{{item['refNo']}}" class="collapse" aria-labelledby="site-listing"
+                 data-parent="#client-sites">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-2">
+                    <label>ID:</label>
+                  </div>
+                  <div class="col-10">
+                    {{item['refNo']}}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-2">
+                    <label>Address:</label>
+                  </div>
+                  <div class="col-10">
+                    {{item['address']}}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-2">
+                    <label>Pincode: </label>
+                  </div>
+                  <div class="col-10">
+                    {{item['pincode']}}
+                  </div>
+                </div>
+                <!-- contractor -->
+                <div class="row">
+                  <div class="col-2">
+                    <label>Contractor:</label>
+                  </div>
+                  <div class="col-10">
+                    {{constructArr(item)}}
+                  </div>
+                </div>
+                <!-- employees -->
+                <div class="row">
+                  <div class="col-2">
+                    <label>Employees:</label>
+                  </div>
+                  <div class="col-10">
+                    {{constructArr(item)}}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-8"></div>
+                  <div class="col-4 text-end">
+                    <button class="btn btn-outline-danger">
+                      Delete Site&nbsp;<i class="fa fa-trash-o"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-8 text-end"> <!-- CLIENT'S SITE NAME -->
-        <select class="hide-border-select">
-          <option value="0">NORTH EAST WAYDOWN HULED</option>
-          <option value="1">NORTH EAST WAYDOWN HULED 1</option>
-          <option value="2">NORTH EAST WAYDOWN HULED 2</option>
-          <option value="3">NORTH EAST WAYDOWN HULED 3</option>
-        </select>
-      </div>
-      <div class="col-2">
-        <button class="btn btn-primary">
-          <i class="fa fa-plus-square"></i>&nbsp;
-          Add Site
-        </button>
-      </div>
+
+
+      <!--      <div class="col-2"> &lt;!&ndash; CURRENT DATE &ndash;&gt;-->
+      <!--        <div class="date-box">-->
+      <!--          <select class="dir-rtl hide-border-select">-->
+      <!--            <option value="date" *ngFor="let date of datesInMonth(dates)">{{date}}</option>-->
+      <!--          </select>-->
+      <!--          {{currMonYear}}-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!--      <div class="col-8 text-end"> &lt;!&ndash; CLIENT'S SITE NAME &ndash;&gt;-->
+      <!--        <select class="hide-border-select">-->
+      <!--          <option value="0">NORTH EAST WAYDOWN HULED</option>-->
+      <!--          <option value="1">NORTH EAST WAYDOWN HULED 1</option>-->
+      <!--          <option value="2">NORTH EAST WAYDOWN HULED 2</option>-->
+      <!--          <option value="3">NORTH EAST WAYDOWN HULED 3</option>-->
+      <!--        </select>-->
+      <!--      </div>-->
+      <!--      <div class="col-2">-->
+      <!--        <button class="btn btn-primary">-->
+      <!--          <i class="fa fa-plus-square"></i>&nbsp;-->
+      <!--          Add Site-->
+      <!--        </button>-->
+      <!--      </div>-->
+
     </div>
-    <hr>
     <div class="row">
 
     </div>
@@ -54,7 +168,7 @@
       <div class="col-12">
         <span class="font-xlarge"><i class="fa fa-map-marker"></i>&nbsp;Hello World</span>
         &nbsp;<span class="change-text" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                    (click)="changeLocation()">
+      >
           Change
         </span>
       </div>
@@ -63,8 +177,482 @@
       </div>
     </div>
     <hr>
-    <div class="row">
+    <div class="row container">
+      <div class="list-group">
 
+        <div *ngFor="let key of keyList">
+          <div class="row" [ngClass]="{'mb-1': index !== 0}" *ngFor="let item of renderList(key); let index = index;">
+            <div class="col-1">
+              <span class="display-day" *ngIf="index === 0">{{getWeekDayText(key)}}</span>
+              <h4 class="mb-0 mt--4" *ngIf="index === 0">{{splitText(key)}}</h4>
+            </div>
+            <div class="col-11">
+              <a href="#" class="list-group-item list-group-item-action">
+                <div class="row">
+                  <div class="col-2">
+                    12-May, 2021
+                  </div>
+                  <div class="col-2">
+                    10:00 AM
+                  </div>
+                  <div class="col-2">
+                    02:00 PM
+                  </div>
+                  <div class="col-4">
+                    Orlando, South Africa - 431607
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- <div class="row" [ngClass]="{'mb-1': false}">
+          <div class="col-1">
+            <span class="display-day" *ngIf="true">FRI</span>
+            <h4 class="mb-0 mt--4" *ngIf="true">03</h4>
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-1">
+
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-1">
+
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-1">
+
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-1">
+
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-1">
+            <span class="display-day">FRI</span>
+            <h4 class="mb-0 mt--4">04</h4>
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-1">
+
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-1">
+
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-1">
+            <span class="display-day">FRI</span>
+            <h4 class="mb-0 mt--4">05</h4>
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-1">
+
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-1">
+
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-1">
+
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-1">
+            <span class="display-day">FRI</span>
+            <h4 class="mb-0 mt--4">06</h4>
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-1">
+
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-1">
+
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-1">
+
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-1">
+            <span class="display-day">FRI</span>
+            <h4 class="mb-0 mt--4">07</h4>
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-1">
+
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-1">
+
+          </div>
+          <div class="col-11">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="row">
+                <div class="col-2">
+                  12-May, 2021
+                </div>
+                <div class="col-2">
+                  10:00 AM
+                </div>
+                <div class="col-2">
+                  02:00 PM
+                </div>
+                <div class="col-4">
+                  Orlando, South Africa - 431607
+                </div>
+              </div>
+            </a>
+          </div>
+        </div> -->
+
+
+      </div>
     </div>
   </div>
 </div>
@@ -80,13 +668,13 @@
       </div>
       <div class="modal-body">
         <form>
-          <div class=" mb-3">
+          <div class="mb-3">
             <label for="client" class="form-label"><b>Client</b></label>
             <select class="form-select" id="client" (change)="onClientSelectionChange($event.target)">
               <option *ngFor="let site of clientList" value="{{site.name}}">{{site.name}}</option>
             </select>
           </div>
-          <div class=" mb-3">
+          <div class="mb-3">
             <label for="sites" class="form-label"><b>Sites</b></label>
             <select class="form-select" id="sites">
               <option *ngFor="let site of changeSiteDropdownList" [disabled]="changeSiteDropdownList.length < 1"
@@ -98,6 +686,111 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Update Site</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add New Site -->
+<div class="modal fade" id="addSiteModal" tabindex="-1" aria-labelledby="addSiteModal" aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addSiteLabel">Add New Site</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row mb-3">
+            <div class="col-2">
+              <label for="client" class="form-label">Client</label>
+            </div>
+            <div class="col-10">
+              <label>{{selectedClient.name}}</label>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-2">
+              <label for="sites" class="form-label">Name</label>
+            </div>
+            <div class="col-10">
+              <input class="form-control" [(ngModel)]="newSiteData.name" name="siteName">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-2">
+              <label for="sites" class="form-label">Address</label>
+            </div>
+            <div class="col-10">
+              <input class="form-control" [(ngModel)]="newSiteData.address" name="siteAddress">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-2">
+              <label for="sites" class="form-label">Pincode</label>
+            </div>
+            <div class="col-10">
+              <input class="form-control" type="number" [(ngModel)]="newSiteData.pincode" name="sitePincode">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Add Site</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add User -->
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModal" aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addUserLabel">Add New User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row mb-3">
+            <div class="col-2">
+              <label for="client" class="form-label">Name</label>
+            </div>
+            <div class="col-10">
+              <input class="form-control" name="employee.username" [(ngModel)]="employee.username">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-2">
+              <label for="sites" class="form-label">Email</label>
+            </div>
+            <div class="col-10">
+              <input class="form-control" name="employee.emailAddress" [(ngModel)]="employee.emailAddress">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-2">
+              <label for="sites" class="form-label">Designation</label>
+            </div>
+            <div class="col-10">
+              <div class="row">
+                <div class="col-12">
+                  <select [(ngModel)]="employee.designation" name="employee.designation" class="form-select">
+                    <option *ngFor="let entity of ['Admin', 'Sub-Admin', 'Menu-Admin']"
+                            value="{{entity}}">{{entity}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="addUser()">Add User</button>
       </div>
     </div>
   </div>

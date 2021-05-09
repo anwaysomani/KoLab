@@ -10,22 +10,26 @@ import {environment} from '../environments/environment';
 import {ClientComponent} from './pages/client/client.component';
 import {AttendanceComponent} from './pages/attendance/attendance.component';
 import {FormsModule} from '@angular/forms';
+import {LoginComponent} from './pages/login/login.component';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
     ClientComponent,
-    AttendanceComponent
+    AttendanceComponent,
+    LoginComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        AngularFireModule.initializeApp(environment.firebase, 'angular-auth-firebase'),
-        AngularFirestoreModule,
-        AngularFireAuthModule,
-        AngularFireStorageModule,
-        FormsModule,
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    AngularFireModule.initializeApp(environment.firebase, 'angular-auth-firebase'),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
+    AngularFireStorageModule,
+    FormsModule,
+    HttpClientModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
