@@ -12,6 +12,8 @@ import {AttendanceComponent} from './pages/attendance/attendance.component';
 import {FormsModule} from '@angular/forms';
 import {LoginComponent} from './pages/login/login.component';
 import {HttpClientModule} from '@angular/common/http';
+import {NgxSpinnerModule} from 'ngx-spinner';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import {HttpClientModule} from '@angular/common/http';
     AngularFireAuthModule,
     AngularFireStorageModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxSpinnerModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,9 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import {AngularFireAuth} from '@angular/fire/auth';
 import 'firebase/auth';
 import {HttpClient} from '@angular/common/http';
+import {environment} from '../../../environments/environment';
+import {NgxSpinnerService} from 'ngx-spinner';
+
 
 @Component({
   selector: 'app-client',
@@ -12,6 +15,9 @@ import {HttpClient} from '@angular/common/http';
 })
 
 export class ClientComponent implements OnInit {
+  // #addUserModal
+  @ViewChild('addUserModal') closeAddExpenseModal: ElementRef | undefined;
+
   entity: Array<any> = [];
   currMonYear: string;
   dates: number;
@@ -32,6 +38,14 @@ export class ClientComponent implements OnInit {
     name: '',
     address: '',
     pincode: ''
+  };
+  loader = {
+    addUserLoader: false,
+    pageLoader: false,
+    addClientLoader: false,
+  };
+  client = {
+    name: '',
   };
 
   valueOld = {
@@ -66,8 +80,12 @@ export class ClientComponent implements OnInit {
     emailAddress: '',
     designation: ''
   };
+  addUserError = false;
+  selectedCategory = 'Admin';
 
-  constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth, private http: HttpClient) {
+  constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth, private http: HttpClient,
+              private SpinnerService: NgxSpinnerService) {
+    this.SpinnerService.show();
 
     console.log(this.valueOld);
     // this.afAuth.authState.subscribe(user => {
@@ -90,12 +108,11 @@ export class ClientComponent implements OnInit {
 
     this.entity2 = '<tbody><tr><th colspan="5">01-May, 2021</th></tr><tr><th scope="row">1</th><td>01-May, 2021</td><td>01-May, 2021</td><td>01-May, 2021</td></tr></tbody>';
 
-    // uid: IzcKvAIXDrdqaS0qVHKcBYthyDi1
-
     this.db = db;
     this.isEmployees = (router.url === '/employees');
     if (this.isEmployees) {
-      this.employeeDataStore();
+      this.getUserListing();
+      // this.employeeDataStore();
     } else {
       this.clientDataStore();
     }
@@ -120,7 +137,6 @@ export class ClientComponent implements OnInit {
     this.db.collection('attendance')
       .doc('IzcKvAIXDrdqaS0qVHKcBYthyDi1').get().subscribe((det) => {
       console.log(det.data());
-
       this.userDataSet = det.data();
     });
   }
@@ -271,17 +287,67 @@ export class ClientComponent implements OnInit {
 
   /* add new user popup Add click */
   addUser(): void { // name, email address, designation
+    this.loader.addUserLoader = true;
     this.addUserService([this.employee.username, this.employee.emailAddress, this.employee.designation]).then((data) => {
       console.log(data);
+      this.loader.addUserLoader = false;
+    }, (error) => {
+      console.log(error);
+      if (error.status === 200) {
+        // handle success user
+        setTimeout(() => {
+          this.closeAddExpenseModal?.nativeElement.click();
+        }, 2000);
+      } else if (error.status === 0) {
+        this.addUserError = true;
+      }
+    }).finally(() => {
+      this.loader.addUserLoader = false;
     });
   }
 
   // tslint:disable-next-line:typedef
   async addUserService(mod: Array<string>) {
-    return await this.http.post('http://us-central1-kolab-04.cloudfunctions.net/addUser', {
+    return await this.http.post(environment.funcUrl + 'addUser/', {
       name: mod[0],
       email: mod[1],
       designation: mod[2],
+      password: 'aksar123',
     }).toPromise();
+  }
+
+  getUserListing(): void {
+    this.loader.pageLoader = true;
+    this.getAllUsers().then((data) => {
+      console.log(data);
+      // @ts-ignore
+      this.employeeList = data;
+    }, (error) => {
+      console.log(error);
+    }).finally(() => {
+      this.loader.pageLoader = false;
+    });
+  }
+
+  // tslint:disable-next-line:typedef
+  async getAllUsers() {
+    return await this.http.post(environment.funcUrl + 'getAllUsers', {
+      designation: this.selectedCategory
+    }).toPromise();
+  }
+
+  // user category selection change
+  userCategorySelectionChange(entity: string): void {
+    this.selectedCategory = entity;
+    this.getUserListing();
+  }
+
+  /* add a new client */
+  addNewClient(): void {
+    this.db.doc(`/clients/${this.client.name}`).set({
+      name: this.client.name,
+      dateAdded: new Date(),
+      sites: [],
+    });
   }
 }

@@ -1,14 +1,40 @@
 <div class="row">
   <div class="col-3 client-list">
-
     <!-- add customization here for search filter + client designation sort + add button -->
+    <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="square-jelly-box" [fullScreen]="false"
+                 *ngIf="loader.pageLoader">
+      <p class="text-white">Please Wait...</p>
+    </ngx-spinner>
+    <div class="container" *ngIf="isEmployees">
+      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="pills-admin-tab" data-toggle="pill" href="#pills-admin" role="tab"
+             aria-controls="pills-admin" aria-selected="true" (click)="userCategorySelectionChange('Admin')">Admins</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pills-contractor-tab" data-toggle="pill" href="#pills-contractor" role="tab"
+             aria-controls="pills-contractor" aria-selected="false" (click)="userCategorySelectionChange('Sub-Admin')">Contractors</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pills-employee-tab" data-toggle="pill" href="#pills-employee" role="tab"
+             aria-controls="pills-employee" aria-selected="false" (click)="userCategorySelectionChange('Menu-Admin')">Employees</a>
+        </li>
+      </ul>
+    </div>
+
     <div class="mb-2 mt-2 row">
       <div class="col-10 p-l-2e">
         <input class="form-control" placeholder="Search here...">
       </div>
-      <div class="col-2 p-0">
-        <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addUserModal">
+      <div class="col-2 p-0" *ngIf="isEmployees">
+        <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addUserModal" #addUserModal>
           <i class="fa fa-user-plus"></i>
+        </button>
+      </div>
+
+      <div class="col-2 p-0" *ngIf="!isEmployees">
+        <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addClientModal" #addClientModal>
+          <i class="fa fa-folder"></i>
         </button>
       </div>
     </div>
@@ -58,7 +84,7 @@
             </button>
           </div>
         </div>
-        <hr>
+        <hr class="mt-0">
         <div class="accordion" id="client-sites" *ngIf="selectedClient['sites']">
           <div class="card mb-2" *ngFor="let item of selectedClient['sites']">
             <div class="card-header" id="site-listing" data-toggle="collapse"
@@ -131,35 +157,8 @@
           </div>
         </div>
       </div>
-
-
-      <!--      <div class="col-2"> &lt;!&ndash; CURRENT DATE &ndash;&gt;-->
-      <!--        <div class="date-box">-->
-      <!--          <select class="dir-rtl hide-border-select">-->
-      <!--            <option value="date" *ngFor="let date of datesInMonth(dates)">{{date}}</option>-->
-      <!--          </select>-->
-      <!--          {{currMonYear}}-->
-      <!--        </div>-->
-      <!--      </div>-->
-      <!--      <div class="col-8 text-end"> &lt;!&ndash; CLIENT'S SITE NAME &ndash;&gt;-->
-      <!--        <select class="hide-border-select">-->
-      <!--          <option value="0">NORTH EAST WAYDOWN HULED</option>-->
-      <!--          <option value="1">NORTH EAST WAYDOWN HULED 1</option>-->
-      <!--          <option value="2">NORTH EAST WAYDOWN HULED 2</option>-->
-      <!--          <option value="3">NORTH EAST WAYDOWN HULED 3</option>-->
-      <!--        </select>-->
-      <!--      </div>-->
-      <!--      <div class="col-2">-->
-      <!--        <button class="btn btn-primary">-->
-      <!--          <i class="fa fa-plus-square"></i>&nbsp;-->
-      <!--          Add Site-->
-      <!--        </button>-->
-      <!--      </div>-->
-
     </div>
-    <div class="row">
-
-    </div>
+    <div class="row"></div>
   </div>
 
   <!-- USER's DETAILS -->
@@ -167,19 +166,16 @@
     <div class="row pt-3">
       <div class="col-12">
         <span class="font-xlarge"><i class="fa fa-map-marker"></i>&nbsp;Hello World</span>
-        &nbsp;<span class="change-text" data-bs-toggle="modal" data-bs-target="#exampleModal"
-      >
+        &nbsp;<span class="change-text" data-bs-toggle="modal" data-bs-target="#exampleModal">
           Change
         </span>
       </div>
       <div class="col-9 text-end"> <!-- CLIENT'S SITE NAME -->
-
       </div>
     </div>
     <hr>
     <div class="row container">
       <div class="list-group">
-
         <div *ngFor="let key of keyList">
           <div class="row" [ngClass]="{'mb-1': index !== 0}" *ngFor="let item of renderList(key); let index = index;">
             <div class="col-1">
@@ -206,452 +202,6 @@
             </div>
           </div>
         </div>
-
-
-        <!-- <div class="row" [ngClass]="{'mb-1': false}">
-          <div class="col-1">
-            <span class="display-day" *ngIf="true">FRI</span>
-            <h4 class="mb-0 mt--4" *ngIf="true">03</h4>
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row mb-1">
-          <div class="col-1">
-
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row mb-1">
-          <div class="col-1">
-
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row mb-1">
-          <div class="col-1">
-
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row mb-1">
-          <div class="col-1">
-
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-1">
-            <span class="display-day">FRI</span>
-            <h4 class="mb-0 mt--4">04</h4>
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row mb-1">
-          <div class="col-1">
-
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row mb-1">
-          <div class="col-1">
-
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-1">
-            <span class="display-day">FRI</span>
-            <h4 class="mb-0 mt--4">05</h4>
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row mb-1">
-          <div class="col-1">
-
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row mb-1">
-          <div class="col-1">
-
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row mb-1">
-          <div class="col-1">
-
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-1">
-            <span class="display-day">FRI</span>
-            <h4 class="mb-0 mt--4">06</h4>
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row mb-1">
-          <div class="col-1">
-
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row mb-1">
-          <div class="col-1">
-
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row mb-1">
-          <div class="col-1">
-
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-1">
-            <span class="display-day">FRI</span>
-            <h4 class="mb-0 mt--4">07</h4>
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row mb-1">
-          <div class="col-1">
-
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row mb-1">
-          <div class="col-1">
-
-          </div>
-          <div class="col-11">
-            <a href="#" class="list-group-item list-group-item-action">
-              <div class="row">
-                <div class="col-2">
-                  12-May, 2021
-                </div>
-                <div class="col-2">
-                  10:00 AM
-                </div>
-                <div class="col-2">
-                  02:00 PM
-                </div>
-                <div class="col-4">
-                  Orlando, South Africa - 431607
-                </div>
-              </div>
-            </a>
-          </div>
-        </div> -->
-
-
       </div>
     </div>
   </div>
@@ -749,6 +299,10 @@
      data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
+      <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="square-jelly-box" [fullScreen]="false"
+                   *ngIf="loader.addUserLoader">
+        <p class="text-white">Please Wait...</p>
+      </ngx-spinner>
       <div class="modal-header">
         <h5 class="modal-title" id="addUserLabel">Add New User</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -786,11 +340,57 @@
               </div>
             </div>
           </div>
+          <div class="mb-3" *ngIf="addUserError">
+            <div class="alert alert-danger" role="alert">
+              Error occurred while creating new user
+            </div>
+          </div>
+          <div class="row mb-3">
+            <span class="text-black-50"><b>Please Note</b>: Password for the user will be set as first name from name field with 123. Eg. Don Jon will have the password as don123</span>
+          </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-primary" (click)="addUser()">Add User</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Client -->
+<div class="modal fade" id="addClientModal" tabindex="-1" aria-labelledby="addClientModal" aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="square-jelly-box" [fullScreen]="false"
+                   *ngIf="loader.addClientLoader">
+        <p class="text-white">Please Wait...</p>
+      </ngx-spinner>
+      <div class="modal-header">
+        <h5 class="modal-title" id="addClientLabel">Add New Client</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row mb-3">
+            <div class="col-2">
+              <label for="client" class="form-label">Client Name?</label>
+            </div>
+            <div class="col-10">
+              <input class="form-control" name="client.name" [(ngModel)]="client.name">
+            </div>
+          </div>
+          <div class="mb-3" *ngIf="addUserError">
+            <div class="alert alert-danger" role="alert">
+              Error occurred while creating new client
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="addNewClient()">Add Client</button>
       </div>
     </div>
   </div>
