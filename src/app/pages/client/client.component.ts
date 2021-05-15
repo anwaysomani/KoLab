@@ -150,7 +150,7 @@ export class ClientComponent implements OnInit {
   }
 
   constructArr(entity: any): string {
-    return entity.join(', ');
+    return ''; // entity.join(', ');
   }
 
   ngOnInit(): void {

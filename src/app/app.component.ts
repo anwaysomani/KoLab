@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {NavigationEnd, Router} from '@angular/router';
 import {environment} from '../environments/environment';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +29,9 @@ export class AppComponent {
   brand: string;
   allow: boolean;
 
-  constructor(private db: AngularFireDatabase, private route: Router) {
+  constructor(private db: AngularFireDatabase, private route: Router, private spinner: NgxSpinnerService) {
+    this.spinner.show();
+
     this.brand = environment.brand;
     route.events.subscribe((data) => {
       if (data instanceof NavigationEnd) {
