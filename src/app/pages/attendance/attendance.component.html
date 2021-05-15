@@ -1,1 +1,51 @@
-<h1>Mark Att.</h1>
+<div class="text-center m-3">
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5>YOUR SITE</h5>
+    </div>
+    <div class="card-body">
+      <h3 *ngIf="activeUser !== undefined">
+        {{activeUser['activeSite']}}
+      </h3>
+      <h3 *ngIf="activeUser === undefined">
+        -
+      </h3>
+      <hr>
+      <h6>({{date}})</h6>
+    </div>
+  </div>
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5>Regular Actions</h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-6">
+          <button class="btn btn-primary btn-lg" (click)="markStatus('Sign In')">
+            Sign In
+          </button>
+        </div>
+        <div class="col-6">
+          <button class="btn btn-danger btn-lg" (click)="markStatus('Sign Out')">
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <h5>Apply for leave</h5>
+    </div>
+    <div class="card-body">
+      <div class="form-group mb-3">
+        <label for="reason" class="mb-2 text-capitalize text-black-50">Enter reason for leave</label>
+        <input name="reason" id="reason" [(ngModel)]="reason" class="form-control" placeholder="Type here...">
+      </div>
+      <hr>
+      <button class="btn btn-info btn-lg" [disabled]="reason.length > 2" (click)="markStatus('On Leave')">
+        Apply Leave
+      </button>
+    </div>
+  </div>
+</div>

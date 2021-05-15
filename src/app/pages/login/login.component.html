@@ -7,16 +7,18 @@
       </div>
       <form id="Login">
         <div class="form-group">
-          <input type="email" class="form-control" id="inputEmail" placeholder="Email Address">
+          <input type="email" class="form-control" id="inputEmail" placeholder="Email Address" name="form.email"
+                 [(ngModel)]="form.email">
         </div>
 
         <div class="form-group">
-          <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+          <input type="password" class="form-control" id="inputPassword" placeholder="Password" name="form.pass"
+                 [(ngModel)]="form.pass">
         </div>
         <!--<div class="forgot">
           <a href="reset.html">Forgot password?</a>
         </div>-->
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submit" class="btn btn-primary" (click)="authenticateUser()">Login</button>
       </form>
     </div>
   </div>

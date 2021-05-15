@@ -21,8 +21,8 @@ export class AppComponent {
     },
   ];
   router: any;
-  private items: any;
   brand: string;
+  allow: boolean;
 
   constructor(private db: AngularFireDatabase, private route: Router) {
     this.brand = environment.brand;
@@ -31,10 +31,17 @@ export class AppComponent {
         this.router = route.url;
       }
     });
+    this.allow = localStorage.getItem('access') === '1';
   }
 
   // this.items = db.list('/restaurant_menu').valueChanges();
   // this.items.subscribe((valueOfItems: any) => {
   //   console.log(valueOfItems);
   // });
+
+  /* sign out user */
+  signOutUser(): void {
+    localStorage.clear();
+    this.route.navigateByUrl('/login');
+  }
 }

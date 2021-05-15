@@ -7,20 +7,40 @@ import {AngularFirestore} from '@angular/fire/firestore';
   styleUrls: ['./attendance.component.less']
 })
 export class AttendanceComponent implements OnInit {
+  reason = '';
+  date: number;
+  activeUser: any;
+  uid = '';
 
   constructor(private db: AngularFirestore) {
-    const date = new Date();
-    const currentDate = date.getDate() + '-' + date.getMonth() + '-' + date.getUTCFullYear();
-    // db.collection('attendance').doc(currentDate).set({
-    //   'aksar@mail.com': {
-    //     employee: 'aksar@mail.com',
-    //     status: 3,
-    //     reason: 'On unplanned leave'
-    //   },
-    // });
+    this.date = (new Date()).getDate();
   }
 
   ngOnInit(): void {
+    // @ts-ignore
+    this.uid = JSON.parse(localStorage.getItem('user')).uid;
+    this.db.doc(`/users/${this.uid}`).valueChanges().subscribe((det) => {
+      this.activeUser = det;
+    });
   }
 
+  /* mark user status */
+  markStatus(status: string): void {
+    const currTime = new Date();
+    const x = {
+      date: this.date,
+      time: currTime.getHours() + ':' + currTime.getMinutes() + ':' + currTime.getSeconds(),
+      site: this.activeUser.activeSite,
+      status,
+      reason: '',
+    };
+    if (status === 'On Leave') {
+      x.reason = this.reason;
+    }
+
+    this.activeUser.attendance.push(x);
+    this.db.doc(`/users/${this.uid}`).update({
+      attendance: this.activeUser.attendance
+    });
+  }
 }

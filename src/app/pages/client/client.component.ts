@@ -5,8 +5,6 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import 'firebase/auth';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
-import {NgxSpinnerService} from 'ngx-spinner';
-
 
 @Component({
   selector: 'app-client',
@@ -15,7 +13,6 @@ import {NgxSpinnerService} from 'ngx-spinner';
 })
 
 export class ClientComponent implements OnInit {
-  // #addUserModal
   @ViewChild('addUserModal') closeAddExpenseModal: ElementRef | undefined;
 
   entity: Array<any> = [];
@@ -26,14 +23,26 @@ export class ClientComponent implements OnInit {
   employeeList: Array<any> = [];
   sitesList: Array<string> = [];
   changeSiteDropdownList: any = [];
-  userDataSet: any = {};
-  entity2: string;
   weekDay: Array<string> = ['Sun', 'Mon', 'Tue', 'Web', 'Thu', 'Fri', 'Sat'];
   selectedClient = {
     name: '',
     sites: [],
     isSelected: false
   };
+
+  selectedUser = {
+    display: false,
+    isSelected: true,
+    activeSite: '',
+    sites: [],
+    uid: '',
+  };
+
+  updateSite = {
+    client: '',
+    site: '',
+  };
+
   newSiteData = {
     name: '',
     address: '',
@@ -48,33 +57,7 @@ export class ClientComponent implements OnInit {
     name: '',
   };
 
-  valueOld = {
-    '02-05-2021': [
-      {
-        'sign-out': '15:00',
-        'sign-in': '10:00',
-        site: 'Chicago'
-      },
-      {
-        'sign-out': '19:00',
-        site: 'Orlando',
-        'sign-in': '17:00'
-      }
-    ],
-    '01-05-2021': [
-      {
-        'sign-in': '11:00',
-        site: 'Orlando',
-        'sign-out': '14:00'
-      },
-      {
-        'sign-out': '19:00',
-        'sign-in': '15:00',
-        site: 'Chicago'
-      }
-    ]
-  };
-  keyList: Array<string> = Object.keys(this.valueOld);
+  keyList: Array<string> = [];
   employee = {
     username: '',
     emailAddress: '',
@@ -82,35 +65,23 @@ export class ClientComponent implements OnInit {
   };
   addUserError = false;
   selectedCategory = 'Admin';
+  userTypes: Array<any> = [];
+  allow: boolean;
+  displayAttendance: any;
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth, private http: HttpClient,
-              private SpinnerService: NgxSpinnerService) {
-    this.SpinnerService.show();
+              private route: Router) {
+    this.allow = localStorage.getItem('access') === '1';
+    if (!this.allow) {
+      route.navigateByUrl('/login');
+    }
 
-    console.log(this.valueOld);
-    // this.afAuth.authState.subscribe(user => {
-    //   if (user) {
-    //     console.log(user.uid);
-    //   } else {
-    //     this.afAuth.signInWithEmailAndPassword('aksar1@mail.com', 'anway123').then((data) => {
-    //       console.log(data);
-    //       console.log(afAuth.user);
-    //     });
-    //
-    //     //   // todo: create new user entry in firestore
-    //     //   // db.collection('users').doc(data.)
-    //     //
-    //     // });
-    //   }
-    // });
-    // this.getEmployeeAttendance();
-
-
-    this.entity2 = '<tbody><tr><th colspan="5">01-May, 2021</th></tr><tr><th scope="row">1</th><td>01-May, 2021</td><td>01-May, 2021</td><td>01-May, 2021</td></tr></tbody>';
-
+    this.loader.pageLoader = true;
     this.db = db;
     this.isEmployees = (router.url === '/employees');
     if (this.isEmployees) {
+      // @ts-ignore
+      this.userTypes = environment.userTypes;
       this.getUserListing();
       // this.employeeDataStore();
     } else {
@@ -123,22 +94,6 @@ export class ClientComponent implements OnInit {
     const month = dt.getMonth();
     const year = dt.getFullYear();
     this.dates = new Date(year, month, 0).getDate();
-
-    // db.collection('mew2').doc('sample').set({tree: '01'});
-    // db.collection('attendance/LA').doc('LA').set({
-    //   name: 'Los Angeles',
-    //   country: 'IN',
-    //   old: 'USA'
-    // }, {merge: true});
-  }
-
-  getEmployeeAttendance() {
-    // IzcKvAIXDrdqaS0qVHKcBYthyDi1
-    this.db.collection('attendance')
-      .doc('IzcKvAIXDrdqaS0qVHKcBYthyDi1').get().subscribe((det) => {
-      console.log(det.data());
-      this.userDataSet = det.data();
-    });
   }
 
   clientDataStore(): void { /* client data records */
@@ -150,9 +105,9 @@ export class ClientComponent implements OnInit {
         this.clientList[0].isSelected = true;
         this.selectClientItem(this.clientList[0]);
       }
-      console.log(det);
+      this.loader.pageLoader = false;
     }, (err) => {
-      console.log(err);
+      this.loader.pageLoader = false;
     });
   }
 
@@ -189,7 +144,6 @@ export class ClientComponent implements OnInit {
               this.clientList[i].sites[i].employees.third.push(emps[k].name);
             }
           }
-          console.log(this.clientList[i].sites[j]);
           this.sitesList.push(this.clientList[i].sites[j]);
         }, (err) => {
           console.log(err);
@@ -199,8 +153,6 @@ export class ClientComponent implements OnInit {
   }
 
   constructArr(entity: any): string {
-    // console.log('Ball Balle');
-    // console.log(entity);
     return ''; //  entity.join(', ');
   }
 
@@ -215,18 +167,17 @@ export class ClientComponent implements OnInit {
     item.isSelected = true;
 
     if (this.isEmployees) {
-      console.log();
+      if (this.selectedUser.display) {
+        this.selectedUser.isSelected = false;
+      }
+      this.selectedUser = item;
+      this.selectedUser.display = true;
+      // @ts-ignore
+      this.keyList = this.selectedUser.attendance.map((value) => value.date).filter((value, index, arr) => arr.indexOf(value) === index);
+      this.keyList.sort();
     } else {
-      // clients
       this.selectClientItem(item);
     }
-
-    this.getEmployeeAttendance();
-    // todo: get realtime database entry for active site
-    // todo: get firestore entry for attendance for last 7-days
-
-    // provide week view for calendar option for user to select
-
   }
 
   /* dropdown item listing change for client */
@@ -243,21 +194,17 @@ export class ClientComponent implements OnInit {
     return -1;
   }
 
-  changeLocation(): void {
-    console.log('Change location');
-  }
-
   getWeekDayText(str: string): string { /* get day as text */
-    return this.weekDay[new Date(str).getDay()];
-  }
-
-  splitText(str: string): string { /* split date */
-    return str.split('-')[0];
+    const today = new Date();
+    // tslint:disable-next-line:radix
+    return this.weekDay[(new Date(today.getFullYear(), today.getMonth(), parseInt(str))).getDay()];
   }
 
   renderList(item: string): Array<any> { /* render attendance listing */
     // @ts-ignore
-    return this.valueOld[item];
+    return this.selectedUser.attendance.filter((er) => {
+      return er.date === item;
+    });
   }
 
   selectClientItem(client: any): void {
@@ -279,7 +226,6 @@ export class ClientComponent implements OnInit {
 
     if (!client.sites || client.sites.length < 1) {
       // display add site ref
-      console.log('Balle');
     }
 
     this.selectedClient = client;
@@ -289,10 +235,8 @@ export class ClientComponent implements OnInit {
   addUser(): void { // name, email address, designation
     this.loader.addUserLoader = true;
     this.addUserService([this.employee.username, this.employee.emailAddress, this.employee.designation]).then((data) => {
-      console.log(data);
       this.loader.addUserLoader = false;
     }, (error) => {
-      console.log(error);
       if (error.status === 200) {
         // handle success user
         setTimeout(() => {
@@ -312,14 +256,13 @@ export class ClientComponent implements OnInit {
       name: mod[0],
       email: mod[1],
       designation: mod[2],
-      password: 'aksar123',
+      password: mod[0].split(',')[0].toLowerCase() + '123',
     }).toPromise();
   }
 
   getUserListing(): void {
     this.loader.pageLoader = true;
     this.getAllUsers().then((data) => {
-      console.log(data);
       // @ts-ignore
       this.employeeList = data;
     }, (error) => {
@@ -349,5 +292,33 @@ export class ClientComponent implements OnInit {
       dateAdded: new Date(),
       sites: [],
     });
+  }
+
+  /* add new site for client */
+  addSite(): void {
+    const newSite = {
+      name: this.newSiteData.name,
+      address: this.newSiteData.address,
+      pincode: this.newSiteData.pincode,
+      addedOn: new Date(),
+      refNo: '',
+    };
+    // @ts-ignore
+    this.selectedClient.sites.push(newSite);
+    this.db.doc(`/clients/${this.selectedClient.name}`).update({
+      sites: this.selectedClient.sites
+    });
+  }
+
+  updateUserSite(): void {
+    if (this.updateSite.site.length > 0) {
+      // @ts-ignore
+      this.selectedUser.sites.push(this.selectedUser.activeSite);
+
+      this.db.doc(`/users/${this.selectedUser.uid}`).update({
+        sites: this.selectedUser.sites,
+        activeSite: this.updateSite.site + ', ' + this.updateSite.client,
+      });
+    }
   }
 }
