@@ -12,12 +12,16 @@ export class AppComponent {
   title = 'KoLab';
   routes = [
     {
-      text: 'CLIENTS',
+      name: 'Clients',
       route: 'clients'
     },
     {
-      text: 'EMPLOYEES',
+      name: 'Employees',
       route: 'employees'
+    },
+    {
+      name: 'Posts',
+      route: 'posts'
     },
   ];
   router: any;

@@ -5,6 +5,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import 'firebase/auth';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
+import {AngularFireStorage} from '@angular/fire/storage';
 
 @Component({
   selector: 'app-client',
@@ -70,10 +71,22 @@ export class ClientComponent implements OnInit {
   displayAttendance: any;
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth, private http: HttpClient,
-              private route: Router) {
+              private storage: AngularFireStorage) {
+
+    /*this.storage.ref('').listAll().toPromise().then((ref) => {
+      console.log(ref.prefixes);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < ref.prefixes.length; i++) {
+        console.log(ref.prefixes[i].fullPath);
+        // ref.items[i].getDownloadURL().then((data) => {
+        //   console.log(data);
+        // });
+      }
+    });*/
+
     this.allow = localStorage.getItem('access') === '1';
     if (!this.allow) {
-      route.navigateByUrl('/login');
+      router.navigateByUrl('/login');
     }
 
     this.loader.pageLoader = true;

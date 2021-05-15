@@ -1,5 +1,5 @@
 <div *ngIf="allow" class="row">
-  <div class="col-3 client-list h-100">
+  <div class="col-3 client-list h-92">
     <!-- add customization here for search filter + client designation sort + add button -->
     <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="square-jelly-box" [fullScreen]="true"
                  *ngIf="loader.pageLoader">
@@ -157,6 +157,7 @@
 
   <!-- USER's DETAILS -->
   <div class="col-9 h-100 overflow-scroll" *ngIf="isEmployees"> <!-- DETAILS -->
+
     <div class="row pt-3">
       <div class="col-12">
         <span class="font-xlarge"><i class="fa fa-map-marker"></i>&nbsp;{{selectedUser['activeSite']}}</span>
@@ -179,24 +180,27 @@
               <h4 class="mb-0 mt--4" *ngIf="index === 0">{{key}}</h4>
             </div>
             <div class="col-11">
-              <a href="#" class="list-group-item list-group-item-action">
+              <div class="list-group-item list-group-item-action">
                 <div class="row">
                   <div class="col-2"> <!-- time -->
                     {{item.time}}
                   </div>
-                  <div class="col-2"> <!-- status -->
+                  <div class="col-2 badge"
+                       [ngClass]="{'bg-danger': item.status === 'On Leave', 'bg-warning': item.status === 'Sign Out',
+                       'bg-success': item.status === 'Sign In'}">
+                    <!-- status -->
                     {{item.status}}
                   </div>
-                  <div class="col-4"> <!-- site / reason -->
-                    {{item.site}}
+                  <div class="col-8">
+                    <span *ngIf="!item.reason || item.reason.length < 5">{{item.site}}</span>
+                    <span class="text-danger"
+                          *ngIf="item.reason && item.reason.length > 0">Reason: {{item.reason}}</span>
                   </div>
                 </div>
-              </a>
+              </div>
             </div>
           </div>
         </div>
-
-
       </div>
     </div>
   </div>

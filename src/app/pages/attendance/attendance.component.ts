@@ -36,6 +36,7 @@ export class AttendanceComponent implements OnInit {
     };
     if (status === 'On Leave') {
       x.reason = this.reason;
+      this.reason = '';
     }
 
     this.activeUser.attendance.push(x);
