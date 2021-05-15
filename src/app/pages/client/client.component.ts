@@ -5,7 +5,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import 'firebase/auth';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
-import {AngularFireStorage} from '@angular/fire/storage';
+import {NgxSpinnerModule} from 'ngx-spinner';
 
 @Component({
   selector: 'app-client',
@@ -24,7 +24,7 @@ export class ClientComponent implements OnInit {
   employeeList: Array<any> = [];
   sitesList: Array<string> = [];
   changeSiteDropdownList: any = [];
-  weekDay: Array<string> = ['Sun', 'Mon', 'Tue', 'Web', 'Thu', 'Fri', 'Sat'];
+  weekDay: Array<string> = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   selectedClient = {
     name: '',
     sites: [],
@@ -68,22 +68,9 @@ export class ClientComponent implements OnInit {
   selectedCategory = 'Admin';
   userTypes: Array<any> = [];
   allow: boolean;
-  displayAttendance: any;
 
-  constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth, private http: HttpClient,
-              private storage: AngularFireStorage) {
-
-    /*this.storage.ref('').listAll().toPromise().then((ref) => {
-      console.log(ref.prefixes);
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < ref.prefixes.length; i++) {
-        console.log(ref.prefixes[i].fullPath);
-        // ref.items[i].getDownloadURL().then((data) => {
-        //   console.log(data);
-        // });
-      }
-    });*/
-
+  constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
+              private http: HttpClient, private spinner: NgxSpinnerModule) {
     this.allow = localStorage.getItem('access') === '1';
     if (!this.allow) {
       router.navigateByUrl('/login');
@@ -93,16 +80,13 @@ export class ClientComponent implements OnInit {
     this.db = db;
     this.isEmployees = (router.url === '/employees');
     if (this.isEmployees) {
-      // @ts-ignore
       this.userTypes = environment.userTypes;
       this.getUserListing();
-      // this.employeeDataStore();
     } else {
       this.clientDataStore();
     }
     const date = new Date();
     this.currMonYear = date.toLocaleString('default', {month: 'long'}) + ' ' + date.getFullYear();
-
     const dt = new Date();
     const month = dt.getMonth();
     const year = dt.getFullYear();
@@ -166,11 +150,7 @@ export class ClientComponent implements OnInit {
   }
 
   constructArr(entity: any): string {
-    return ''; //  entity.join(', ');
-  }
-
-  datesInMonth(n: number): Array<any> { // construct date-in-month array
-    return Array.from(Array(n), (x, i) => i).slice(1);
+    return entity.join(', ');
   }
 
   ngOnInit(): void {

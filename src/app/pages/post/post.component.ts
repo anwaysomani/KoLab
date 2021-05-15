@@ -42,5 +42,4 @@ export class PostComponent implements OnInit {
   imageSelection(i: string): void {
     this.selectedImage = i;
   }
-
 }
