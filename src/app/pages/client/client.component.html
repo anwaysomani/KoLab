@@ -60,7 +60,7 @@
   </div>
 
   <!-- CLIENT's DETAILS -->
-  <div class="col-9 h-100 overflow-scroll" *ngIf="!isEmployees"> <!-- DETAILS -->
+  <div class="col-9 h-92 overflow-scroll side-nav" *ngIf="!isEmployees"> <!-- DETAILS -->
     <div class="row pt-3 m-0">
 
       <div *ngIf="selectedClient.sites.length < 1" style="top: 35%; position: absolute; left: 50%;">
@@ -84,7 +84,7 @@
           <h1 class="text-center" style="text-align: center" *ngIf="selectedClient.sites.length < 1">No Sites
             Available</h1>
         </div>
-        <div class="accordion" id="client-sites" *ngIf="selectedClient['sites'] && selectedClient.sites.length > 0">
+        <div class="accordion block-container" id="client-sites" *ngIf="selectedClient['sites'] && selectedClient.sites.length > 0">
           <div class="card mb-2" *ngFor="let item of selectedClient['sites']">
 
             <div class="card">
@@ -96,48 +96,31 @@
                 </h5>
               </div>
               <div class="card-body">
-                <div class="row">
-                  <div class="col-2">
-                    <label>ID:</label>
-                  </div>
-                  <div class="col-10">
-                    {{item['refNo']}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-2">
-                    <label>Address:</label>
-                  </div>
-                  <div class="col-10">
-                    {{item['address']}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-2">
-                    <label>Pincode: </label>
-                  </div>
-                  <div class="col-10">
-                    {{item['pincode']}}
-                  </div>
-                </div>
-                <!-- contractor -->
-                <div class="row">
-                  <div class="col-2">
-                    <label>Contractor:</label>
-                  </div>
-                  <div class="col-10">
-                    {{constructArr(item)}}
-                  </div>
-                </div>
-                <!-- employees -->
-                <div class="row">
-                  <div class="col-2">
-                    <label>Employees:</label>
-                  </div>
-                  <div class="col-10">
-                    {{constructArr(item)}}
-                  </div>
-                </div>
+
+                <table class="table table-striped">
+                  <tbody>
+                  <tr>
+                    <th class="text-uppercase" scope="col">ID</th>
+                    <td>{{item['refNo']}}</td>
+                  </tr>
+                  <tr>
+                    <th class="text-uppercase" scope="col">Address</th>
+                    <td>{{item['address']}}</td>
+                  </tr>
+                  <tr>
+                    <th class="text-uppercase" scope="col">Pincode</th>
+                    <td>{{item['pincode']}}</td>
+                  </tr>
+                  <tr>
+                    <th class="text-uppercase" scope="col">Contractor</th>
+                    <td>{{constructArr(item)}}</td>
+                  </tr>
+                  <tr>
+                    <th class="text-uppercase" scope="col">Employees</th>
+                    <td>{{constructArr(item)}}</td>
+                  </tr>
+                  </tbody>
+                </table>
                 <div class="row">
                   <div class="col-8"></div>
                   <div class="col-4 text-end">
@@ -156,7 +139,7 @@
   </div>
 
   <!-- USER's DETAILS -->
-  <div class="col-9 h-100 overflow-scroll" *ngIf="isEmployees"> <!-- DETAILS -->
+  <div class="col-9 h-92 side-nav" *ngIf="isEmployees"> <!-- DETAILS -->
 
     <div class="row pt-3">
       <div class="col-12">
@@ -170,7 +153,7 @@
       </div>
     </div>
     <hr>
-    <div class="row container">
+    <div class="row container block-container">
       <div class="list-group">
         <div *ngFor="let key of keyList">
 

@@ -4,6 +4,8 @@ import {AngularFireStorage} from '@angular/fire/storage';
 import {finalize} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {Router} from '@angular/router';
+import {Title} from '@angular/platform-browser';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-attendance',
@@ -19,7 +21,7 @@ export class AttendanceComponent implements OnInit {
   fb: string | undefined;
   downloadURL: Observable<string> | undefined;
 
-  constructor(private db: AngularFirestore, private storage: AngularFireStorage, private route: Router) {
+  constructor(private db: AngularFirestore, private storage: AngularFireStorage, private route: Router, private titleService: Title) {
     // @ts-ignore
     this.uid = JSON.parse(localStorage.getItem('user')).uid;
     this.db.doc(`/users/${this.uid}`).valueChanges().subscribe((det) => {
@@ -32,6 +34,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.titleService.setTitle('Employee Playground | ' + environment.brand);
   }
 
   /* mark user status */

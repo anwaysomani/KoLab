@@ -23,5 +23,4 @@ export const environment = {
     displayName: 'Employee',
     srch: 'Employee'
   }],
-  allowAdmin: true,
 };

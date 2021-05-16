@@ -5,7 +5,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import 'firebase/auth';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
-import {NgxSpinnerModule} from 'ngx-spinner';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-client',
@@ -70,7 +70,7 @@ export class ClientComponent implements OnInit {
   allow: boolean;
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
-              private http: HttpClient, private spinner: NgxSpinnerModule) {
+              private http: HttpClient, private titleService: Title) {
     this.allow = localStorage.getItem('access') === '1';
     if (!this.allow) {
       router.navigateByUrl('/login');
@@ -82,8 +82,10 @@ export class ClientComponent implements OnInit {
     if (this.isEmployees) {
       this.userTypes = environment.userTypes;
       this.getUserListing();
+      this.titleService.setTitle('Employees | ' + environment.brand);
     } else {
       this.clientDataStore();
+      this.titleService.setTitle('Clients | ' + environment.brand);
     }
     const date = new Date();
     this.currMonYear = date.toLocaleString('default', {month: 'long'}) + ' ' + date.getFullYear();

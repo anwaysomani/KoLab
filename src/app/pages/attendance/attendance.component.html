@@ -7,7 +7,7 @@
       <h3 *ngIf="activeUser !== undefined">
         {{activeUser['activeSite']}}
       </h3>
-      <h3 *ngIf="activeUser === undefined">
+      <h3 *ngIf="activeUser === undefined || activeUser['activeSite'].length < 1">
         -
       </h3>
       <hr>
@@ -21,12 +21,12 @@
       <h5 class="text-uppercase">Site Updates</h5>
     </div>
     <div class="card-body">
-      <input type="file" class="btn btn-primary" id="file"
+      <input type="file" class="btn btn-primary" id="uploadImage"
              (change)="onFileSelected($event)"
              name="image"
              autocomplete="off" hidden/>
-      <label for="file">
-        <button class="border-dark btn btn-light">Upload Image</button>
+      <label class="border-dark btn btn-light" for="uploadImage">
+        Upload Image
       </label>
     </div>
   </div>
@@ -66,7 +66,7 @@
   </div>
 
   <!-- logout -->
-  <button class="btn btn-danger btn-lg w-75" (click)="markStatus('On Leave')">
+  <button class="btn btn-danger btn-lg w-75" (click)="signOutUser()">
     Logout
   </button>
 </div>
