@@ -24,7 +24,7 @@
 
     <div class="mb-2 mt-2 row">
       <div class="col-10 p-l-2e">
-        <input class="form-control" placeholder="Search here...">
+        <input class="form-control" name="searchText" placeholder="Search here..." [(ngModel)]="searchText">
       </div>
       <div class="col-2 p-0" *ngIf="isEmployees">
         <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addUserModal" #addUserModal>
@@ -60,7 +60,7 @@
   </div>
 
   <!-- CLIENT's DETAILS -->
-  <div class="col-9 h-92 overflow-scroll side-nav" *ngIf="!isEmployees"> <!-- DETAILS -->
+  <div class="col-9 h-92 side-nav" *ngIf="!isEmployees"> <!-- DETAILS -->
     <div class="row pt-3 m-0">
 
       <div *ngIf="selectedClient.sites.length < 1" style="top: 35%; position: absolute; left: 50%;">
@@ -84,7 +84,8 @@
           <h1 class="text-center" style="text-align: center" *ngIf="selectedClient.sites.length < 1">No Sites
             Available</h1>
         </div>
-        <div class="accordion block-container" id="client-sites" *ngIf="selectedClient['sites'] && selectedClient.sites.length > 0">
+        <div class="accordion block-container" id="client-sites"
+             *ngIf="selectedClient['sites'] && selectedClient.sites.length > 0">
           <div class="card mb-2" *ngFor="let item of selectedClient['sites']">
 
             <div class="card">

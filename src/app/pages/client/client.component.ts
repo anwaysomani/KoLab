@@ -68,6 +68,7 @@ export class ClientComponent implements OnInit {
   selectedCategory = 'Admin';
   userTypes: Array<any> = [];
   allow: boolean;
+  searchText = '';
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title) {
@@ -315,5 +316,9 @@ export class ClientComponent implements OnInit {
         activeSite: this.updateSite.site + ', ' + this.updateSite.client,
       });
     }
+  }
+
+  searchList(): void {
+
   }
 }
