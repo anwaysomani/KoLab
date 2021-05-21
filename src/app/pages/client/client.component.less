@@ -8,6 +8,10 @@
   padding-left: 2em;
 }
 
+.p-b-2e {
+  padding-bottom: 2em;
+}
+
 .m-t-1e {
   margin-top: 1em;
 }
@@ -50,8 +54,11 @@
 }
 
 .highlight-row {
-  background: #000;
+  background: #000 !important;
   color: #fff;
+  .card{
+    background-color: #000;
+  }
 }
 
 .display-day {
@@ -96,4 +103,31 @@
 .block-container {
   height: 80vh;
   overflow: scroll;
+}
+
+.custom-scrollbar {
+  position: relative;
+  height: ~"calc(100vh - 475px)";
+  overflow: auto;
+  }
+  .table-wrapper-scroll-y {
+  display: block;
+  }
+
+   td:hover {
+    background-color: rgb(180, 179, 179);
+    text-decoration: underline;
+    color: blue;
+  }
+
+.h-30{
+  height: 46vh !important;
+}
+
+.m-r-1e{
+  margin-right: 1em !important;
+}
+
+.p-05e {
+  padding: 0.5em !important;
 }

@@ -61,22 +61,19 @@
 
   <!-- CLIENT's DETAILS -->
   <div class="col-3 h-92" *ngIf="!isEmployees"> <!-- DETAILS -->
-    <div class="row pt-3 m-0">
+    <div class="row m-0">
 
-      <div *ngIf="selectedClient.sites.length < 1" style="top: 35%; position: absolute; left: 50%;">
-        <img src="assets/icons/menu.svg" width="250" height="250" style="opacity: 30%;"/>
-      </div>
-
-      <div class="shadow p-3 mb-5 bg-white rounded">
+      <div class="shadow p-3 mb-5 bg-white rounded h-92">
         <div class="row">
-          <div class="col-3">
+          <div class="col-7">
             <h3>SITES</h3>
           </div>
-          <div class="col-5"></div>
+          <div class="col-5">
           <div class=" text-end mb-3">
             <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addSiteModal">
               Add Site <i class="fa fa-plus"></i>
             </button>
+          </div>
           </div>
         </div>
         <hr class="mt-0">
@@ -88,12 +85,16 @@
              *ngIf="selectedClient['sites'] && selectedClient.sites.length > 0">
           <div class="card mb-2" *ngFor="let item of selectedClient['sites']"
           [class.selected]="item === selectedItem"
+          [ngClass]="{'highlight-row': item === selectedItem}"
           (click)="onSelect(item)">
             <div class="card">
               <div class="card-header">
                 <h5 class="mb-0 ">
                   <div class="col-10">
                     <label>{{item['name']}}</label>
+                    <span class="highlighted-item-row" *ngIf="item === selectedItem"> <!-- selected item highlight -->
+                      <i class="fa fa-angle-right"></i>
+                    </span>
                   </div>
                 </h5>
               </div>
@@ -155,68 +156,124 @@
     </div>
   </div>
 </div>
-<div class="col-6 shadow p-3 mb-5 bg-white rounded">
+<div class="col-6 shadow p-3 mb-5 bg-white rounded h-92">
   <div *ngIf="selectedItem">
     <div class="row m-t-1e">
-      <div class="col-8"></div>
-      <div class="col-4 text-end">
-        <button class="btn btn-outline-danger ">
-          Delete Site&nbsp;<i class="fa fa-trash-o"></i>
+      <div class="col-6">
+        <h3><b>#</b> : {{selectedItem['refNo']}}123</h3>
+      </div>
+      <div class="col-6 text-end">
+        <button  class="btn btn-outline-danger m-r-1e">
+          &#x2715;<!-- <i class="fa fa-trash-o"></i> --> <!-- Delete Icon Hex code -->
+        </button>
+        <button class="btn btn-outline-primary ">
+          &#x270E;
         </button>
       </div>
     </div>
     <!-- Selected Site Details -->
-    <div class="card-body">
-      <table class="table table-striped">
-        <tbody>
-        <tr>
-          <th class="text-uppercase" scope="col">ID</th>
-          <td>{{selectedItem['refNo']}}</td>
-        </tr>
-        <tr>
-          <th class="text-uppercase" scope="col">Address</th>
-          <td>{{selectedItem['address']}}</td>
-        </tr>
-        <tr>
-          <th class="text-uppercase" scope="col">Pincode</th>
-          <td>{{selectedItem['pincode']}}</td>
-        </tr>
-        </tbody>
-      </table>      
-    </div>
+    
 
     <section id="tabs" class="role-tab">
-      <div class="container">
+      <div class="container h-30">
           <div class="row">
-              <div class="col-12">
-                  <nav>
-                      <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                          <a class="nav-item nav-link active" (click)="activateContractor('activeContractor')" id="nav-contractor-tab" data-toggle="collapse" href="#nav-contractor" role="tab" aria-controls="nav-contractor" aria-selected="true">Contractors</a>
-                          <a class="nav-item nav-link"  (click)="activateEmployee('activeEmployee')" id="nav-employee-tab" data-toggle="collapse" href="#nav-employee" role="tab" aria-controls="nav-employee" aria-selected="false">Employees</a>
-                      </div>
-                  </nav>
-                  <div class="tab-content" id="nav-tabContent">
-                    <!-- Panel for Contractor -->
-                      <div class="tab-pane fade show" [ngClass]="{ 'active':activeTab==='activeContractor'}" id="nav-contractor" role="tabpanel" aria-labelledby="nav-contractor-tab">
-                        <ul class = "list-group">
-                          <li class = "list-group-item">Rajiv</li>
-                          <li class = "list-group-item">PHP</li>
-                       </ul>
-                      </div>
-                      <!-- Panel for Employee -->
-                      <div class="tab-pane fade" [ngClass]="{ 'active':activeTab==='activeEmployee'}" id="nav-employee" role="tabpanel" aria-labelledby="nav-employee-tab">
-                        <ul class = "list-group">
-                          <li class = "list-group-item">Sanjiv</li>
-                          <li class = "list-group-item">PHP</li>
-                       </ul>
-                      </div>                      
-                  </div>
-              </div>
+            <div>
+              <table class="table table-striped">
+                <tbody>
+                  <tr>
+                    <th class="text-uppercase" scope="col">Project Manager</th>
+                    <td>Nicholos Flemming</td>
+                  </tr>
+                </tbody>
+              </table>      
+            </div>
+            <div class="table-wrapper-scroll-y custom-scrollbar">
+              <div class="text-uppercase col-12 p-05e" style="background-color:rgba(145, 162, 219, 0.137); " scope="col"><b>Employees</b></div>
+              <table class="table table-bordered mb-0 table-hover">
+                <tbody>
+                  <tr>                   
+                    <td>Mark</td>
+                    <td>Otto</td>
+                  </tr>
+                  <tr>                    
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                  </tr>
+                  <tr>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                  </tr>
+                  <tr>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                  </tr>
+                  <tr>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                  </tr>
+                  <tr>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                  </tr>
+                </tbody>
+              </table>            
+            </div>
+            <div class="m-t-1e">
+            <table class="table table-striped">
+              <tbody>
+              <tr>
+                <th class="text-uppercase" scope="col">Address</th>
+                <td>{{selectedItem['address']}}</td>
+              </tr>
+              <tr>
+                <th class="text-uppercase" scope="col">Pincode</th>
+                <td>{{selectedItem['pincode']}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+            
           </div>
       </div>
   </section>
+  <div class="container" shadow p-3 mb-5 bg-white rounded>
+    <div class="row">
+      <div class="detailsTable table-wrapper-scroll-y custom-scrollbar m-t-1e">
+        <div class="text-uppercase col-12 p-05e" style="background-color:rgba(88, 73, 160, 0.1); " scope="col"><b>DETAILS</b></div>
+        <table class="table table-bordered mb-0 table-hover">
+          <tbody>
+            <tr>                   
+              <td>Mark</td>
+              <td>Otto</td>
+            </tr>
+            <tr>                    
+              <td>Jacob</td>
+              <td>Thornton</td>
+            </tr>
+            <tr>
+              <td>Larry</td>
+              <td>the Bird</td>
+            </tr>
+            <tr>
+              <td>Mark</td>
+              <td>Otto</td>
+            </tr>
+            <tr>
+              <td>Jacob</td>
+              <td>Thornton</td>
+            </tr>
+            <tr>
+              <td>Larry</td>
+              <td>the Bird</td>
+            </tr>
+          </tbody>
+        </table>            
+      </div>
+    </div>
+  </div>
 </div>
   </div>
+  
 </div>
 <!-- Update Employee's Site -->
 <div class="modal fade" id="changeSiteModal" tabindex="-1" aria-labelledby="changeSiteModalLabel" aria-hidden="true"

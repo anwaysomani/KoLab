@@ -24,7 +24,7 @@ export class ClientComponent implements OnInit {
   employeeList: Array<any> = [];
   sitesList: Array<string> = [];
   changeSiteDropdownList: any = [];
-  activeTab: string = 'activeContractor';
+  activeTab: string = 'activeEmployee';
   selectedItem?: any;
   weekDay: Array<string> = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   selectedClient = {
@@ -73,6 +73,7 @@ export class ClientComponent implements OnInit {
   searchText = '';
   prevClientItem = '';
   prevEmployeeItem = '';
+  itemClicked:boolean=false;
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title) {
@@ -344,5 +345,9 @@ export class ClientComponent implements OnInit {
 
   activateEmployee(activeTab: string){
     this.activeTab = activeTab;
+  }
+
+  openDetails(){
+    this.itemClicked = !this.itemClicked;
   }
 }
