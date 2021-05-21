@@ -60,20 +60,20 @@
   </div>
 
   <!-- CLIENT's DETAILS -->
-  <div class="col-9 h-92 side-nav" *ngIf="!isEmployees"> <!-- DETAILS -->
+  <div class="col-3 h-92" *ngIf="!isEmployees"> <!-- DETAILS -->
     <div class="row pt-3 m-0">
 
       <div *ngIf="selectedClient.sites.length < 1" style="top: 35%; position: absolute; left: 50%;">
         <img src="assets/icons/menu.svg" width="250" height="250" style="opacity: 30%;"/>
       </div>
 
-      <div>
+      <div class="shadow p-3 mb-5 bg-white rounded">
         <div class="row">
           <div class="col-3">
             <h3>SITES</h3>
           </div>
           <div class="col-5"></div>
-          <div class="col-4 text-end mb-3">
+          <div class=" text-end mb-3">
             <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addSiteModal">
               Add Site <i class="fa fa-plus"></i>
             </button>
@@ -84,58 +84,24 @@
           <h1 class="text-center" style="text-align: center" *ngIf="selectedClient.sites.length < 1">No Sites
             Available</h1>
         </div>
-        <div class="accordion block-container" id="client-sites"
+        <div id="client-sites"
              *ngIf="selectedClient['sites'] && selectedClient.sites.length > 0">
-          <div class="card mb-2" *ngFor="let item of selectedClient['sites']">
-
+          <div class="card mb-2" *ngFor="let item of selectedClient['sites']"
+          [class.selected]="item === selectedItem"
+          (click)="onSelect(item)">
             <div class="card">
               <div class="card-header">
-                <h5 class="mb-0 row">
+                <h5 class="mb-0 ">
                   <div class="col-10">
                     <label>{{item['name']}}</label>
                   </div>
                 </h5>
               </div>
-              <div class="card-body">
-
-                <table class="table table-striped">
-                  <tbody>
-                  <tr>
-                    <th class="text-uppercase" scope="col">ID</th>
-                    <td>{{item['refNo']}}</td>
-                  </tr>
-                  <tr>
-                    <th class="text-uppercase" scope="col">Address</th>
-                    <td>{{item['address']}}</td>
-                  </tr>
-                  <tr>
-                    <th class="text-uppercase" scope="col">Pincode</th>
-                    <td>{{item['pincode']}}</td>
-                  </tr>
-                  <tr>
-                    <th class="text-uppercase" scope="col">Contractor</th>
-                    <td>{{constructArr(item)}}</td>
-                  </tr>
-                  <tr>
-                    <th class="text-uppercase" scope="col">Employees</th>
-                    <td>{{constructArr(item)}}</td>
-                  </tr>
-                  </tbody>
-                </table>
-                <div class="row">
-                  <div class="col-8"></div>
-                  <div class="col-4 text-end">
-                    <button class="btn btn-outline-danger">
-                      Delete Site&nbsp;<i class="fa fa-trash-o"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
+              
             </div>
           </div>
-        </div>
+        </div>          
       </div>
-    </div>
     <div class="row"></div>
   </div>
 
@@ -189,7 +155,69 @@
     </div>
   </div>
 </div>
+<div class="col-6 shadow p-3 mb-5 bg-white rounded">
+  <div *ngIf="selectedItem">
+    <div class="row m-t-1e">
+      <div class="col-8"></div>
+      <div class="col-4 text-end">
+        <button class="btn btn-outline-danger ">
+          Delete Site&nbsp;<i class="fa fa-trash-o"></i>
+        </button>
+      </div>
+    </div>
+    <!-- Selected Site Details -->
+    <div class="card-body">
+      <table class="table table-striped">
+        <tbody>
+        <tr>
+          <th class="text-uppercase" scope="col">ID</th>
+          <td>{{selectedItem['refNo']}}</td>
+        </tr>
+        <tr>
+          <th class="text-uppercase" scope="col">Address</th>
+          <td>{{selectedItem['address']}}</td>
+        </tr>
+        <tr>
+          <th class="text-uppercase" scope="col">Pincode</th>
+          <td>{{selectedItem['pincode']}}</td>
+        </tr>
+        </tbody>
+      </table>      
+    </div>
 
+    <section id="tabs" class="role-tab">
+      <div class="container">
+          <div class="row">
+              <div class="col-12">
+                  <nav>
+                      <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                          <a class="nav-item nav-link active" (click)="activateContractor('activeContractor')" id="nav-contractor-tab" data-toggle="collapse" href="#nav-contractor" role="tab" aria-controls="nav-contractor" aria-selected="true">Contractors</a>
+                          <a class="nav-item nav-link"  (click)="activateEmployee('activeEmployee')" id="nav-employee-tab" data-toggle="collapse" href="#nav-employee" role="tab" aria-controls="nav-employee" aria-selected="false">Employees</a>
+                      </div>
+                  </nav>
+                  <div class="tab-content" id="nav-tabContent">
+                    <!-- Panel for Contractor -->
+                      <div class="tab-pane fade show" [ngClass]="{ 'active':activeTab==='activeContractor'}" id="nav-contractor" role="tabpanel" aria-labelledby="nav-contractor-tab">
+                        <ul class = "list-group">
+                          <li class = "list-group-item">Rajiv</li>
+                          <li class = "list-group-item">PHP</li>
+                       </ul>
+                      </div>
+                      <!-- Panel for Employee -->
+                      <div class="tab-pane fade" [ngClass]="{ 'active':activeTab==='activeEmployee'}" id="nav-employee" role="tabpanel" aria-labelledby="nav-employee-tab">
+                        <ul class = "list-group">
+                          <li class = "list-group-item">Sanjiv</li>
+                          <li class = "list-group-item">PHP</li>
+                       </ul>
+                      </div>                      
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+</div>
+  </div>
+</div>
 <!-- Update Employee's Site -->
 <div class="modal fade" id="changeSiteModal" tabindex="-1" aria-labelledby="changeSiteModalLabel" aria-hidden="true"
      data-bs-backdrop="static" data-bs-keyboard="true">

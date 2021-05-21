@@ -24,6 +24,8 @@ export class ClientComponent implements OnInit {
   employeeList: Array<any> = [];
   sitesList: Array<string> = [];
   changeSiteDropdownList: any = [];
+  activeTab: string = 'activeContractor';
+  selectedItem?: any;
   weekDay: Array<string> = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   selectedClient = {
     name: '',
@@ -69,6 +71,8 @@ export class ClientComponent implements OnInit {
   userTypes: Array<any> = [];
   allow: boolean;
   searchText = '';
+  prevClientItem = '';
+  prevEmployeeItem = '';
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title) {
@@ -104,6 +108,7 @@ export class ClientComponent implements OnInit {
       if (this.clientList.length > 0) {
         this.clientList[0].isSelected = true;
         this.selectClientItem(this.clientList[0]);
+        this.selectedItem = this.clientList[0].sites[0];
       }
       this.loader.pageLoader = false;
     }, (err) => {
@@ -166,6 +171,9 @@ export class ClientComponent implements OnInit {
       if (this.selectedUser.display) {
         this.selectedUser.isSelected = false;
       }
+      if(item != this.selectedUser){
+        this.selectedUser.isSelected = false;
+      }
       this.selectedUser = item;
       this.selectedUser.display = true;
       // @ts-ignore
@@ -204,7 +212,11 @@ export class ClientComponent implements OnInit {
   }
 
   selectClientItem(client: any): void {
-    this.selectedClient.isSelected = false;
+    if(client != this.prevClientItem){
+      this.selectedClient.isSelected = false;
+    }
+    this.prevClientItem = client;
+    /* this.selectedClient.isSelected = false; */
     this.selectedClient = {
       name: '',
       sites: [],
@@ -320,5 +332,17 @@ export class ClientComponent implements OnInit {
 
   searchList(): void {
 
+  }
+
+  onSelect(item: any): void {
+    this.selectedItem = item;
+  }
+  
+  activateContractor(activeTab:string){
+    this.activeTab = activeTab;
+  }
+
+  activateEmployee(activeTab: string){
+    this.activeTab = activeTab;
   }
 }
