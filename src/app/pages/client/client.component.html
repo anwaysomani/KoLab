@@ -47,7 +47,7 @@
           <div class="d-flex w-100 justify-content-between">
             <h6 class="mb-1">{{item.name}}</h6>
             <span class="highlighted-item-row" *ngIf="item.isSelected"> <!-- selected item highlight -->
-              <i class="fa fa-angle-right"></i>
+              &#x296C;
             </span>
           </div>
         </li>
@@ -69,11 +69,11 @@
             <h3>SITES</h3>
           </div>
           <div class="col-5">
-          <div class=" text-end mb-3">
-            <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addSiteModal">
-              Add Site <i class="fa fa-plus"></i>
-            </button>
-          </div>
+            <div class=" text-end mb-3">
+              <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addSiteModal">
+                Add Site <i class="fa fa-plus"></i>
+              </button>
+            </div>
           </div>
         </div>
         <hr class="mt-0">
@@ -84,68 +84,69 @@
         <div id="client-sites"
              *ngIf="selectedClient['sites'] && selectedClient.sites.length > 0">
           <div class="card mb-2" *ngFor="let item of selectedClient['sites']"
-          [class.selected]="item === selectedItem"
-          [ngClass]="{'highlight-row': item === selectedItem}"
-          (click)="onSelect(item)">
+               [class.selected]="item === selectedItem"
+               [ngClass]="{'highlight-row': item === selectedItem}"
+               (click)="onSelect(item)">
             <div class="card">
               <div class="card-header">
                 <h5 class="mb-0 ">
                   <div class="col-10">
                     <label>{{item['name']}}</label>
                     <span class="highlighted-item-row" *ngIf="item === selectedItem"> <!-- selected item highlight -->
-                      <i class="fa fa-angle-right"></i>
+                      &#x296C;
                     </span>
                   </div>
                 </h5>
               </div>
-              
+
             </div>
           </div>
-        </div>          
+        </div>
       </div>
-    <div class="row"></div>
-  </div>
+      <div class="row"></div>
+    </div>
 
-  <!-- USER's DETAILS -->
-  <div class="col-9 h-92 side-nav" *ngIf="isEmployees"> <!-- DETAILS -->
+    <!-- USER's DETAILS -->
+    <div class="col-9 h-92 side-nav" *ngIf="isEmployees"> <!-- DETAILS -->
 
-    <div class="row pt-3">
-      <div class="col-12">
-        <span class="font-xlarge"><i class="fa fa-map-marker"></i>&nbsp;{{selectedUser['activeSite']}}</span>
-        &nbsp;<span class="change-text" data-bs-toggle="modal" data-bs-target="#changeSiteModal"
-                    (click)="clientDataStore()">
+      <div class="row pt-3">
+        <div class="col-12">
+          <span class="font-xlarge"><i class="fa fa-map-marker"></i>&nbsp;{{selectedUser['activeSite']}}</span>
+          &nbsp;<span class="change-text" data-bs-toggle="modal" data-bs-target="#changeSiteModal"
+                      (click)="clientDataStore()">
           Change
         </span>
+        </div>
+        <div class="col-9 text-end"> <!-- CLIENT'S SITE NAME -->
+        </div>
       </div>
-      <div class="col-9 text-end"> <!-- CLIENT'S SITE NAME -->
-      </div>
-    </div>
-    <hr>
-    <div class="row container block-container">
-      <div class="list-group">
-        <div *ngFor="let key of keyList">
+      <hr>
+      <div class="row container block-container">
+        <div class="list-group">
+          <div *ngFor="let key of keyList">
 
-          <div class="row" [ngClass]="{'mb-1': index !== 0}" *ngFor="let item of renderList(key); let index = index;">
-            <div class="col-1">
-              <span class="display-day" *ngIf="index === 0">{{getWeekDayText(key)}}</span>
-              <h4 class="mb-0 mt--4" *ngIf="index === 0">{{key}}</h4>
-            </div>
-            <div class="col-11">
-              <div class="list-group-item list-group-item-action">
-                <div class="row">
-                  <div class="col-2"> <!-- time -->
-                    {{item.time}}
-                  </div>
-                  <div class="col-2 badge"
-                       [ngClass]="{'bg-danger': item.status === 'On Leave', 'bg-warning': item.status === 'Sign Out',
+            <div class="row" [ngClass]="{'mb-1': index !== 0}" *ngFor="let item of renderList(key); let index = index;">
+              <div class="col-1">
+                <span class="display-day" *ngIf="index === 0">{{getWeekDayText(key)}}</span>
+                <h4 class="mb-0 mt--4" *ngIf="index === 0">{{key}}</h4>
+              </div>
+              <div class="col-11">
+                <div class="list-group-item list-group-item-action">
+                  <div class="row">
+                    <div class="col-2"> <!-- time -->
+                      {{item.time}}
+                    </div>
+                    <div class="col-2 badge"
+                         [ngClass]="{'bg-danger': item.status === 'On Leave', 'bg-warning': item.status === 'Sign Out',
                        'bg-success': item.status === 'Sign In'}">
-                    <!-- status -->
-                    {{item.status}}
-                  </div>
-                  <div class="col-8">
-                    <span *ngIf="!item.reason || item.reason.length < 5">{{item.site}}</span>
-                    <span class="text-danger"
-                          *ngIf="item.reason && item.reason.length > 0">Reason: {{item.reason}}</span>
+                      <!-- status -->
+                      {{item.status}}
+                    </div>
+                    <div class="col-8">
+                      <span *ngIf="!item.reason || item.reason.length < 5">{{item.site}}</span>
+                      <span class="text-danger"
+                            *ngIf="item.reason && item.reason.length > 0">Reason: {{item.reason}}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -155,125 +156,294 @@
       </div>
     </div>
   </div>
-</div>
-<div class="col-6 shadow p-3 mb-5 bg-white rounded h-92">
-  <div *ngIf="selectedItem">
-    <div class="row m-t-1e">
-      <div class="col-6">
-        <h3><b>#</b> : {{selectedItem['refNo']}}123</h3>
-      </div>
-      <div class="col-6 text-end">
-        <button  class="btn btn-outline-danger m-r-1e">
-          &#x2715;<!-- <i class="fa fa-trash-o"></i> --> <!-- Delete Icon Hex code -->
-        </button>
-        <button class="btn btn-outline-primary ">
-          &#x270E;
-        </button>
-      </div>
-    </div>
-    <!-- Selected Site Details -->
-    
+  <div class="col-6 shadow p-3 mb-5 bg-white rounded overflow-scroll">
 
-    <section id="tabs" class="role-tab">
-      <div class="container h-30">
+
+    <!--      &lt;!&ndash; Selected Site Details &ndash;&gt;-->
+    <!--      <section id="tabs" class="role-tab">-->
+    <!--        <div class="container h-30">-->
+    <!--          <div class="row">-->
+    <!--            <div>-->
+    <!--              <table class="table table-striped">-->
+    <!--                <tbody>-->
+    <!--                <tr>-->
+    <!--                  <th class="text-uppercase" scope="col">Project Manager</th>-->
+    <!--                  <td>Nicholos Flemming</td>-->
+    <!--                </tr>-->
+    <!--                </tbody>-->
+    <!--              </table>-->
+    <!--            </div>-->
+    <!--            <div class="table-wrapper-scroll-y custom-scrollbar">-->
+    <!--              <div class="text-uppercase col-12 p-05e" style="background-color:rgba(145, 162, 219, 0.137); "-->
+    <!--                   scope="col"><b>Employees</b></div>-->
+    <!--              <div class="accordion accordion-flush" id="accordionFlushExample">-->
+    <!--                <div class="accordion-item">-->
+    <!--                  <h2 class="accordion-header" id="flush-headingOne">-->
+    <!--                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"-->
+    <!--                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">-->
+    <!--                      Employees-->
+    <!--                    </button>-->
+    <!--                  </h2>-->
+    <!--                  <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"-->
+    <!--                       data-bs-parent="#accordionFlushExample">-->
+    <!--                    &lt;!&ndash; employee list &ndash;&gt;-->
+    <!--                  </div>-->
+    <!--                </div>-->
+    <!--                <div class="accordion-item">-->
+    <!--                  <h2 class="accordion-header" id="flush-headingTwo">-->
+    <!--                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"-->
+    <!--                            data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">-->
+    <!--                      Visitors-->
+    <!--                    </button>-->
+    <!--                  </h2>-->
+    <!--                  <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"-->
+    <!--                       data-bs-parent="#accordionFlushExample">-->
+    <!--                    &lt;!&ndash; visitors list &ndash;&gt;-->
+    <!--                  </div>-->
+    <!--                </div>-->
+    <!--              </div>-->
+    <!--              <div class="row row-cols-1 row-cols-md-2 g-4">-->
+    <!--                <div class="col">-->
+    <!--                  <div class="card">-->
+    <!--                    <div class="card-body">-->
+    <!--                      <h5 class="card-title">Card title</h5>-->
+    <!--                    </div>-->
+    <!--                  </div>-->
+    <!--                </div>-->
+    <!--                <div class="col">-->
+    <!--                  <div class="card">-->
+    <!--                    <div class="card-body">-->
+    <!--                      <h5 class="card-title">Card title</h5>-->
+    <!--                    </div>-->
+    <!--                  </div>-->
+    <!--                </div>-->
+    <!--                <div class="col">-->
+    <!--                  <div class="card">-->
+    <!--                    <div class="card-body">-->
+    <!--                      <h5 class="card-title">Card title</h5>-->
+    <!--                    </div>-->
+    <!--                  </div>-->
+    <!--                </div>-->
+    <!--                <div class="col">-->
+    <!--                  <div class="card">-->
+    <!--                    <div class="card-body">-->
+    <!--                      <h5 class="card-title">Card title</h5>-->
+    <!--                    </div>-->
+    <!--                  </div>-->
+    <!--                </div>-->
+    <!--                <div class="col">-->
+    <!--                  <div class="card">-->
+    <!--                    <div class="card-body">-->
+    <!--                      <h5 class="card-title">Card title</h5>-->
+    <!--                    </div>-->
+    <!--                  </div>-->
+    <!--                </div>-->
+    <!--                <div class="col">-->
+    <!--                  <div class="card">-->
+    <!--                    <div class="card-body">-->
+    <!--                      <h5 class="card-title">Card title</h5>-->
+    <!--                    </div>-->
+    <!--                  </div>-->
+    <!--                </div>-->
+    <!--                <div class="col">-->
+    <!--                  <div class="card">-->
+    <!--                    <div class="card-body">-->
+    <!--                      <h5 class="card-title">Card title</h5>-->
+    <!--                    </div>-->
+    <!--                  </div>-->
+    <!--                </div>-->
+    <!--              </div>-->
+    <!--            </div>-->
+    <!--            <div class="m-t-1e">-->
+    <!--              <table class="table table-striped">-->
+    <!--                <tbody>-->
+    <!--                <tr>-->
+    <!--                  <th class="text-uppercase" scope="col">Address</th>-->
+    <!--                  <td>{{selectedItem['address']}}</td>-->
+    <!--                </tr>-->
+    <!--                <tr>-->
+    <!--                  <th class="text-uppercase" scope="col">Pincode</th>-->
+    <!--                  <td>{{selectedItem['pincode']}}</td>-->
+    <!--                </tr>-->
+    <!--                </tbody>-->
+    <!--              </table>-->
+    <!--            </div>-->
+
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      </section>-->
+    <!--      <div class="container" shadow p-3 mb-5 bg-white rounded>-->
+    <!--        <div class="row">-->
+    <!--          <div class="detailsTable table-wrapper-scroll-y custom-scrollbar m-t-1e">-->
+    <!--            <div class="text-uppercase col-12 p-05e" style="background-color:rgba(88, 73, 160, 0.1); " scope="col"><b>DETAILS</b>-->
+    <!--            </div>-->
+    <!--            <table class="table table-bordered mb-0 table-hover">-->
+    <!--              <tbody>-->
+    <!--              <tr>-->
+    <!--                <td>Mark</td>-->
+    <!--                <td>Otto</td>-->
+    <!--              </tr>-->
+    <!--              <tr>-->
+    <!--                <td>Jacob</td>-->
+    <!--                <td>Thornton</td>-->
+    <!--              </tr>-->
+    <!--              <tr>-->
+    <!--                <td>Larry</td>-->
+    <!--                <td>the Bird</td>-->
+    <!--              </tr>-->
+    <!--              <tr>-->
+    <!--                <td>Mark</td>-->
+    <!--                <td>Otto</td>-->
+    <!--              </tr>-->
+    <!--              <tr>-->
+    <!--                <td>Jacob</td>-->
+    <!--                <td>Thornton</td>-->
+    <!--              </tr>-->
+    <!--              <tr>-->
+    <!--                <td>Larry</td>-->
+    <!--                <td>the Bird</td>-->
+    <!--              </tr>-->
+    <!--              </tbody>-->
+    <!--            </table>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
+
+
+    <!-- widget-3 -->
+    <div class="card h-43 mb-3">
+      <div class="card-header">
+        <div *ngIf="selectedItem">
           <div class="row">
-            <div>
-              <table class="table table-striped">
-                <tbody>
-                  <tr>
-                    <th class="text-uppercase" scope="col">Project Manager</th>
-                    <td>Nicholos Flemming</td>
-                  </tr>
-                </tbody>
-              </table>      
+            <div class="col-6">
+              <h3><b>#</b> : {{selectedItem['refNo']}}123</h3>
             </div>
-            <div class="table-wrapper-scroll-y custom-scrollbar">
-              <div class="text-uppercase col-12 p-05e" style="background-color:rgba(145, 162, 219, 0.137); " scope="col"><b>Employees</b></div>
-              <table class="table table-bordered mb-0 table-hover">
-                <tbody>
-                  <tr>                   
-                    <td>Mark</td>
-                    <td>Otto</td>
-                  </tr>
-                  <tr>                    
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                  </tr>
-                  <tr>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                  </tr>
-                  <tr>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                  </tr>
-                  <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                  </tr>
-                  <tr>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                  </tr>
-                </tbody>
-              </table>            
+            <div class="col-6 text-end">
+              <button class="btn btn-outline-danger m-r-1e">
+                &#x2715;<!-- <i class="fa fa-trash-o"></i> --> <!-- Delete Icon Hex code -->
+              </button>
+              <button class="btn btn-outline-primary ">
+                &#x270E;
+              </button>
             </div>
-            <div class="m-t-1e">
-            <table class="table table-striped">
-              <tbody>
-              <tr>
-                <th class="text-uppercase" scope="col">Address</th>
-                <td>{{selectedItem['address']}}</td>
-              </tr>
-              <tr>
-                <th class="text-uppercase" scope="col">Pincode</th>
-                <td>{{selectedItem['pincode']}}</td>
-              </tr>
-              </tbody>
-            </table>
           </div>
-            
-          </div>
+        </div>
       </div>
-  </section>
-  <div class="container" shadow p-3 mb-5 bg-white rounded>
-    <div class="row">
-      <div class="detailsTable table-wrapper-scroll-y custom-scrollbar m-t-1e">
-        <div class="text-uppercase col-12 p-05e" style="background-color:rgba(88, 73, 160, 0.1); " scope="col"><b>DETAILS</b></div>
-        <table class="table table-bordered mb-0 table-hover">
-          <tbody>
-            <tr>                   
-              <td>Mark</td>
-              <td>Otto</td>
-            </tr>
-            <tr>                    
-              <td>Jacob</td>
-              <td>Thornton</td>
-            </tr>
-            <tr>
-              <td>Larry</td>
-              <td>the Bird</td>
-            </tr>
-            <tr>
-              <td>Mark</td>
-              <td>Otto</td>
-            </tr>
-            <tr>
-              <td>Jacob</td>
-              <td>Thornton</td>
-            </tr>
-            <tr>
-              <td>Larry</td>
-              <td>the Bird</td>
-            </tr>
-          </tbody>
-        </table>            
+      <div class="card-body overflow-scroll">
+        <!-- project manager -->
+        <div class="mb-3 row">
+          <label class="col-sm-3 col-form-label"><b>Project Manager/s</b></label>
+          <div class="col-sm-9 col-form-label">
+            <span *ngFor="let employee of selectedSiteContractorList">{{employee.name}}</span>
+            <span *ngIf="selectedSiteContractorList.length < 1">-</span>
+          </div>
+        </div>
+
+        <!-- employees -->
+        <label class="col-form-label-lg text-uppercase"><b>Employees</b></label>
+        <div class="row mb-3 g-0" *ngIf="selectedSiteEmployeeList.length < 1">
+          (No employees allocated yet)
+        </div>
+        <div class="row g-3 mb-3" *ngIf="selectedSiteEmployeeList.length > 0">
+          <div class="col-4 border-end border-bottom arrow-pointer item-selection"
+               *ngFor="let employee of selectedSiteEmployeeList" (click)="selectEmployee(employee.uid)">
+            {{employee.name}}
+          </div>
+        </div>
+
+        <!-- visitors -->
+        <label class="col-form-label-lg text-uppercase"><b>Visitors</b></label>
+        <div class="row g-3 mb-3">
+          <div class="col-4 border-end border-bottom arrow-pointer item-selection" *ngFor="let i of [1,2,3,4,5]">
+            Nicolas Timelane
+          </div>
+        </div>
+
+        <!-- images -->
+        <div class="row mb-3">
+          <!-- materials -->
+          <div class="col-6">
+            <div>
+              <label class="col-form-label-lg"><b class="text-uppercase">Materials&nbsp;
+                <span class="text-black-50 arrow-pointer">&#x279C;</span>
+              </b></label>
+            </div>
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/kolab-04.appspot.com/o/1621168796866?alt=media&token=3e3dcb5d-698f-4289-bf8e-9a7bfecba38e"
+              alt="Sample" height="200"/>
+          </div>
+
+          <!-- work progress -->
+          <div class="col-6">
+            <div>
+              <label class="col-form-label-lg"><b class="text-uppercase">Progress&nbsp;
+                <span class="text-black-50 arrow-pointer">&#x279C;</span>
+              </b></label>
+            </div>
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/kolab-04.appspot.com/o/1621168796866?alt=media&token=3e3dcb5d-698f-4289-bf8e-9a7bfecba38e"
+              alt="Sample" height="200"/>
+          </div>
+        </div>
+
+
       </div>
     </div>
+
+    <!-- dynamic column for data display -->
+    <div class="card h-43">
+      <div class="card-body">
+        <!-- for employee/contractor attendance display -->
+        <div *ngIf="displayEmployeeDetail">
+          <div class="row">
+            <div class="col-6">
+              <label class="col-form-label text-uppercase">{{selectedSiteEmployee}}</label>
+            </div>
+            <div class="col-6 text-end">
+              <!-- active - green - Sign In -->
+              <label class="col-form-label text-success" *ngIf="selectedSiteEmployeeStatus === 'Sign In'">&#x26AC;&nbsp;Active</label>
+              <!-- on leave - red - On Leave -->
+              <label class="col-form-label text-danger" *ngIf="selectedSiteEmployeeStatus === 'On Leave'">&#x26AC;&nbsp;On
+                Leave</label>
+              <!-- at lunch - yellow -->
+              <label class="col-form-label text-warning" *ngIf="selectedSiteEmployeeStatus === 'At Lunch'">&#x26AC;&nbsp;At
+                Lunch</label>
+              <!-- offline - grey - Sign Out -->
+              <label class="col-form-label text-black-50" *ngIf="selectedSiteEmployeeStatus === '' || selectedSiteEmployeeStatus === 'Sign Out'">&#x26AC;&nbsp;Offline</label>
+            </div>
+          </div>
+
+          <!-- display last three status-es -->
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Time</th>
+              <th scope="col">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>12-07-2021</td>
+              <td>12:01 AM</td>
+              <td>Sign In</td>
+            </tr>
+            <tr>
+              <td>12-07-2021</td>
+              <td>07:01 PM</td>
+              <td>Sign Out</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+    </div>
+
   </div>
-</div>
-  </div>
-  
+
 </div>
 <!-- Update Employee's Site -->
 <div class="modal fade" id="changeSiteModal" tabindex="-1" aria-labelledby="changeSiteModalLabel" aria-hidden="true"

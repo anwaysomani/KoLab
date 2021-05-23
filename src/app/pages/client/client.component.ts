@@ -73,7 +73,12 @@ export class ClientComponent implements OnInit {
   searchText = '';
   prevClientItem = '';
   prevEmployeeItem = '';
-  itemClicked:boolean=false;
+  itemClicked: boolean = false;
+  displayEmployeeDetail = false;
+  selectedSiteEmployeeList: Array<any> = [];
+  selectedSiteContractorList: Array<any> = [];
+  selectedSiteEmployee = '';
+  selectedSiteEmployeeStatus = '';
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title) {
@@ -172,7 +177,7 @@ export class ClientComponent implements OnInit {
       if (this.selectedUser.display) {
         this.selectedUser.isSelected = false;
       }
-      if(item != this.selectedUser){
+      if (item != this.selectedUser) {
         this.selectedUser.isSelected = false;
       }
       this.selectedUser = item;
@@ -213,7 +218,7 @@ export class ClientComponent implements OnInit {
   }
 
   selectClientItem(client: any): void {
-    if(client != this.prevClientItem){
+    if (client != this.prevClientItem) {
       this.selectedClient.isSelected = false;
     }
     this.prevClientItem = client;
@@ -303,6 +308,9 @@ export class ClientComponent implements OnInit {
     });
   }
 
+  // maintain 3-4 flags for different types of data
+  // change status of each on selection
+
   /* add new site for client */
   addSite(): void {
     const newSite = {
@@ -331,23 +339,59 @@ export class ClientComponent implements OnInit {
     }
   }
 
-  searchList(): void {
+  /* update state of details */
+  updateDynamicDetailSelection(state: number): void {
+    this.displayEmployeeDetail = (state === 1); // update view for employee
+  }
 
+  /* update widget-04 for employee selection */
+  selectEmployee(uid: string): void {
+    this.updateDynamicDetailSelection(1);
+    // get selected employee detail
+    this.db.collection('users').doc(uid).valueChanges().subscribe((det: any) => {
+      this.selectedSiteEmployee = det.name;
+      if (det.currentStatus) {
+        this.selectedSiteEmployeeStatus = det.currentStatus;
+      } else {
+        this.selectedSiteEmployeeStatus = '';
+      }
+      if (det.attendance.length > 3) {
+        // get last three records
+      } else {
+        // get all records
+      }
+      console.log(det);
+    });
+  }
+
+  /* fetch and sort mployee listing on site selection */
+  sortEmployeeList(site: string): void {
+    // from site, get data
+    this.db.collection('users', ref => {
+      const x = '' + site + ', ' + this.selectedClient.name;
+      return ref.where('activeSite', '==', x);
+    }).valueChanges().subscribe((det: Array<any>) => {
+      this.selectedSiteEmployeeList = det.filter(s => s.designation === 'Menu-Admin');
+      this.selectedSiteContractorList = det.filter(s => s.designation === 'Sub-Admin');
+    }, (err) => {
+      console.log(err);
+    });
   }
 
   onSelect(item: any): void {
     this.selectedItem = item;
+    this.sortEmployeeList(item.name);
   }
-  
-  activateContractor(activeTab:string){
+
+  activateContractor(activeTab: string) {
     this.activeTab = activeTab;
   }
 
-  activateEmployee(activeTab: string){
+  activateEmployee(activeTab: string) {
     this.activeTab = activeTab;
   }
 
-  openDetails(){
+  openDetails() {
     this.itemClicked = !this.itemClicked;
   }
 }
