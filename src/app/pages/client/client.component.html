@@ -442,7 +442,7 @@
       <div class="image-list">
         <div class="container image-list">  
           <div class="row">
-            <div class="col-12 mt-3 mb-1">
+            <div class="col-12 mb-1">
               <h4 class="text-uppercase">Materials</h4>
             </div>
             <div class="col-4" *ngFor="let img of images;let i=index">
@@ -458,7 +458,7 @@
             <div id="image-modal-carousel" class="carousel slide" data-ride="carousel">
               <div class="carousel-inner">
                 <div class="carousel-item" *ngFor="let photo of images let i = index" [ngClass]="{'active': i == imgId }">
-                  <img class="d-block w-100" src={{photo.image}} alt="First slide">
+                  <img class="d-block w-100 img-responsive" src={{photo.image}} alt="First slide">
                 </div>
               </div>
             </div>
