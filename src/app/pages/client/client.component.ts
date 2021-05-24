@@ -77,6 +77,7 @@ export class ClientComponent implements OnInit {
   displayEmployeeDetail = false;
   displayMaterialView = false;
   displayProgressView = false;
+  displayInfoView = false;
   selectedSiteEmployeeList: Array<any> = [];
   selectedSiteContractorList: Array<any> = [];
   selectedSiteEmployee = '';
@@ -166,6 +167,7 @@ export class ClientComponent implements OnInit {
         this.selectedItem = this.clientList[0].sites[0];
       }
       this.loader.pageLoader = false;
+      this.onSelect(this.selectedItem);
     }, (err) => {
       this.loader.pageLoader = false;
     });
@@ -393,6 +395,7 @@ export class ClientComponent implements OnInit {
     this.displayEmployeeDetail = (state === 1); // update view for employee
     this.displayMaterialView = (state === 2);
     this.displayProgressView = (state === 3);
+    this.displayInfoView = (state === 4);
   }
 
   /* update widget-04 for employee selection */
