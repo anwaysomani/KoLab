@@ -20,10 +20,6 @@ export class AppComponent {
       name: 'Employees',
       route: 'employees'
     },
-    {
-      name: 'Posts',
-      route: 'posts'
-    },
   ];
   router: any;
   brand: string;
