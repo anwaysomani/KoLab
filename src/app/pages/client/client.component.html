@@ -366,7 +366,7 @@
           <div class="col-6">
             <div>
               <label class="col-form-label-lg"><b class="text-uppercase">Materials&nbsp;
-                <span class="text-black-50 arrow-pointer">&#x279C;</span>
+                <span class="text-black-50 arrow-pointer" (click) = "selectMaterials('Materials')">&#x279C;</span>
               </b></label>
             </div>
             <img
@@ -378,7 +378,7 @@
           <div class="col-6">
             <div>
               <label class="col-form-label-lg"><b class="text-uppercase">Progress&nbsp;
-                <span class="text-black-50 arrow-pointer">&#x279C;</span>
+                <span class="text-black-50 arrow-pointer" (click) = "selectMaterials('Progress')">&#x279C;</span>
               </b></label>
             </div>
             <img
@@ -392,7 +392,7 @@
     </div>
 
     <!-- dynamic column for data display -->
-    <div class="card h-43">
+    <div class="card h-43 overflow-scroll">
       <div class="card-body">
         <!-- for employee/contractor attendance display -->
         <div *ngIf="displayEmployeeDetail">
@@ -414,7 +414,11 @@
             </div>
           </div>
 
+          <div class="row mb-3 g-0" *ngIf="employeeAttendance.length < 1">
+            (No attendance record found for this month.)
+          </div>
           <!-- display last three status-es -->
+          <div class="row g-3 mb-3" *ngIf="employeeAttendance.length > 0">
           <table class="table">
             <thead>
             <tr>
@@ -424,15 +428,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-              <td>12-07-2021</td>
-              <td>12:01 AM</td>
-              <td>Sign In</td>
-            </tr>
-            <tr>
-              <td>12-07-2021</td>
-              <td>07:01 PM</td>
-              <td>Sign Out</td>
+            <tr *ngFor = "let item of employeeAttendance">
+              <td>{{item.date}}</td>
+              <td>{{item.time}}</td>
+              <td>{{item.status}}</td>
             </tr>
             </tbody>
           </table>
@@ -440,6 +439,42 @@
 
 
       </div>
+      <div class="image-list">
+        <div class="container image-list">  
+          <div class="row">
+            <div class="col-12 mt-3 mb-1">
+              <h4 class="text-uppercase">Materials</h4>
+            </div>
+            <div class="col-4" *ngFor="let img of images;let i=index">
+              <a (click)="openImageModel(img.image,i)" data-toggle="modal" data-target="#materials-progress-modal"><img src={{images[i].image}}></a>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="modal fade" id="materials-progress-modal" tabindex="-1" role="dialog" aria-labelledby="materials-progress-modal-label" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="model-body">
+            <div id="image-modal-carousel" class="carousel slide" data-ride="carousel">
+              <div class="carousel-inner">
+                <div class="carousel-item" *ngFor="let photo of images let i = index" [ngClass]="{'active': i == imgId }">
+                  <img class="d-block w-100" src={{photo.image}} alt="First slide">
+                </div>
+              </div>
+            </div>
+            <a class="carousel-control-prev" href="#image-modal-carousel" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#image-modal-carousel" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
     </div>
 
   </div>
