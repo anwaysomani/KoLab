@@ -366,7 +366,7 @@
           <div class="col-6">
             <div>
               <label class="col-form-label-lg"><b class="text-uppercase">Materials&nbsp;
-                <span class="text-black-50 arrow-pointer" (click) = "selectMaterials('Materials')">&#x279C;</span>
+                <span class="text-black-50 arrow-pointer" (click) = "updateDynamicDetailSelection(2)">&#x279C;</span>
               </b></label>
             </div>
             <img
@@ -378,7 +378,7 @@
           <div class="col-6">
             <div>
               <label class="col-form-label-lg"><b class="text-uppercase">Progress&nbsp;
-                <span class="text-black-50 arrow-pointer" (click) = "selectMaterials('Progress')">&#x279C;</span>
+                <span class="text-black-50 arrow-pointer" (click) = "updateDynamicDetailSelection(3)">&#x279C;</span>
               </b></label>
             </div>
             <img
@@ -439,7 +439,7 @@
 
 
       </div>
-      <div class="image-list">
+      <div class="image-list" *ngIf="displayMaterialView">
         <div class="container image-list">  
           <div class="row">
             <div class="col-12 mb-1">
