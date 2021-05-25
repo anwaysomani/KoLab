@@ -1,5 +1,5 @@
 <div *ngIf="allow" class="row">
-  <div class="col-3 client-list h-92">
+  <div class="col-2 client-list h-92">
     <!-- add customization here for search filter + client designation sort + add button -->
     <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="square-jelly-box" [fullScreen]="true"
                  *ngIf="loader.pageLoader">
@@ -23,7 +23,7 @@
     </div>
 
     <div class="mb-2 mt-2 row">
-      <div class="col-10 p-l-2e">
+      <div class="col-9 p-l-2e">
         <input class="form-control" name="searchText" placeholder="Search here..." [(ngModel)]="searchText">
       </div>
       <div class="col-2 p-0" *ngIf="isEmployees">
@@ -63,7 +63,7 @@
   <div class="col-3 h-92" *ngIf="!isEmployees"> <!-- DETAILS -->
     <div class="row m-0">
 
-      <div class="shadow p-3 mb-5 bg-white rounded h-92">
+      <div class="shadow p-3 bg-white rounded h-92">
         <div class="row">
           <div class="col-7">
             <h3>SITES</h3>
@@ -156,172 +156,18 @@
       </div>
     </div>
   </div>
-  <div class="col-6 shadow p-3 mb-5 bg-white rounded overflow-scroll">
-
-
-    <!--      &lt;!&ndash; Selected Site Details &ndash;&gt;-->
-    <!--      <section id="tabs" class="role-tab">-->
-    <!--        <div class="container h-30">-->
-    <!--          <div class="row">-->
-    <!--            <div>-->
-    <!--              <table class="table table-striped">-->
-    <!--                <tbody>-->
-    <!--                <tr>-->
-    <!--                  <th class="text-uppercase" scope="col">Project Manager</th>-->
-    <!--                  <td>Nicholos Flemming</td>-->
-    <!--                </tr>-->
-    <!--                </tbody>-->
-    <!--              </table>-->
-    <!--            </div>-->
-    <!--            <div class="table-wrapper-scroll-y custom-scrollbar">-->
-    <!--              <div class="text-uppercase col-12 p-05e" style="background-color:rgba(145, 162, 219, 0.137); "-->
-    <!--                   scope="col"><b>Employees</b></div>-->
-    <!--              <div class="accordion accordion-flush" id="accordionFlushExample">-->
-    <!--                <div class="accordion-item">-->
-    <!--                  <h2 class="accordion-header" id="flush-headingOne">-->
-    <!--                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"-->
-    <!--                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">-->
-    <!--                      Employees-->
-    <!--                    </button>-->
-    <!--                  </h2>-->
-    <!--                  <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"-->
-    <!--                       data-bs-parent="#accordionFlushExample">-->
-    <!--                    &lt;!&ndash; employee list &ndash;&gt;-->
-    <!--                  </div>-->
-    <!--                </div>-->
-    <!--                <div class="accordion-item">-->
-    <!--                  <h2 class="accordion-header" id="flush-headingTwo">-->
-    <!--                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"-->
-    <!--                            data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">-->
-    <!--                      Visitors-->
-    <!--                    </button>-->
-    <!--                  </h2>-->
-    <!--                  <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"-->
-    <!--                       data-bs-parent="#accordionFlushExample">-->
-    <!--                    &lt;!&ndash; visitors list &ndash;&gt;-->
-    <!--                  </div>-->
-    <!--                </div>-->
-    <!--              </div>-->
-    <!--              <div class="row row-cols-1 row-cols-md-2 g-4">-->
-    <!--                <div class="col">-->
-    <!--                  <div class="card">-->
-    <!--                    <div class="card-body">-->
-    <!--                      <h5 class="card-title">Card title</h5>-->
-    <!--                    </div>-->
-    <!--                  </div>-->
-    <!--                </div>-->
-    <!--                <div class="col">-->
-    <!--                  <div class="card">-->
-    <!--                    <div class="card-body">-->
-    <!--                      <h5 class="card-title">Card title</h5>-->
-    <!--                    </div>-->
-    <!--                  </div>-->
-    <!--                </div>-->
-    <!--                <div class="col">-->
-    <!--                  <div class="card">-->
-    <!--                    <div class="card-body">-->
-    <!--                      <h5 class="card-title">Card title</h5>-->
-    <!--                    </div>-->
-    <!--                  </div>-->
-    <!--                </div>-->
-    <!--                <div class="col">-->
-    <!--                  <div class="card">-->
-    <!--                    <div class="card-body">-->
-    <!--                      <h5 class="card-title">Card title</h5>-->
-    <!--                    </div>-->
-    <!--                  </div>-->
-    <!--                </div>-->
-    <!--                <div class="col">-->
-    <!--                  <div class="card">-->
-    <!--                    <div class="card-body">-->
-    <!--                      <h5 class="card-title">Card title</h5>-->
-    <!--                    </div>-->
-    <!--                  </div>-->
-    <!--                </div>-->
-    <!--                <div class="col">-->
-    <!--                  <div class="card">-->
-    <!--                    <div class="card-body">-->
-    <!--                      <h5 class="card-title">Card title</h5>-->
-    <!--                    </div>-->
-    <!--                  </div>-->
-    <!--                </div>-->
-    <!--                <div class="col">-->
-    <!--                  <div class="card">-->
-    <!--                    <div class="card-body">-->
-    <!--                      <h5 class="card-title">Card title</h5>-->
-    <!--                    </div>-->
-    <!--                  </div>-->
-    <!--                </div>-->
-    <!--              </div>-->
-    <!--            </div>-->
-    <!--            <div class="m-t-1e">-->
-    <!--              <table class="table table-striped">-->
-    <!--                <tbody>-->
-    <!--                <tr>-->
-    <!--                  <th class="text-uppercase" scope="col">Address</th>-->
-    <!--                  <td>{{selectedItem['address']}}</td>-->
-    <!--                </tr>-->
-    <!--                <tr>-->
-    <!--                  <th class="text-uppercase" scope="col">Pincode</th>-->
-    <!--                  <td>{{selectedItem['pincode']}}</td>-->
-    <!--                </tr>-->
-    <!--                </tbody>-->
-    <!--              </table>-->
-    <!--            </div>-->
-
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--      </section>-->
-    <!--      <div class="container" shadow p-3 mb-5 bg-white rounded>-->
-    <!--        <div class="row">-->
-    <!--          <div class="detailsTable table-wrapper-scroll-y custom-scrollbar m-t-1e">-->
-    <!--            <div class="text-uppercase col-12 p-05e" style="background-color:rgba(88, 73, 160, 0.1); " scope="col"><b>DETAILS</b>-->
-    <!--            </div>-->
-    <!--            <table class="table table-bordered mb-0 table-hover">-->
-    <!--              <tbody>-->
-    <!--              <tr>-->
-    <!--                <td>Mark</td>-->
-    <!--                <td>Otto</td>-->
-    <!--              </tr>-->
-    <!--              <tr>-->
-    <!--                <td>Jacob</td>-->
-    <!--                <td>Thornton</td>-->
-    <!--              </tr>-->
-    <!--              <tr>-->
-    <!--                <td>Larry</td>-->
-    <!--                <td>the Bird</td>-->
-    <!--              </tr>-->
-    <!--              <tr>-->
-    <!--                <td>Mark</td>-->
-    <!--                <td>Otto</td>-->
-    <!--              </tr>-->
-    <!--              <tr>-->
-    <!--                <td>Jacob</td>-->
-    <!--                <td>Thornton</td>-->
-    <!--              </tr>-->
-    <!--              <tr>-->
-    <!--                <td>Larry</td>-->
-    <!--                <td>the Bird</td>-->
-    <!--              </tr>-->
-    <!--              </tbody>-->
-    <!--            </table>-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
-
-
+  <div class="col-7 shadow pt-3 bg-white rounded overflow-scroll">
     <!-- widget-3 -->
     <div class="card h-43 mb-3">
       <div class="card-header">
         <div *ngIf="selectedItem">
           <div class="row">
             <div class="col-6">
-              <h3><b>#</b> : {{selectedItem['refNo']}}123</h3>
+              <h3><b>#</b> {{selectedItem['name']}}</h3>
             </div>
             <div class="col-6 text-end">
               <button class="btn btn-outline-danger m-r-1e">
-                &#x2715;<!-- <i class="fa fa-trash-o"></i> --> <!-- Delete Icon Hex code -->
+                &#x2715;
               </button>
               <button class="btn btn-outline-primary ">
                 &#x270E;
@@ -366,7 +212,7 @@
           <div class="col-6">
             <div>
               <label class="col-form-label-lg"><b class="text-uppercase">Materials&nbsp;
-                <span class="text-black-50 arrow-pointer" (click) = "selectMaterials('Materials')">&#x279C;</span>
+                <span class="text-black-50 arrow-pointer" (click)="selectMaterials('Materials')">&#x279C;</span>
               </b></label>
             </div>
             <img
@@ -378,7 +224,7 @@
           <div class="col-6">
             <div>
               <label class="col-form-label-lg"><b class="text-uppercase">Progress&nbsp;
-                <span class="text-black-50 arrow-pointer" (click) = "selectMaterials('Progress')">&#x279C;</span>
+                <span class="text-black-50 arrow-pointer" (click)="selectMaterials('Progress')">&#x279C;</span>
               </b></label>
             </div>
             <img
@@ -410,7 +256,8 @@
               <label class="col-form-label text-warning" *ngIf="selectedSiteEmployeeStatus === 'At Lunch'">&#x26AC;&nbsp;At
                 Lunch</label>
               <!-- offline - grey - Sign Out -->
-              <label class="col-form-label text-black-50" *ngIf="selectedSiteEmployeeStatus === '' || selectedSiteEmployeeStatus === 'Sign Out'">&#x26AC;&nbsp;Offline</label>
+              <label class="col-form-label text-black-50"
+                     *ngIf="selectedSiteEmployeeStatus === '' || selectedSiteEmployeeStatus === 'Sign Out'">&#x26AC;&nbsp;Offline</label>
             </div>
           </div>
 
@@ -419,109 +266,90 @@
           </div>
           <!-- display last three status-es -->
           <div class="row g-3 mb-3" *ngIf="employeeAttendance.length > 0">
-          <table class="table">
-            <thead>
-            <tr>
-              <th scope="col">Date</th>
-              <th scope="col">Time</th>
-              <th scope="col">Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor = "let item of employeeAttendance">
-              <td>{{item.date}}</td>
-              <td>{{item.time}}</td>
-              <td>{{item.status}}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-
-
-      </div>
-      <div class="image-list">
-        <div class="container image-list">  
-          <div class="row">
-            <div class="col-12 mb-1">
-              <h4 class="text-uppercase">Materials</h4>
-            </div>
-            <div class="col-4" *ngFor="let img of images;let i=index">
-              <a (click)="openImageModel(img.image,i)" data-toggle="modal" data-target="#materials-progress-modal"><img src={{images[i].image}}></a>
-            </div>
+            <table class="table">
+              <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Status</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let item of employeeAttendance">
+                <td>{{item.date}}</td>
+                <td>{{item.time}}</td>
+                <td>{{item.status}}</td>
+              </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-    </div>
-    <div class="modal fade" id="materials-progress-modal" tabindex="-1" role="dialog" aria-labelledby="materials-progress-modal-label" aria-hidden="true">
-      <div class="modal-dialog  modal-lg" role="document">
-        <div class="modal-content">
-          <div class="model-body">
-            <div id="image-modal-carousel" class="carousel slide" data-ride="carousel">
-              <div class="carousel-inner">
-                <div class="row">
-                  <div class="col-7">
-                    <div class="carousel-item" *ngFor="let photo of images let i = index" [ngClass]="{'active': i == imgId }">
-                      <img class="d-block w-100 img-responsive" src={{photo.image}} alt="First slide">
-                    </div>
-                  </div>
-                  <div class="col-5">
-                    <div class="wrapper" id="chatPane">
-                      <div class="main">
-                          <div class="px-2 scroll">
-                              <div class="d-flex align-items-center">
-                                  <div class="text-left pr-1"><img src="https://img.icons8.com/color/40/000000/guest-female.png" width="30" class="img1" /></div>
-                                  <div class="pr-2 pl-1"> <span class="name">Sarah Anderson</span>
-                                      <p class="msg">Hi Dr. Hendrikson, I haven't been falling well for past few days.</p>
-                                  </div>
-                              </div>
-                              <div class="d-flex align-items-center text-right justify-content-end ">
-                                  <div class="pr-2"> <span class="name">Dr. Hendrikson</span>
-                                      <p class="msg">Let's jump on a video call</p>
-                                  </div>
-                                  <div><img src="https://i.imgur.com/HpF4BFG.jpg" width="30" class="img1" /></div>
-                              </div>
-                              <div class="text-center"><span class="between">Call started at 10:47am</span></div>
-                              <div class="text-center"><span class="between">Call ended at 11:03am</span></div>
-                              <div class="d-flex align-items-center">
-                                  <div class="text-left pr-1"><img src="https://img.icons8.com/color/40/000000/guest-female.png" width="30" class="img1" /></div>
-                                  <div class="pr-2 pl-1"> <span class="name">Sarah Anderson</span>
-                                      <p class="msg">How often should i take this?</p>
-                                  </div>
-                              </div>
-                              <div class="d-flex align-items-center text-right justify-content-end ">
-                                  <div class="pr-2"> <span class="name">Dr. Hendrikson</span>
-                                      <p class="msg">Twice a day, at breakfast and before bed</p>
-                                  </div>
-                                  <div><img src="https://i.imgur.com/HpF4BFG.jpg" width="30" class="img1" /></div>
-                              </div>
-                              <div class="d-flex align-items-center">
-                                  <div class="text-left pr-1"><img src="https://img.icons8.com/color/40/000000/guest-female.png" width="30" class="img1" /></div>
-                                  <div class="pr-2 pl-1"> <span class="name">Sarah Anderson</span>
-                                      <p class="msg">How often should i take this?</p>
-                                  </div>
-                              </div>
-                          </div>
-                          <nav class="navbar bg-white navbar-expand-sm d-flex justify-content-between"> <input type="text number" name="text" class="form-control" placeholder="Type a message...">
-                              <div class="icondiv d-flex justify-content-end align-content-center text-center ml-2"> <i class="fa fa-paperclip icon1"></i> <i class="fa fa-arrow-circle-right icon2"></i> </div>
-                          </nav>
-                      </div>
-                  </div>
-                  </div>
-                </div>                
+
+        <!-- for materials list -->
+        <div class="image-list" *ngIf="materialImagesDisplay || progressImagesDisplay">
+          <div class="container image-list">
+            <div class="row">
+              <div class="col-12 mb-1">
+                <h4 class="text-uppercase">
+                  <span *ngIf="materialImagesDisplay">Materials</span>
+                  <span *ngIf="progressImagesDisplay">Work Progress</span>
+                </h4>
+              </div>
+              <div class="col-4" *ngFor="let img of renderImages();let i=index">
+                <a (click)="openImageModel(img,i)" data-toggle="modal" data-target="#materials-progress-modal">
+                  <img src={{img}} alt=""/>
+                </a>
               </div>
             </div>
-            <a class="carousel-control-prev" href="#image-modal-carousel" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#image-modal-carousel" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
+          </div>
+        </div>
+        <div class="modal fade" id="materials-progress-modal" tabindex="-1" role="dialog"
+             aria-labelledby="materials-progress-modal-label" aria-hidden="true">
+          <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+              <div class="model-body">
+                <div id="image-modal-carousel" class="carousel slide">
+                  <div class="carousel-inner">
+                    <div class="row">
+                      <div class="col-7">
+                        <div class="carousel-item" *ngFor="let image of renderImages() let i = index"
+                             [ngClass]="{'active': i == imgId }">
+                          <img class="d-block w-100 img-responsive" src={{image}} alt="First slide">
+                        </div>
+                      </div>
+                      <div class="col-5">
+                        <label>12/02/2021</label>
+                        <p>Hello World How Are You. Biwi Bacche are fine?</p>
+                        <hr>
+                        <label>12/02/2021</label>
+                        <p>Hello World How Are You. Biwi Bacche are fine?</p>
+                        <hr>
+                        <label>12/02/2021</label>
+                        <p>Hello World How Are You. Biwi Bacche are fine?</p>
+                        <hr>
+                        <label>12/02/2021</label>
+                        <p>Hello World How Are You. Biwi Bacche are fine?</p>
+                        <hr>
+                        <label>12/02/2021</label>
+                        <p>Hello World How Are You. Biwi Bacche are fine?</p>
+                        <hr>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <a class="carousel-control-prev" href="#image-modal-carousel" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#image-modal-carousel" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    </div>
     </div>
 
   </div>
