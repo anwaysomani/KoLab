@@ -102,6 +102,7 @@ export class ClientComponent implements OnInit {
   allImageListing: Array<string> = [];
   materialImagesDisplay = false;
   progressImagesDisplay = false;
+  displayInfoView = false;
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage) {
@@ -140,6 +141,7 @@ export class ClientComponent implements OnInit {
         this.selectedItem = this.clientList[0].sites[0];
       }
       this.loader.pageLoader = false;
+      this.onSelect(this.selectedItem);
     }, (err) => {
       this.loader.pageLoader = false;
     });
@@ -366,7 +368,8 @@ export class ClientComponent implements OnInit {
     this.displayEmployeeDetail = (state === 1); // update view for employee
     this.materialImagesDisplay = (state === 2); // update view for material images
     this.progressImagesDisplay = (state === 3); // update view for progress images
-  }
+    this.displayInfoView = (state === 4);  
+}
 
   /* update widget-04 for employee selection */
   selectEmployee(uid: string): void {

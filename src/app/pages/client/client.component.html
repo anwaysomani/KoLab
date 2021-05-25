@@ -166,6 +166,9 @@
               <h3><b>#</b> {{selectedItem['name']}}</h3>
             </div>
             <div class="col-6 text-end">
+              <button class="btn btn-outline-primary m-r-1e p-l-7 p-r-7" (click)="updateDynamicDetailSelection(4)">
+                &#x2139;
+              </button>
               <button class="btn btn-outline-danger m-r-1e">
                 &#x2715;
               </button>
@@ -350,6 +353,26 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="m-t-1e" id="InfoView" *ngIf="displayInfoView">
+        <table class="table table-striped">
+          <tbody>
+            <tr>
+              <th class="text-uppercase" scope="col">Ref</th>
+              <td>{{selectedItem['refNo']}}123</td>
+            </tr>  
+            <tr>
+              <th class="text-uppercase" scope="col">Address</th>
+              <td>{{selectedItem['address']}}</td>
+            </tr>
+            <tr>
+              <th class="text-uppercase" scope="col">Pincode</th>
+              <td>{{selectedItem['pincode']}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>              
+    </div>
     </div>
 
   </div>
