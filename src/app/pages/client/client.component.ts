@@ -368,7 +368,7 @@ export class ClientComponent implements OnInit {
     this.displayEmployeeDetail = (state === 1); // update view for employee
     this.materialImagesDisplay = (state === 2); // update view for material images
     this.progressImagesDisplay = (state === 3); // update view for progress images
-    this.displayInfoView = (state === 4);  
+    this.displayInfoView = (state === 4);
 }
 
   /* update widget-04 for employee selection */
@@ -404,9 +404,13 @@ export class ClientComponent implements OnInit {
     });
   }
 
+  defaultMaterialImage = '';
+  defaultProgressImage = '';
+
   onSelect(item: any): void {
     this.selectedItem = item;
     this.sortEmployeeList(item.name);
+    this.renderDisplayImage();
   }
 
   activateContractor(activeTab: string): void {
@@ -422,7 +426,7 @@ export class ClientComponent implements OnInit {
       this.updateDynamicDetailSelection(3);
       this.materialView = false;
     }
-    this.fetchRecentImages();
+    this.fetchRecentImages(this.materialView);
   }
 
   openImageModel(imgHref: any, imgId: number): void {
@@ -432,10 +436,10 @@ export class ClientComponent implements OnInit {
   }
 
   /* get image listing from storage */
-  fetchRecentImages(): void {
+  fetchRecentImages(toFetchVal: boolean): void {
     const filePath = this.selectedItem.name + ', ' + this.selectedClient.name;
     this.allImageListing = [];
-    this.storage.ref(`${filePath}/` + (this.materialView ? 'material' : 'progress')).listAll().toPromise()
+    this.storage.ref(`${filePath}/` + (toFetchVal ? 'material' : 'progress')).listAll().toPromise()
       .then((ref) => {
       for (const i of ref.items) {
         i.getDownloadURL().then((url: string) => {
@@ -448,5 +452,23 @@ export class ClientComponent implements OnInit {
   /* render images to widget-04 */
   renderImages(): Array<any> {
     return this.allImageListing;
+  }
+
+  /* get default display image on site window */
+  renderDisplayImage(): void {
+    const filePath = this.selectedItem.name + ', ' + this.selectedClient.name;
+    this.storage.ref(`${filePath}/material`).listAll().toPromise()
+      .then((ref) => {
+          ref.items[ref.items.length - 1].getDownloadURL().then((url: string) => {
+            this.defaultMaterialImage = url;
+          });
+      });
+
+    this.storage.ref(`${filePath}/material`).listAll().toPromise()
+      .then((ref) => {
+        ref.items[ref.items.length - 1].getDownloadURL().then((url: string) => {
+          this.defaultProgressImage = url;
+        });
+      });
   }
 }

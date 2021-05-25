@@ -83,15 +83,15 @@
         </div>
         <div id="client-sites"
              *ngIf="selectedClient['sites'] && selectedClient.sites.length > 0">
-          <div class="card mb-2" *ngFor="let item of selectedClient['sites']"
+          <div class="card mb-2 arrow-pointer" *ngFor="let item of selectedClient['sites']"
                [class.selected]="item === selectedItem"
                [ngClass]="{'highlight-row': item === selectedItem}"
                (click)="onSelect(item)">
             <div class="card">
               <div class="card-header">
                 <h5 class="mb-0 ">
-                  <div class="col-10">
-                    <label>{{item['name']}}</label>
+                  <div class="col-10 arrow-pointer">
+                    <label class="arrow-pointer">{{item['name']}}</label>
                     <span class="highlighted-item-row" *ngIf="item === selectedItem"> <!-- selected item highlight -->
                       &#x296C;
                     </span>
@@ -202,12 +202,12 @@
         </div>
 
         <!-- visitors -->
-        <label class="col-form-label-lg text-uppercase"><b>Visitors</b></label>
+        <!--<label class="col-form-label-lg text-uppercase"><b>Visitors</b></label>
         <div class="row g-3 mb-3">
           <div class="col-4 border-end border-bottom arrow-pointer item-selection" *ngFor="let i of [1,2,3,4,5]">
             Nicolas Timelane
           </div>
-        </div>
+        </div>-->
 
         <!-- images -->
         <div class="row mb-3">
@@ -218,9 +218,7 @@
                 <span class="text-black-50 arrow-pointer" (click)="selectMaterials('Materials')">&#x279C;</span>
               </b></label>
             </div>
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/kolab-04.appspot.com/o/1621168796866?alt=media&token=3e3dcb5d-698f-4289-bf8e-9a7bfecba38e"
-              alt="Sample" height="200"/>
+            <img src="{{defaultMaterialImage}}" alt="Sample" height="200"/>
           </div>
 
           <!-- work progress -->
@@ -230,13 +228,9 @@
                 <span class="text-black-50 arrow-pointer" (click)="selectMaterials('Progress')">&#x279C;</span>
               </b></label>
             </div>
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/kolab-04.appspot.com/o/1621168796866?alt=media&token=3e3dcb5d-698f-4289-bf8e-9a7bfecba38e"
-              alt="Sample" height="200"/>
+            <img src="{{defaultProgressImage}}" alt="Sample" height="200"/>
           </div>
         </div>
-
-
       </div>
     </div>
 
@@ -352,15 +346,15 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="m-t-1e" id="InfoView" *ngIf="displayInfoView">
-        <table class="table table-striped">
-          <tbody>
+
+        <!-- site info -->
+        <div class="m-t-1e" id="InfoView" *ngIf="displayInfoView">
+          <table class="table table-striped">
+            <tbody>
             <tr>
               <th class="text-uppercase" scope="col">Ref</th>
               <td>{{selectedItem['refNo']}}123</td>
-            </tr>  
+            </tr>
             <tr>
               <th class="text-uppercase" scope="col">Address</th>
               <td>{{selectedItem['address']}}</td>
@@ -369,15 +363,15 @@
               <th class="text-uppercase" scope="col">Pincode</th>
               <td>{{selectedItem['pincode']}}</td>
             </tr>
-          </tbody>
-        </table>
-      </div>              
-    </div>
-    </div>
+            </tbody>
+          </table>
+        </div>
 
+      </div>
+    </div>
   </div>
-
 </div>
+
 <!-- Update Employee's Site -->
 <div class="modal fade" id="changeSiteModal" tabindex="-1" aria-labelledby="changeSiteModalLabel" aria-hidden="true"
      data-bs-backdrop="static" data-bs-keyboard="true">
