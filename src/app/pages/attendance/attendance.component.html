@@ -18,16 +18,37 @@
        *ngIf="activeUser !== undefined && activeUser.designation !== undefined && activeUser.designation === 'Sub-Admin'">
     <!-- permission only if second level admin -->
     <div class="card-header">
-      <h5 class="text-uppercase">Site Updates</h5>
+      <h5 class="text-uppercase">Site Updates&nbsp;
+        <span class="position-absolute right-1">
+          <img src="https://image.flaticon.com/icons/png/512/1827/1827422.png" alt="notification" width="20"
+               height="20"/>
+        </span>
+      </h5>
     </div>
     <div class="card-body">
-      <input type="file" class="btn btn-primary" id="uploadImage"
-             (change)="onFileSelected($event)"
-             name="image"
-             autocomplete="off" hidden/>
-      <label class="border-dark btn btn-light" for="uploadImage">
-        Upload Image
-      </label>
+
+      <!-- upload material -->
+      <div>
+        <input type="file" class="btn btn-primary" id="uploadMaterial"
+               (change)="onFileSelected($event, true)"
+               name="image"
+               autocomplete="off" hidden/>
+        <label class="border-dark btn btn-light btn-close-white w-75" for="uploadMaterial">
+          &#x2750;&nbsp;Upload Material
+        </label>
+      </div>
+
+      <!-- upload progress -->
+      <div class="mt-2">
+        <input type="file" class="btn btn-primary" id="uploadProgress"
+               (change)="onFileSelected($event, false)"
+               name="image"
+               autocomplete="off" hidden/>
+        <label class="border-dark btn btn-light btn-close-white w-75" for="uploadProgress">
+          &#x262F;&nbsp;Upload Progress
+        </label>
+      </div>
+
     </div>
   </div>
   <div class="card mb-4">

@@ -59,12 +59,13 @@ export class AttendanceComponent implements OnInit {
   }
 
   // tslint:disable-next-line:typedef
-  onFileSelected(event: any) {
+  onFileSelected(event: any, isMaterial: boolean) {
     const n = Date.now();
     const file = event.target.files[0];
     const filePath = `${this.activeUser.activeSite}/${n}`;
     const fileRef = this.storage.ref(filePath);
-    const task = this.storage.upload(`${this.activeUser.activeSite}/${n}`, file);
+    const partialPath = isMaterial ? 'material' : 'progress';
+    const task = this.storage.upload(`${this.activeUser.activeSite}/${partialPath}/${n}`, file);
     task.snapshotChanges().pipe(finalize(() => {
         this.downloadURL = fileRef.getDownloadURL();
         this.downloadURL.subscribe(url => {
