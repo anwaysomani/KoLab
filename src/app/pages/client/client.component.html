@@ -315,43 +315,43 @@
           <div class="modal-dialog  modal-lg" role="document">
             <div class="modal-content">
               <div class="model-body">
-                <div id="image-modal-carousel" class="carousel slide">
-                  <div class="carousel-inner">
-                    <div class="row">
-                      <div class="col-7">
-                        <div class="carousel-item" *ngFor="let image of renderImages() let i = index"
-                             [ngClass]="{'active': i == imgId }">
-                          <img class="d-block w-100 img-responsive" src={{image}} alt="First slide">
-                        </div>
-                      </div>
-                      <div class="col-5">
-                        <label>12/02/2021</label>
-                        <p>Hello World How Are You. Biwi Bacche are fine?</p>
-                        <hr>
-                        <label>12/02/2021</label>
-                        <p>Hello World How Are You. Biwi Bacche are fine?</p>
-                        <hr>
-                        <label>12/02/2021</label>
-                        <p>Hello World How Are You. Biwi Bacche are fine?</p>
-                        <hr>
-                        <label>12/02/2021</label>
-                        <p>Hello World How Are You. Biwi Bacche are fine?</p>
-                        <hr>
-                        <label>12/02/2021</label>
-                        <p>Hello World How Are You. Biwi Bacche are fine?</p>
-                        <hr>
+                <div class="row">
+                  <div class="col-7">
+                    <div id="image-modal-carousel" class="carousel slide" data-interval="false">
+                      <div class="carousel-inner" role="listbox">
+                          <div class="carousel-item" *ngFor="let image of renderImages() let i = index"
+                            [ngClass]="{'active': i == imgId }">
+                            <a class="carousel-control-prev" href="#image-modal-carousel" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                            </a>
+                            <img class="d-block w-100 img-responsive" src={{image}} alt="First slide">
+                            <a class="carousel-control-next" href="#image-modal-carousel" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                            </a>
+                          </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <a class="carousel-control-prev" href="#image-modal-carousel" role="button" data-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#image-modal-carousel" role="button" data-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Next</span>
-                </a>
+                  <div class="col-5">
+                    <label>12/02/2021</label>
+                    <p>Hello World How Are You. Biwi Bacche are fine?</p>
+                    <hr>
+                    <label>12/02/2021</label>
+                    <p>Hello World How Are You. Biwi Bacche are fine?</p>
+                    <hr>
+                    <label>12/02/2021</label>
+                    <p>Hello World How Are You. Biwi Bacche are fine?</p>
+                    <hr>
+                    <label>12/02/2021</label>
+                    <p>Hello World How Are You. Biwi Bacche are fine?</p>
+                    <hr>
+                    <label>12/02/2021</label>
+                    <p>Hello World How Are You. Biwi Bacche are fine?</p>
+                    <hr>
+                  </div>
+                </div>          
               </div>
             </div>
           </div>
