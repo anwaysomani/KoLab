@@ -81,6 +81,7 @@ export class ClientComponent implements OnInit {
   selectedSiteEmployee = '';
   employeeAttendance: Array<any> = [];
   selectedSiteEmployeeStatus = '';
+  currentDate = 1;
 
   images = [
     {
@@ -103,6 +104,8 @@ export class ClientComponent implements OnInit {
   materialImagesDisplay = false;
   progressImagesDisplay = false;
   displayInfoView = false;
+  defaultMaterialImage = '';
+  defaultProgressImage = '';
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage) {
@@ -112,6 +115,7 @@ export class ClientComponent implements OnInit {
     }
 
     this.loader.pageLoader = true;
+    this.currentDate = new Date().getDate();
     this.db = db;
     this.isEmployees = (router.url === '/employees');
     if (this.isEmployees) {
@@ -310,6 +314,9 @@ export class ClientComponent implements OnInit {
     });
   }
 
+  // maintain 3-4 flags for different types of data
+  // change status of each on selection
+
   // tslint:disable-next-line:typedef
   async getAllUsers() {
     return await this.http.post(environment.funcUrl + 'getAllUsers', {
@@ -322,9 +329,6 @@ export class ClientComponent implements OnInit {
     this.selectedCategory = entity;
     this.getUserListing();
   }
-
-  // maintain 3-4 flags for different types of data
-  // change status of each on selection
 
   /* add a new client */
   addNewClient(): void {
@@ -369,7 +373,7 @@ export class ClientComponent implements OnInit {
     this.materialImagesDisplay = (state === 2); // update view for material images
     this.progressImagesDisplay = (state === 3); // update view for progress images
     this.displayInfoView = (state === 4);
-}
+  }
 
   /* update widget-04 for employee selection */
   selectEmployee(uid: string): void {
@@ -403,9 +407,6 @@ export class ClientComponent implements OnInit {
       console.log(err);
     });
   }
-
-  defaultMaterialImage = '';
-  defaultProgressImage = '';
 
   onSelect(item: any): void {
     this.selectedItem = item;
@@ -441,12 +442,12 @@ export class ClientComponent implements OnInit {
     this.allImageListing = [];
     this.storage.ref(`${filePath}/` + (toFetchVal ? 'material' : 'progress')).listAll().toPromise()
       .then((ref) => {
-      for (const i of ref.items) {
-        i.getDownloadURL().then((url: string) => {
-          this.allImageListing.push(url);
-        });
-      }
-    });
+        for (const i of ref.items) {
+          i.getDownloadURL().then((url: string) => {
+            this.allImageListing.push(url);
+          });
+        }
+      });
   }
 
   /* render images to widget-04 */
@@ -459,9 +460,9 @@ export class ClientComponent implements OnInit {
     const filePath = this.selectedItem.name + ', ' + this.selectedClient.name;
     this.storage.ref(`${filePath}/material`).listAll().toPromise()
       .then((ref) => {
-          ref.items[ref.items.length - 1].getDownloadURL().then((url: string) => {
-            this.defaultMaterialImage = url;
-          });
+        ref.items[ref.items.length - 1].getDownloadURL().then((url: string) => {
+          this.defaultMaterialImage = url;
+        });
       });
 
     this.storage.ref(`${filePath}/progress`).listAll().toPromise()
@@ -470,5 +471,18 @@ export class ClientComponent implements OnInit {
           this.defaultProgressImage = url;
         });
       });
+  }
+
+  /* get date for month */
+  getDateFromMonth(): Array<number> {
+    const date = new Date();
+    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+
+    const arr = [];
+    for (let i = 1; i <= lastDay; i++) {
+      arr.push(i);
+    }
+
+    return arr;
   }
 }

@@ -166,6 +166,9 @@
               <h3><b>#</b> {{selectedItem['name']}}</h3>
             </div>
             <div class="col-6 text-end">
+              <select class="border-0 border-2 border-bottom m-r-1e f-s-1" (click)="getDateFromMonth()" [(ngModel)]="currentDate" name="currentDate">
+                <option *ngFor="let i of getDateFromMonth()" value="{{i}}">{{i}}</option>
+              </select>
               <button class="btn btn-outline-primary m-r-1e p-l-7 p-r-7" (click)="updateDynamicDetailSelection(4)">
                 &#x2139;
               </button>
