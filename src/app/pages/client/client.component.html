@@ -186,8 +186,8 @@
         <!-- project manager -->
         <div class="mb-3 row">
           <label class="col-sm-3 col-form-label"><b>Project Manager/s</b></label>
-          <div class="col-sm-9 col-form-label">
-            <span *ngFor="let employee of selectedSiteContractorList">{{employee.name}}</span>
+          <div class="col-sm-9 col-form-label arrow-pointer item-selection">
+            <span *ngFor="let employee of selectedSiteContractorList" (click)="selectEmployee(employee.uid)">{{employee.name}}</span>
             <span *ngIf="selectedSiteContractorList.length < 1">-</span>
           </div>
         </div>
@@ -236,7 +236,10 @@
         </div>
       </div>
     </div>
-
+    <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="square-jelly-box" [fullScreen]="false"
+            *ngIf="loader.addClientLoader">
+          <p class="text-white">Please Wait...</p>
+    </ngx-spinner>
     <!-- dynamic column for data display -->
     <div class="card h-43 overflow-scroll">
       <div class="card-body">
@@ -295,6 +298,10 @@
                   <span *ngIf="progressImagesDisplay">Work Progress</span>
                 </h4>
               </div>
+              <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="square-jelly-box" [fullScreen]="false"
+                   *ngIf="loader.addClientLoader">
+                  <p class="text-white">Please Wait...</p>
+              </ngx-spinner>
               <div class="col-4" *ngFor="let img of renderImages();let i=index">
                 <a (click)="openImageModel(img,i)" data-toggle="modal" data-target="#materials-progress-modal">
                   <img src={{img}} alt=""/>

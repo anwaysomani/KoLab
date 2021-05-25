@@ -377,6 +377,7 @@ export class ClientComponent implements OnInit {
 
   /* update widget-04 for employee selection */
   selectEmployee(uid: string): void {
+    this.loader.addClientLoader = true;
     this.updateDynamicDetailSelection(1);
     // get selected employee detail
     this.db.collection('users').doc(uid).valueChanges().subscribe((det: any) => {
@@ -391,6 +392,7 @@ export class ClientComponent implements OnInit {
         // get last three records
         this.employeeAttendance = this.employeeAttendance.slice(this.employeeAttendance.length - 3);
       }
+      this.loader.addClientLoader = false;
     });
   }
 
@@ -438,16 +440,18 @@ export class ClientComponent implements OnInit {
 
   /* get image listing from storage */
   fetchRecentImages(toFetchVal: boolean): void {
+    this.loader.addClientLoader = true;
     const filePath = this.selectedItem.name + ', ' + this.selectedClient.name;
     this.allImageListing = [];
     this.storage.ref(`${filePath}/` + (toFetchVal ? 'material' : 'progress')).listAll().toPromise()
       .then((ref) => {
-        for (const i of ref.items) {
-          i.getDownloadURL().then((url: string) => {
-            this.allImageListing.push(url);
-          });
-        }
-      });
+      for (const i of ref.items) {
+        i.getDownloadURL().then((url: string) => {
+          this.allImageListing.push(url);
+        });
+      }
+      this.loader.addClientLoader = false;
+    });
   }
 
   /* render images to widget-04 */
@@ -457,6 +461,7 @@ export class ClientComponent implements OnInit {
 
   /* get default display image on site window */
   renderDisplayImage(): void {
+    this.loader.addClientLoader = true;
     const filePath = this.selectedItem.name + ', ' + this.selectedClient.name;
     this.storage.ref(`${filePath}/material`).listAll().toPromise()
       .then((ref) => {
@@ -470,6 +475,7 @@ export class ClientComponent implements OnInit {
         ref.items[ref.items.length - 1].getDownloadURL().then((url: string) => {
           this.defaultProgressImage = url;
         });
+        this.loader.addClientLoader = false;
       });
   }
 
