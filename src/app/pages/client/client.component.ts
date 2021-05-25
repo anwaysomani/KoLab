@@ -464,7 +464,7 @@ export class ClientComponent implements OnInit {
           });
       });
 
-    this.storage.ref(`${filePath}/material`).listAll().toPromise()
+    this.storage.ref(`${filePath}/progress`).listAll().toPromise()
       .then((ref) => {
         ref.items[ref.items.length - 1].getDownloadURL().then((url: string) => {
           this.defaultProgressImage = url;
