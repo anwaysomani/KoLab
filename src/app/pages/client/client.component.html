@@ -24,7 +24,7 @@
 
     <div class="mb-2 mt-2 row">
       <div class="col-9 p-l-2e">
-        <input class="form-control" name="searchText" placeholder="Search here..." [(ngModel)]="searchText">
+        <input class="form-control" name="searchText" placeholder="Search here..." [(ngModel)]="searchText" (change)="clientSearch()">
       </div>
       <div class="col-2 p-0" *ngIf="isEmployees">
         <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addUserModal" #addUserModal>
@@ -34,7 +34,7 @@
 
       <div class="col-2 p-0" *ngIf="!isEmployees">
         <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addClientModal" #addClientModal>
-          <i class="fa fa-folder"></i>
+          &#x2b;
         </button>
       </div>
     </div>
@@ -96,11 +96,15 @@
                       &#x296C;
                     </span>
                   </div>
+                  <div class="caption-box t-a-r">John Snow</div>
                 </h5>
               </div>
 
             </div>
           </div>
+        </div>
+        <div class="dataNotFound text-black-50 text-center" *ngIf="selectedClient.sites.length < 0">
+            No Client found.
         </div>
       </div>
       <div class="row"></div>

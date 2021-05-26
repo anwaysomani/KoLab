@@ -497,4 +497,14 @@ export class ClientComponent implements OnInit {
 
     return arr;
   }
+
+  clientSearch(): any[]{
+    if(this.clientList.length<0){
+      return [];
+    }
+    this.searchText = this.searchText.toLowerCase();
+    return this.clientList.filter(item => {
+      return item.name.toLowerCase().includes(this.searchText);
+    });
+  }
 }
