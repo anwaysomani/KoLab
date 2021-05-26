@@ -24,7 +24,8 @@
 
     <div class="mb-2 mt-2 row">
       <div class="col-9 p-l-2e">
-        <input class="form-control" name="searchText" placeholder="Search here..." [(ngModel)]="searchText" (change)="clientSearch()">
+        <input class="form-control" name="searchText" placeholder="Search here..." [(ngModel)]="searchText"
+               (change)="clientSearch(searchText)">
       </div>
       <div class="col-2 p-0" *ngIf="isEmployees">
         <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addUserModal" #addUserModal>
@@ -41,6 +42,21 @@
 
     <div class="list-group">
       <div *ngIf="(isEmployees ? employeeList : clientList).length > 0">
+
+        <span *ngIf="getFilteredClientList().length > 0">
+          <li class="arrow-pointer list-group-item list-group-item-action p-l-2e" aria-current="true"
+              (click)="loadDocInfo(item)" *ngFor="let item of getFilteredClientList()"
+              [ngClass]="{'highlight-row': item.isSelected}">
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="mb-1">{{item.name}}</h6>
+            <span class="highlighted-item-row" *ngIf="item.isSelected"> <!-- selected item highlight -->
+              &#x296C;
+            </span>
+          </div>
+        </li>
+          </span>
+
+        <span *ngIf="getFilteredClientList().length < 1">
         <li class="arrow-pointer list-group-item list-group-item-action p-l-2e" aria-current="true"
             (click)="loadDocInfo(item)" *ngFor="let item of (isEmployees ? employeeList : clientList)"
             [ngClass]="{'highlight-row': item.isSelected}">
@@ -51,6 +67,8 @@
             </span>
           </div>
         </li>
+          </span>
+
       </div>
       <div class="text-center list-group-item list-group-item-action p-l-2e m-t-1e pt-0 pb-0" aria-current="true"
            *ngIf="(isEmployees ? employeeList : clientList).length < 1">
@@ -71,7 +89,7 @@
           <div class="col-5">
             <div class=" text-end mb-3">
               <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addSiteModal">
-                Add Site <i class="fa fa-plus"></i>
+                Add Site &#x2b;
               </button>
             </div>
           </div>
@@ -92,11 +110,11 @@
                 <h5 class="mb-0 ">
                   <div class="col-10 arrow-pointer">
                     <label class="arrow-pointer">{{item['name']}}</label>
-                    <span class="highlighted-item-row" *ngIf="item === selectedItem"> <!-- selected item highlight -->
+                    <span class="highlighted-item-row pt-2" *ngIf="item === selectedItem"> <!-- selected item highlight -->
                       &#x296C;
                     </span>
                   </div>
-                  <div class="caption-box t-a-r">John Snow</div>
+                  <div class="caption-box">{{item['contractor']}}</div>
                 </h5>
               </div>
 
@@ -104,7 +122,7 @@
           </div>
         </div>
         <div class="dataNotFound text-black-50 text-center" *ngIf="selectedClient.sites.length < 0">
-            No Client found.
+          No Client found.
         </div>
       </div>
       <div class="row"></div>
@@ -170,10 +188,11 @@
               <h3><b>#</b> {{selectedItem['name']}}</h3>
             </div>
             <div class="col-6 text-end">
-              <select class="border-0 border-2 border-bottom m-r-1e f-s-1" (click)="getDateFromMonth()" [(ngModel)]="currentDate" name="currentDate">
+              <select class="border-0 border-2 border-bottom m-r-1e f-s-1" (click)="getDateFromMonth()"
+                      [(ngModel)]="currentDate" name="currentDate">
                 <option *ngFor="let i of getDateFromMonth()" value="{{i}}">{{i}}</option>
               </select>
-              <button class="btn btn-outline-primary m-r-1e p-l-7 p-r-7" (click)="updateDynamicDetailSelection(4)">
+              <button class="btn btn-outline-primary m-r-1e" (click)="updateDynamicDetailSelection(4)">
                 &#x2139;
               </button>
               <button class="btn btn-outline-danger m-r-1e">
@@ -191,7 +210,8 @@
         <div class="mb-3 row">
           <label class="col-sm-3 col-form-label"><b>Project Manager/s</b></label>
           <div class="col-sm-9 col-form-label arrow-pointer item-selection">
-            <span *ngFor="let employee of selectedSiteContractorList" (click)="selectEmployee(employee.uid)">{{employee.name}}</span>
+            <span *ngFor="let employee of selectedSiteContractorList"
+                  (click)="selectEmployee(employee.uid)">{{employee.name}}</span>
             <span *ngIf="selectedSiteContractorList.length < 1">-</span>
           </div>
         </div>
@@ -241,8 +261,8 @@
       </div>
     </div>
     <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="square-jelly-box" [fullScreen]="false"
-            *ngIf="loader.addClientLoader">
-          <p class="text-white">Please Wait...</p>
+                 *ngIf="loader.addClientLoader">
+      <p class="text-white">Please Wait...</p>
     </ngx-spinner>
     <!-- dynamic column for data display -->
     <div class="card h-43 overflow-scroll">
@@ -303,8 +323,8 @@
                 </h4>
               </div>
               <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="square-jelly-box" [fullScreen]="false"
-                   *ngIf="loader.addClientLoader">
-                  <p class="text-white">Please Wait...</p>
+                           *ngIf="loader.addClientLoader">
+                <p class="text-white">Please Wait...</p>
               </ngx-spinner>
               <div class="col-4" *ngFor="let img of renderImages();let i=index">
                 <a (click)="openImageModel(img,i)" data-toggle="modal" data-target="#materials-progress-modal">
@@ -323,18 +343,18 @@
                   <div class="col-7">
                     <div id="image-modal-carousel" class="carousel slide" data-interval="false">
                       <div class="carousel-inner" role="listbox">
-                          <div class="carousel-item" *ngFor="let image of renderImages() let i = index"
-                            [ngClass]="{'active': i == imgId }">
-                            <a class="carousel-control-prev" href="#image-modal-carousel" role="button" data-slide="prev">
+                        <div class="carousel-item" *ngFor="let image of renderImages() let i = index"
+                             [ngClass]="{'active': i == imgId }">
+                          <a class="carousel-control-prev" href="#image-modal-carousel" role="button" data-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="sr-only">Previous</span>
-                            </a>
-                            <img class="d-block w-100 img-responsive" src={{image}} alt="First slide">
-                            <a class="carousel-control-next" href="#image-modal-carousel" role="button" data-slide="next">
+                          </a>
+                          <img class="d-block w-100 img-responsive" src={{image}} alt="First slide">
+                          <a class="carousel-control-next" href="#image-modal-carousel" role="button" data-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="sr-only">Next</span>
-                            </a>
-                          </div>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -355,7 +375,7 @@
                     <p>Hello World How Are You. Biwi Bacche are fine?</p>
                     <hr>
                   </div>
-                </div>          
+                </div>
               </div>
             </div>
           </div>

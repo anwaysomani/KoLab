@@ -106,6 +106,7 @@ export class ClientComponent implements OnInit {
   displayInfoView = false;
   defaultMaterialImage = '';
   defaultProgressImage = '';
+  tempSelectedClients: Array<any> = [];
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage) {
@@ -192,10 +193,6 @@ export class ClientComponent implements OnInit {
     }
   }
 
-  constructArr(entity: any): string {
-    return ''; // entity.join(', ');
-  }
-
   ngOnInit(): void {
   }
 
@@ -257,20 +254,21 @@ export class ClientComponent implements OnInit {
       isSelected: false
     };
 
-    // get employees with active employees
-    this.db.collection('users', ref => {
-      return ref.where('activeSite', '==', 'Chicago, Orlando - 431601');
-    }).valueChanges().subscribe((det) => {
-      console.log(det);
-    }, (err) => {
-      console.log(err);
-    });
-
-    if (!client.sites || client.sites.length < 1) {
-      // display add site ref
-    }
-
     this.selectedClient = client;
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.selectedClient.sites.length; i++) {
+      // get employees with active employees
+      this.db.collection('users', ref => {
+        // @ts-ignore
+        return ref.where('activeSite', '==', this.selectedClient.sites[i].name + ', ' + this.selectedClient.name);
+      }).valueChanges().subscribe((det) => {
+        // @ts-ignore
+        this.selectedClient.sites[i].contractor = det.length > 0 ? det[0].name : '-';
+      }, (err) => {
+        console.log(err);
+      });
+    }
   }
 
   /* add new user popup Add click */
@@ -302,6 +300,9 @@ export class ClientComponent implements OnInit {
     }).toPromise();
   }
 
+  // maintain 3-4 flags for different types of data
+  // change status of each on selection
+
   getUserListing(): void {
     this.loader.pageLoader = true;
     this.getAllUsers().then((data) => {
@@ -313,9 +314,6 @@ export class ClientComponent implements OnInit {
       this.loader.pageLoader = false;
     });
   }
-
-  // maintain 3-4 flags for different types of data
-  // change status of each on selection
 
   // tslint:disable-next-line:typedef
   async getAllUsers() {
@@ -445,13 +443,13 @@ export class ClientComponent implements OnInit {
     this.allImageListing = [];
     this.storage.ref(`${filePath}/` + (toFetchVal ? 'material' : 'progress')).listAll().toPromise()
       .then((ref) => {
-      for (const i of ref.items) {
-        i.getDownloadURL().then((url: string) => {
-          this.allImageListing.push(url);
-        });
-      }
-      this.loader.addClientLoader = false;
-    });
+        for (const i of ref.items) {
+          i.getDownloadURL().then((url: string) => {
+            this.allImageListing.push(url);
+          });
+        }
+        this.loader.addClientLoader = false;
+      });
   }
 
   /* render images to widget-04 */
@@ -465,46 +463,54 @@ export class ClientComponent implements OnInit {
     const filePath = this.selectedItem.name + ', ' + this.selectedClient.name;
     this.storage.ref(`${filePath}/material`).listAll().toPromise()
       .then((ref) => {
-        if(ref.items.length>0){
+        if (ref.items.length > 0) {
           ref.items[ref.items.length - 1].getDownloadURL().then((url: string) => {
             this.defaultMaterialImage = url;
           });
-        }        
+        }
         this.loader.addClientLoader = false;
       });
 
     this.storage.ref(`${filePath}/progress`).listAll().toPromise()
       .then((ref) => {
-        if(ref.items.length>0){
+        if (ref.items.length > 0) {
           ref.items[ref.items.length - 1].getDownloadURL().then((url: string) => {
             this.defaultProgressImage = url;
           });
         }
         this.loader.addClientLoader = false;
       });
-      this.loader.addClientLoader = false;
+    this.loader.addClientLoader = false;
   }
 
   /* get date for month */
   getDateFromMonth(): Array<number> {
     const date = new Date();
     const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-
     const arr = [];
     for (let i = 1; i <= lastDay; i++) {
       arr.push(i);
     }
-
     return arr;
   }
 
-  clientSearch(): any[]{
-    if(this.clientList.length<0){
-      return [];
+  /* client listing search */
+  clientSearch(txt: string): void {
+    if (this.clientList.length < 0) {
+      this.tempSelectedClients = [];
     }
-    this.searchText = this.searchText.toLowerCase();
-    return this.clientList.filter(item => {
-      return item.name.toLowerCase().includes(this.searchText);
+    this.tempSelectedClients = this.clientList.filter(item => {
+      return item.name.toLowerCase().includes(txt.toLowerCase());
     });
+  }
+
+  /* get filtered client listing */
+  getFilteredClientList(): Array<any> {
+    return this.tempSelectedClients;
+  }
+
+  /* delete site */
+  deleteSite(): void {
+
   }
 }
