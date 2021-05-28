@@ -54,10 +54,10 @@
 }
 
 .highlight-row {
-  background: #000 !important;
+  background: #1d2531 !important;
   color: #fff;
   .card{
-    background-color: #000;
+    background-color: #1d2531;
   }
   .caption-box{
     color: #fff;
@@ -194,3 +194,96 @@
 .caption-box {
   font-size: small;
 }
+
+.no-data-content{
+  position: absolute;
+  top: 50%;
+}
+
+@bg-color:#263544;
+@border-radius:2vh;
+@highlight-row:#ffb703;
+@font-color:#F0FFFF;
+@sidemenu-font-color:#42a5f5;
+@main-section-list-bgcolor:#f2f7fb;
+@global-font-size :1 rem;
+@l-sidebar-font-color : #b7c0cd;
+@header-color: #4099ff;
+@content-header-color:#333;
+/* less Variables */
+
+.main-nav__list{
+  font-size: @global-font-size;
+}
+.right-sidebar{
+  .card-header{
+    background-color: @header-color;
+  }
+  .card-body {
+    h5 {
+      font-weight: 700;
+    }
+  }
+}
+#client-sites{
+  .highlight-row{
+    border-radius: 0.25em;
+  }
+}
+ .client-list {
+  background-color: @bg-color;
+  border-radius: @border-radius;
+  color: @font-color;
+  .btn-outline-primary{
+    border-radius: 5px;
+    /* background-color: @font-color; */
+    border: 0px;
+    .btn {
+      color: @bg-color;
+    }
+  }
+  .card-wrapper .card{
+    background-color: #fff !important;
+  }
+}
+.list-group {
+  .list-group-item {
+    background-color: @bg-color;
+    color: @l-sidebar-font-color;
+    border-color: #000;
+  }
+}
+
+.main-section{
+  .main-section-list{
+    background-color: @main-section-list-bgcolor !important;
+    border-radius: 2vh !important;
+  }
+}
+.right-sidebar{
+  background-color: @main-section-list-bgcolor !important;
+  border-radius: 2vh !important;
+  .card-header h3 {
+    color: @content-header-color;
+  }
+}
+
+.icon-user-plus {
+  font-size: 25px;
+  float: right;
+  :hover{
+    color: @highlight-row;
+  }
+}
+.icon-right-arrow {
+  color: @header-color;
+}
+
+.icon-info{
+  display: inline;
+  color: #fff;
+  :hover{
+    color:@highlight-row;
+  }
+}
+
