@@ -199,6 +199,9 @@
   position: absolute;
   top: 50%;
 }
+.t-a-r{
+  text-align: right;
+}
 /* ------------------- Less Css Variables ------------------------------------- */
 @bg-color:#263544;
 @border-radius:2vh;
@@ -284,6 +287,28 @@
   color: #fff;
   :hover{
     color:@highlight-row;
+  }
+}
+.employee-sidebar {
+  background-color: @bg-color;
+}
+.employee-main-content {
+  background-color: @main-section-list-bgcolor;
+  .card-container {
+    display: flex;
+    margin: 1em;
+    padding:1em;
+    .card {
+      margin: 1em;
+      width: 30%;
+      @media (max-width: 1340px){
+        width: 44%;
+      }
+    }
+  }
+  .subtitle .card-subtitle{
+    float: left;
+    width: 50%;
   }
 }
 

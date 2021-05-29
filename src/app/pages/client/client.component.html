@@ -1,5 +1,5 @@
 <div *ngIf="allow" class="row main-nav">
-  <div class="col-2 client-list h-92">
+  <div class="col-2 client-list h-92" *ngIf="!isEmployees">
     <!-- add customization here for search filter + client designation sort + add button -->
     <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="square-jelly-box" [fullScreen]="true"
                  *ngIf="loader.pageLoader">
@@ -189,7 +189,7 @@
       </div>
     </div>
   </div>
-  <div class="col-7 shadow pt-3 bg-white rounded overflow-scroll right-sidebar">
+  <div class="col-7 shadow pt-3 bg-white rounded overflow-scroll right-sidebar" *ngIf="!isEmployees">
     <!-- widget-3 -->
     <div class="card h-43 mb-3">
       <div class="card-header">
@@ -408,6 +408,70 @@
         </div>
 
       </div>
+    </div>
+  </div>
+  <div class="employee-container">
+    <div class="row">
+      <div class="col-12">
+
+      </div>
+    
+    <div class="col-3 employee-sidebar h-92" *ngIf="isEmployees">
+      <div class="filter">
+        <div class="filter-list">
+          <div class="filter-item">
+  
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-9 employee-main-content h-92" *ngIf="isEmployees">
+      <div class="employee-card-container">
+        <div class="card-header mb-3">
+          <h3>EMPLOYEE DETAILS</h3>
+        </div>
+        <div class="card-container row" *ngIf="employeeList.length > 0">            
+          <div class="card col-3" *ngFor="let item of employeeList">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-6">
+                  <h5 class="card-title">{{item.name}}</h5>
+                </div>
+                <div class="col-6">
+                  <div class="row">
+                    <div class="col-6">
+                      <label class="col-form-label text-uppercase">{{selectedSiteEmployee}}</label>
+                    </div>
+                    <div class="col-6 text-end">
+                      <!-- active - green - Sign In -->
+                      <label class="col-form-label text-success" *ngIf="selectedSiteEmployeeStatus === 'Sign In'"><i class="fa fa-circle" data-toggle="tooltip" title="Active"></i>Active</label>
+                      <!-- on leave - red - On Leave -->
+                      <label class="col-form-label text-danger" *ngIf="selectedSiteEmployeeStatus === 'On Leave'"><i class="fa fa-circle" data-toggle="tooltip" title="On Leave"></i></label>
+                      <!-- at lunch - yellow -->
+                      <label class="col-form-label text-warning" *ngIf="selectedSiteEmployeeStatus === 'At Lunch'"><i class="fa fa-circle" data-toggle="tooltip" title="At Lunch"></i></label>
+                      <!-- offline - grey - Sign Out -->
+                      <label class="col-form-label text-black-50"
+                            *ngIf="selectedSiteEmployeeStatus === '' || selectedSiteEmployeeStatus === 'Sign Out'"><i class="fa fa-circle" data-toggle="tooltip" title="Offline"></i></label>
+                    </div>
+                  </div>
+  
+                </div>
+              </div>
+              
+              
+              <div class="subtitle">
+                <h6 class="card-subtitle mb-2 text-muted">#998877665544</h6>
+                <h6 class="card-subtitle mb-2 text-muted t-a-r">{{item.designation}}</h6>
+              </div>
+              <div class="card-text">
+                <p>{{item.email}}</p>
+              </div>              
+              <a href="#" class="card-link">Card link</a>
+            </div>
+          </div> 
+        </div>
+      </div>
+    </div>
     </div>
   </div>
 </div>
