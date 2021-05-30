@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import {AngularFireAuth} from '@angular/fire/auth';
@@ -107,6 +107,8 @@ export class ClientComponent implements OnInit {
   defaultMaterialImage = '';
   defaultProgressImage = '';
   tempSelectedClients: Array<any> = [];
+  record: any;
+  recordId: number=0;
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage) {
@@ -512,5 +514,14 @@ export class ClientComponent implements OnInit {
   /* delete site */
   deleteSite(): void {
 
+  }
+
+  openEmployeeDetailsModel(data:any,index:number): void {
+    this.record =data;
+    this.recordId = index;    
+  }
+
+  paginateRecords(data:any) {
+    return data.slice(0,10);
   }
 }

@@ -299,6 +299,7 @@
     margin: 1em;
     padding:1em;
     .card {
+      box-shadow: 0 0 5px;
       margin: 1em;
       width: 30%;
       @media (max-width: 1340px){
@@ -312,3 +313,15 @@
   }
 }
 
+#employeeDetailModal{
+  .card .card-body .card-title{
+    color: @content-header-color;
+  }
+  .table-footer {
+    color: @content-header-color;
+  }
+  .carousel-control-next, .carousel-control-prev {
+    color: @content-header-color;
+    text-decoration: unset;
+  }
+}
