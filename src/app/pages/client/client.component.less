@@ -291,6 +291,7 @@
 }
 .employee-sidebar {
   background-color: @bg-color;
+  border-radius: 1vh !important;
 }
 .employee-main-content {
   background-color: @main-section-list-bgcolor;
@@ -323,5 +324,18 @@
   .carousel-control-next, .carousel-control-prev {
     color: @content-header-color;
     text-decoration: unset;
+  }
+}
+.employee-card-container {
+  box-shadow: 0 0 10px -4px rgb(35 31 31 / 90%);
+  .card-header{
+    background-color: @header-color;
+  }
+}
+
+.filter-item {
+  padding: 2em;
+  h3 ,label{
+    color: @font-color;
   }
 }
