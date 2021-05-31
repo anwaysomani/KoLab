@@ -107,13 +107,15 @@ export class ClientComponent implements OnInit {
   defaultMaterialImage = '';
   defaultProgressImage = '';
   tempSelectedClients: Array<any> = [];
-  tempSelectedDesignation: Array<any> = [];
+  tempSelectedEmployees: Array<any> = [];
   tempSelectedStatus: Array<any> = [];
   record: any;
   recordId: number=0;
   filterApplied = false;
   selectedStatus = "";
   availableStatusList =['Active',"On Leave","At Lunch","Sign Out"];
+  availableDesignationList = ['EMPLOYEE','CONTRACTOR','ADMIN'];
+  selectedDesignation=this.availableDesignationList[0];
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage) {
@@ -516,6 +518,16 @@ export class ClientComponent implements OnInit {
     return this.tempSelectedClients;
   }
 
+  /* employee listing search */
+  employeeSearch(txt: string): void {
+    if (this.employeeList.length < 0) {
+      this.tempSelectedEmployees = [];
+    }
+    this.tempSelectedEmployees = this.employeeList.filter(item => {
+      return item.name.toLowerCase().includes(txt.toLowerCase());
+    });
+  }
+
   /* delete site */
   deleteSite(): void {
 
@@ -533,27 +545,23 @@ export class ClientComponent implements OnInit {
   onDesignationSelection(txt: string): void {
     this.filterApplied=!this.filterApplied;
     if (this.employeeList.length < 0) {
-      this.tempSelectedDesignation = [];
+      this.tempSelectedEmployees = [];
     }
-    this.tempSelectedDesignation = this.employeeList.filter(item => {
+    this.tempSelectedEmployees = this.employeeList.filter(item => {
       return item.designation.toLowerCase().includes(txt.toLowerCase());
     });
   }
 
   onStatusSelection(txt: string): void {
     this.filterApplied=!this.filterApplied;
-    var attendanceList=[];
+    this.tempSelectedEmployees.splice(0,this.tempSelectedEmployees.length);
     if (this.employeeList.length < 0) {
-      this.tempSelectedStatus = [];
+      this.tempSelectedEmployees = [];
     }
-    for(let i=0;i<this.employeeList.length;i++){
-      if(this.employeeList[i].attendance!="" && this.employeeList[i].attendance.length>0){
-        attendanceList.push(this.employeeList[i].attendance);
-      }      
-    }
-    this.tempSelectedStatus = attendanceList.filter(item => {
-      return item.status.toLowerCase().includes(txt.toLowerCase());
+    this.tempSelectedEmployees = this.employeeList.filter(user => {
+      return user.attendance[user.attendance.length-1].status.toLowerCase().includes(txt.toLowerCase());
     });
+    
   }
 
   
