@@ -448,7 +448,7 @@
         <div class="card-header mb-3">
           <h3>EMPLOYEE DETAILS</h3>
         </div>
-        <div class="card-container row" *ngIf="employeeList.length > 0">            
+        <div class="card-container row" *ngIf="tempSelectedEmployees.length > 0">            
           <div class="card col-3" *ngFor="let item of tempSelectedEmployees;let j=index">
             <div class="card-body" data-toggle="modal" (click)="openEmployeeDetailsModel(item,j)" data-bs-toggle="modal" data-bs-target="#employeeDetailModal">
               <div class="row">
@@ -483,18 +483,17 @@
                 <p>{{item.activeSite}}</p>
               </div>
             </div>
-          </div> 
-          <div class="row" *ngIf="tempSelectedEmployees.length==0">
-            <div class="no-data-dropbox text-center">
-              <div class="no-data-content left-50">
-                <i class="fa fa-5x fa-dropbox"></i>
-                <h1 class="text-center" style="text-align: center">Data Not Available for selected filter</h1>
-              </div>
-            </div>
-          </div>
+          </div>          
         </div>
       </div>
-               
+      <div class="row" *ngIf="tempSelectedEmployees.length<1">
+        <div class="no-data-dropbox text-center">
+          <div class="no-data-content left-50">
+            <i class="fa fa-5x fa-dropbox"></i>
+            <h1 class="text-center" style="text-align: center">Data Not Available for selected filter</h1>
+          </div>
+        </div>
+      </div>         
     </div>
     </div>
   </div>

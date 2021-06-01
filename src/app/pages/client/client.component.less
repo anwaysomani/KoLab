@@ -342,3 +342,7 @@
     color: @font-color;
   }
 }
+/* Prevent collapse of empty row in html table */
+td:empty::after{
+  content: "\00a0";
+}
