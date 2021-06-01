@@ -379,7 +379,7 @@ export class ClientComponent implements OnInit {
     this.displayEmployeeDetail = (state === 1); // update view for employee
     this.materialImagesDisplay = (state === 2); // update view for material images
     this.progressImagesDisplay = (state === 3); // update view for progress images
-    this.displayInfoView = (state === 4);
+    this.displayInfoView = (state === 4); // update view for info
   }
 
   /* update widget-04 for employee selection */
@@ -421,6 +421,7 @@ export class ClientComponent implements OnInit {
     this.selectedItem = item;
     this.sortEmployeeList(item.name);
     this.renderDisplayImage();
+    this.updateDynamicDetailSelection(0);
   }
 
   activateContractor(activeTab: string): void {

@@ -419,7 +419,7 @@
           <div class="filter-item">
             <div class="input-group mb-3">
               <input type="text" class="form-control" name ="searchText" placeholder="Free Text Search" aria-label="Free Text Search" aria-describedby="basic-addon2" [(ngModel)]="searchText" (change)="employeeSearch(searchText)">
-              <span class="input-group-text fa fa-search" id="basic-addon2"></span>
+              <span class="input-group-text fa fa-search" id="basic-addon2" (click)="employeeSearch(searchText)"></span>
             </div>
             <hr style="text-align:left;margin-left:0;color: #fff;">
             <h3>Designation Filter</h3>
