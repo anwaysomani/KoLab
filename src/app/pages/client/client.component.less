@@ -223,7 +223,7 @@
 }
 .right-sidebar{
   .card-header{
-    background-color: @header-color;
+    background-color: @bg-color;
   }
   .card-body {
     h5 {
@@ -238,7 +238,6 @@
 }
  .client-list {
   background-color: @bg-color;
-  border-radius: @border-radius;
   color: @font-color;
   .btn-outline-primary{
     border-radius: 5px;
@@ -262,15 +261,16 @@
 
 .main-section{
   .main-section-list{
-    background-color: @main-section-list-bgcolor !important;
-    border-radius: 2vh !important;
+    background-color: @bg-color !important;
+    h3{
+      color: @font-color;
+    }
   }
 }
 .right-sidebar{
-  background-color: @main-section-list-bgcolor !important;
-  border-radius: 2vh !important;
+  background-color: @bg-color !important;
   .card-header h3 {
-    color: @content-header-color;
+    color: @font-color;
   }
 }
 
@@ -294,7 +294,6 @@
 }
 .employee-sidebar {
   background-color: @bg-color;
-  border-radius: 1vh !important;
 }
 .employee-main-content {
   background-color: @main-section-list-bgcolor;
@@ -332,7 +331,10 @@
 .employee-card-container {
   box-shadow: 0 0 10px -4px rgb(35 31 31 / 90%);
   .card-header{
-    background-color: @header-color;
+    background-color: @bg-color;
+    h3{
+      color: @font-color;
+    }
   }
 }
 
