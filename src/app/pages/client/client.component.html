@@ -480,6 +480,7 @@
               </div>
               <div class="card-text">
                 <p>{{item.email}}</p>
+                <span *ngIf="item.activeSite=== undefined || item.activeSite === null  || item.activeSite=='' ">-</span>
                 <p>{{item.activeSite}}</p>
               </div>
             </div>
@@ -737,11 +738,12 @@
                                       <th>{{item.designation}}</th>
                                     </tr>
                                     <tr>
-                                      <td colspan="2">{{item.activeSite}}</td>
+                                      <td colspan="2" *ngIf="item.activeSite">{{item.activeSite}}</td>
+                                      <td *ngIf="item.activeSite=== undefined || item.activeSite === null  || item.activeSite=='' ">-</td>
                                     </tr>
                                   </tbody>
                                 </table>
-                                <table id="employee-data-table" class="table table-striped table-bordered" cellspacing="0" 
+                                <table id="employee-data-table" class="table borderless" cellspacing="0" 
                                 width="100%" *ngIf="item.attendance.length>0">
                                   <thead>
                                     <tr>

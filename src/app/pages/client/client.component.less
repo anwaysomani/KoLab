@@ -206,10 +206,10 @@
   left: 50%;
 }
 /* ------------------- Less Css Variables ------------------------------------- */
-@bg-color:#263544;
+@app-bg-color:#263544;
 @border-radius:2vh;
 @highlight-row:#ffb703;
-@font-color:#F0FFFF;
+@font-color:#1d2020;
 @sidemenu-font-color:#42a5f5;
 @main-section-list-bgcolor:#f2f7fb;
 @global-font-size :1 rem;
@@ -222,9 +222,14 @@
   font-size: @global-font-size;
 }
 .right-sidebar{
-  .card-header{
-    background-color: @bg-color;
+  .card{
+    background: rgba(255, 255, 255, .7);
+	  -webkit-backdrop-filter: blur(10px);
+	  backdrop-filter: blur(10px);
   }
+ /*  .card-header{
+    background-color: @app-bg-color;
+  } */
   .card-body {
     h5 {
       font-weight: 700;
@@ -237,14 +242,14 @@
   }
 }
  .client-list {
-  background-color: @bg-color;
+  /* background-color: @app-bg-color; */
   color: @font-color;
   .btn-outline-primary{
     border-radius: 5px;
     /* background-color: @font-color; */
     border: 0px;
     .btn {
-      color: @bg-color;
+      color: @app-bg-color;
     }
   }
   .card-wrapper .card{
@@ -253,22 +258,22 @@
 }
 .list-group {
   .list-group-item {
-    background-color: @bg-color;
-    color: @l-sidebar-font-color;
+    /* background-color: @app-bg-color; */
+    /* color: @l-sidebar-font-color; */
     border-color: #000;
   }
 }
 
 .main-section{
   .main-section-list{
-    background-color: @bg-color !important;
+    /* background-color: @app-bg-color !important; */
     h3{
       color: @font-color;
     }
   }
 }
 .right-sidebar{
-  background-color: @bg-color !important;
+  /* background-color: @app-bg-color !important; */
   .card-header h3 {
     color: @font-color;
   }
@@ -293,15 +298,18 @@
   }
 }
 .employee-sidebar {
-  background-color: @bg-color;
+  /* background-color: @app-bg-color; */
 }
 .employee-main-content {
-  background-color: @main-section-list-bgcolor;
+  /* background-color: @main-section-list-bgcolor; */
   .card-container {
     display: flex;
     margin: 1em;
     padding:1em;
     .card {
+      background: rgba(255, 255, 255, .7);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
       box-shadow: 0 0 5px;
       margin: 1em;
       width: 30%;
@@ -331,7 +339,7 @@
 .employee-card-container {
   box-shadow: 0 0 10px -4px rgb(35 31 31 / 90%);
   .card-header{
-    background-color: @bg-color;
+    /* background-color: @app-bg-color; */
     h3{
       color: @font-color;
     }
@@ -347,4 +355,31 @@
 /* Prevent collapse of empty row in html table */
 td:empty::after{
   content: "\00a0";
+}
+
+.client-list {
+  background: #edc0bf;
+  background: linear-gradient(90deg, #edc0bf 0,#c4caef 58%);
+}
+.main-section-list {
+  background: #edc0bf;
+  background: linear-gradient(90deg, #edc0bf 0,#c4caef 58%);
+}
+
+.right-sidebar {
+  background: #edc0bf;
+  background: linear-gradient(90deg, #edc0bf 0,#c4caef 58%);
+}
+.employee-sidebar {
+  background: #edc0bf;
+  background: linear-gradient(90deg, #edc0bf 0,#c4caef 58%);
+}
+
+.employee-main-content{
+  background: #edc0bf;
+  background: linear-gradient(90deg, #edc0bf 0,#c4caef 58%);
+}
+
+.borderless td {
+  border: none;
 }
