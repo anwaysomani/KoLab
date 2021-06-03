@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import {AngularFireAuth} from '@angular/fire/auth';
@@ -110,12 +110,12 @@ export class ClientComponent implements OnInit {
   tempSelectedEmployees: Array<any> = [];
   tempSelectedStatus: Array<any> = [];
   record: any;
-  recordId: number=0;
+  recordId = 0;
   filterApplied = false;
-  selectedStatus = "";
-  availableStatusList =['Active',"On Leave","At Lunch","Sign Out"];
-  availableDesignationList = ['EMPLOYEE','CONTRACTOR','ADMIN'];
-  selectedDesignation=this.availableDesignationList[0];
+  selectedStatus = '';
+  availableStatusList = ['Active', 'On Leave', 'At Lunch', 'Sign Out'];
+  availableDesignationList = ['EMPLOYEE', 'CONTRACTOR', 'ADMIN'];
+  selectedDesignation = this.availableDesignationList[0];
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage) {
@@ -534,17 +534,17 @@ export class ClientComponent implements OnInit {
 
   }
 
-  openEmployeeDetailsModel(data:any,index:number): void {
-    this.record =data;
-    this.recordId = index;    
+  openEmployeeDetailsModel(data: any, index: number): void {
+    this.record = data;
+    this.recordId = index;
   }
 
-  paginateRecords(data:any) {
-    return data.slice(0,10);
+  paginateRecords(data: any) {
+    return data.slice(0, 10);
   }
 
   onDesignationSelection(txt: string): void {
-    this.filterApplied=!this.filterApplied;
+    this.filterApplied = !this.filterApplied;
     if (this.employeeList.length < 0) {
       this.tempSelectedEmployees = [];
     }
@@ -554,17 +554,16 @@ export class ClientComponent implements OnInit {
   }
 
   onStatusSelection(txt: string): void {
-    this.filterApplied=!this.filterApplied;
-    this.tempSelectedEmployees.splice(0,this.tempSelectedEmployees.length);
+    this.filterApplied = !this.filterApplied;
+    this.tempSelectedEmployees.splice(0, this.tempSelectedEmployees.length);
     if (this.employeeList.length < 0) {
       this.tempSelectedEmployees = [];
     }
     this.tempSelectedEmployees = this.employeeList.filter(user => {
-      return user.attendance[user.attendance.length-1].status.toLowerCase().includes(txt.toLowerCase());
+      return user.attendance[user.attendance.length - 1].status.toLowerCase().includes(txt.toLowerCase());
     });
-    
+
   }
 
-  
 
 }
