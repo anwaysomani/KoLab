@@ -419,31 +419,37 @@
         <div class="filter">
           <div class="filter-list">
             <div class="filter-item">
-              <div class="input-group mb-3">
-                <input (change)="employeeSearch(searchText)" [(ngModel)]="searchText" aria-describedby="basic-addon2" aria-label="Free Text Search"
-                       class="form-control" name="searchText" placeholder="Free Text Search"
-                       type="text">
-                <span (click)="employeeSearch(searchText)" class="input-group-text fa fa-search"
-                      id="basic-addon2"></span>
+              <div class="card card-body apply-gradient">
+                <div class="input-group mb-3">
+                  <input (change)="employeeSearch(searchText)" [(ngModel)]="searchText" aria-describedby="basic-addon2" aria-label="Free Text Search"
+                        class="form-control" name="searchText" placeholder="Free Text Search"
+                        type="text">
+                  <span (click)="employeeSearch(searchText)" class="input-group-text fa fa-search"
+                        id="basic-addon2"></span>
+                </div>
               </div>
               <hr style="text-align:left;margin-left:0;color: #fff;">
-              <h3>Designation Filter</h3>
-              <div *ngFor="let item of availableDesignationList let i=index" class="form-check">
-                <input (change)="onDesignationSelection(item)" [(ngModel)]="selectedDesignation" class="form-check-input" id="{{item}}-designation"
-                       name="designation"
-                       type="radio" value="{{item}}">
-                <label class="form-check-label" for="{{item}}-designation">
-                  {{item}}
-                </label>
+              <div class="card card-body apply-gradient">
+                <h3>Designation Filter</h3>
+                <div *ngFor="let item of availableDesignationList let i=index" class="form-check">
+                  <input (change)="onDesignationSelection(item)" [(ngModel)]="selectedDesignation" class="form-check-input" id="{{item}}-designation"
+                        name="designation"
+                        type="radio" value="{{item}}">
+                  <label class="form-check-label" for="{{item}}-designation">
+                    {{item}}
+                  </label>
+                </div>
               </div>
               <hr style="text-align:left;margin-left:0;color: #fff;">
-              <h3>Status Filter</h3>
-              <div *ngFor="let item of availableStatusList" class="form-check">
-                <input (change)="onStatusSelection(item)" [(ngModel)]="selectedStatus" class="form-check-input" id="{{item}}-status" name="status"
-                       type="radio" value="{{item}}">
-                <label class="form-check-label" for="{{item}}-status">
-                  {{item}}
-                </label>
+              <div class="card card-body apply-gradient">
+                <h3>Status Filter</h3>
+                <div *ngFor="let item of availableStatusList" class="form-check">
+                  <input (change)="onStatusSelection(item)" [(ngModel)]="selectedStatus" class="form-check-input" id="{{item}}-status" name="status"
+                        type="radio" value="{{item}}">
+                  <label class="form-check-label" for="{{item}}-status">
+                    {{item}}
+                  </label>
+                </div>
               </div>
             </div>
           </div>
@@ -490,7 +496,6 @@
                   <h6 class="card-subtitle mb-2 text-muted t-a-r">{{item.designation}}</h6>
                 </div>
                 <div class="card-text">
-                  <p>{{item.email}}</p>
                   <span
                     *ngIf="item.activeSite=== undefined || item.activeSite === null  || item.activeSite=='' ">-</span>
                   <p>{{item.activeSite}}</p>
