@@ -1,5 +1,5 @@
 <div *ngIf="allow" class="row main-nav">
-  <div *ngIf="!isEmployees" class="col-2 client-list h-92 card">
+  <div *ngIf="!isEmployees" class="col-2 client-list h-92 card p-3 apply-gradient">
     <!-- add customization here for search filter + client designation sort + add button -->
     <ngx-spinner *ngIf="loader.pageLoader" [fullScreen]="true" bdColor="rgba(51, 51, 51, 0.8)" size="default"
                  type="square-jelly-box">
@@ -81,7 +81,7 @@
   <div *ngIf="!isEmployees" class="col-3 h-92"> <!-- DETAILS -->
     <div class="row m-0 main-section">
 
-      <div class="shadow p-3 bg-white rounded h-92 main-section-list">
+      <div class="shadow p-3 bg-white rounded h-92 main-section-list apply-gradient">
         <div class="row">
           <div class="col-7">
             <h3>SITES</h3>
@@ -183,7 +183,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!isEmployees" class="col-7 shadow pt-3 bg-white rounded overflow-scroll right-sidebar">
+  <div *ngIf="!isEmployees" class="col-7 shadow pt-3 bg-white rounded overflow-scroll right-sidebar apply-gradient">
     <!-- widget-3 -->
     <div class="card h-43 mb-3">
       <div class="card-header">
@@ -415,7 +415,7 @@
   <!-- Employee Screen -->
   <div class="employee-container">
     <div class="row">
-      <div *ngIf="isEmployees" class="col-3 employee-sidebar h-92">
+      <div *ngIf="isEmployees" class="col-3 employee-sidebar h-92 apply-gradient">
         <div class="filter">
           <div class="filter-list">
             <div class="filter-item">
@@ -449,7 +449,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="isEmployees" class="col-9 employee-main-content h-92">
+      <div *ngIf="isEmployees" class="col-9 employee-main-content h-92 apply-gradient">
         <div class="employee-card-container">
           <div class="card-header mb-3">
             <h3>EMPLOYEE DETAILS</h3>
@@ -720,7 +720,7 @@
                     <span class="sr-only">Previous</span>
                   </a>
                   <!-- Show Employeedetails in pop up -->
-                  <div class="card">
+                  <div class="card apply-gradient">
                     <div class="card-body">
                       <table class="table">
                         <thead class="card-title">
