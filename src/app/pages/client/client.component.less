@@ -1,3 +1,15 @@
+@bg-color-card:rgba(0,0,0,.03);
+@linear-gradient:linear-gradient(90deg, #edc0bf 0, #c4caef 58%);
+@font-color: #1d2020;
+@font-header:16px;
+@font-body:14px;
+
+/* ========================= */
+@border-radius: 2vh;
+@highlight-row: #ffb703;
+@content-header-color: #333;
+/* ========================= */
+
 .client-list {
   height: 90vh;
   box-shadow: 0 0 10px -4px rgb(35 31 31 / 90%);
@@ -29,6 +41,10 @@
 }
 
 .fs-16 {
+  font-size: 16px;
+}
+
+.fs-14 {
   font-size: 16px;
 }
 
@@ -209,23 +225,6 @@ td:hover {
   left: 50%;
 }
 
-@app-bg-color: #263544;
-@border-radius: 2vh;
-@highlight-row: #ffb703;
-@font-color: #1d2020;
-@sidemenu-font-color: #42a5f5;
-@main-section-list-bgcolor: #f2f7fb;
-@global-font-size: 1rem;
-@l-sidebar-font-color: #b7c0cd;
-@header-color: #4099ff;
-@content-header-color: #333;
-@bg-color-card:rgba(0,0,0,.03);
-@linear-gradient:linear-gradient(90deg, #edc0bf 0, #c4caef 58%);
-
-.main-nav__list {
-  font-size: @global-font-size;
-}
-
 .right-sidebar {
   .card {
     background: @bg-color-card;
@@ -250,10 +249,6 @@ td:hover {
   .btn-outline-primary {
     border-radius: 5px;
     border: 0;
-
-    .btn {
-      color: @app-bg-color;
-    }
   }
 
   .card-wrapper .card {
@@ -290,9 +285,7 @@ td:hover {
   }
 }
 
-.icon-right-arrow {
-  color: @header-color;
-}
+
 
 .icon-info {
   display: inline;
@@ -307,14 +300,15 @@ td:hover {
   .card-container {
     display: flex;
     margin: 1em;
-    padding: 1em;
-
     .card {
       background: @bg-color-card;
       box-shadow: 0 0 5px;
       margin: 1em;
-      width: 29%;
+      width: 22%;
       @media (max-width: 1340px) {
+        width: 22%;
+      }
+      @media (min-width: 1340px) and(max-width: 1465px) {
         width: 29%;
       }
     }
@@ -353,6 +347,15 @@ td:hover {
 
 .filter-item {
   padding: 2em;
+  .searchText input{
+    outline: none;
+    border-width: 0 0 0.1em;
+    border-color: @font-color;
+    border-radius: 0;
+    :focus{
+      border-width: 0 0 0.2em;
+    }
+  }
 
   h3, label {
     color: @font-color;
@@ -372,4 +375,25 @@ td:empty::after {
   background: @linear-gradient;
   background-color: @bg-color-card;
   border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+.p-l-r-0{
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.p-t-b-0_5{
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+.font-header{
+  font-size: @font-header;
+}
+
+.font-body{
+  font-size: @font-body;
+}
+.f-w-b {
+  font-weight: bold;
 }

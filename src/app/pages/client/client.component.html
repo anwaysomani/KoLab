@@ -420,17 +420,18 @@
           <div class="filter-list">
             <div class="filter-item">
               <div class="card card-body apply-gradient">
+                <span class="font-header f-w-b">Employees</span>
                 <div class="input-group mb-3">
                   <input (change)="employeeSearch(searchText)" [(ngModel)]="searchText" aria-describedby="basic-addon2" aria-label="Free Text Search"
-                        class="form-control" name="searchText" placeholder="Free Text Search"
+                        class="form-control apply-gradient searchText" name="searchText"
                         type="text">
-                  <span (click)="employeeSearch(searchText)" class="input-group-text fa fa-search"
-                        id="basic-addon2"></span>
+                 <!--  <span (click)="employeeSearch(searchText)" class="input-group-text fa fa-search"
+                        id="basic-addon2"></span> -->
                 </div>
               </div>
               <hr style="text-align:left;margin-left:0;color: #fff;">
               <div class="card card-body apply-gradient">
-                <h3>Designation Filter</h3>
+                <span class="font-header f-w-b">Designation</span>
                 <div *ngFor="let item of availableDesignationList let i=index" class="form-check">
                   <input (change)="onDesignationSelection(item)" [(ngModel)]="selectedDesignation" class="form-check-input" id="{{item}}-designation"
                         name="designation"
@@ -442,7 +443,7 @@
               </div>
               <hr style="text-align:left;margin-left:0;color: #fff;">
               <div class="card card-body apply-gradient">
-                <h3>Status Filter</h3>
+                <span class="font-header f-w-b">Status</span>
                 <div *ngFor="let item of availableStatusList" class="form-check">
                   <input (change)="onStatusSelection(item)" [(ngModel)]="selectedStatus" class="form-check-input" id="{{item}}-status" name="status"
                         type="radio" value="{{item}}">
@@ -462,11 +463,11 @@
           </div>
           <div *ngIf="tempSelectedEmployees.length > 0" class="card-container row">
             <div *ngFor="let item of tempSelectedEmployees;let j=index" class="card col-3">
-              <div (click)="openEmployeeDetailsModel(item,j)" class="card-body" data-bs-target="#employeeDetailModal"
+              <div (click)="openEmployeeDetailsModel(item,j)" class="card-body p-l-r-0 p-t-b-0_5" data-bs-target="#employeeDetailModal"
                    data-bs-toggle="modal" data-toggle="modal">
                 <div class="row">
                   <div class="col-6">
-                    <h5 class="card-title">{{item.name}}</h5>
+                    <span class="card-title font-header">{{item.name}}</span>
                   </div>
                   <div class="col-6">
                     <div class="row">
@@ -491,11 +492,11 @@
                     </div>
                   </div>
                 </div>
-                <div class="subtitle">
-                  <h6 class="card-subtitle mb-2 text-muted">#998877665544</h6>
-                  <h6 class="card-subtitle mb-2 text-muted t-a-r">{{item.designation}}</h6>
+                <div class="subtitle font-body">
+                  <span class="card-subtitle mb-2 text-muted">#998877665544</span>
+                  <span class="card-subtitle mb-2 text-muted t-a-r">{{item.designation}}</span>
                 </div>
-                <div class="card-text">
+                <div class="card-text font-body">
                   <span
                     *ngIf="item.activeSite=== undefined || item.activeSite === null  || item.activeSite=='' ">-</span>
                   <p>{{item.activeSite}}</p>
