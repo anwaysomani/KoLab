@@ -254,7 +254,7 @@
           <!-- work progress -->
           <div class="col-6">
             <div>
-              <label class="col-form-label-lg"><b class="text-uppercase">Progress&nbsp;
+              <label class="col-form-label-lg font-header"><b class="text-uppercase">Progress&nbsp;
                 <span (click)="selectMaterials('Progress')" class="arrow-pointer icon-right-arrow">
                   <i class="fa fa-arrow-right"></i>
                 </span>
@@ -273,7 +273,7 @@
     <div class="card h-43 overflow-scroll">
       <div class="card-body">
         <!-- for employee/contractor attendance display -->
-        <div *ngIf="displayEmployeeDetail">
+        <div *ngIf="displayEmployeeDetail" class="employee-detail-list">
           <div class="row">
             <div class="col-6">
               <label class="col-form-label text-uppercase">{{selectedSiteEmployee}}</label>

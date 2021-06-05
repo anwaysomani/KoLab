@@ -135,11 +135,14 @@
   display: block;
 }
 
-td:hover {
-  background-color: rgb(180, 179, 179);
-  text-decoration: underline;
-  color: blue;
+.employee-detail-list{
+  td:hover {
+    background-color: rgb(180, 179, 179);
+    text-decoration: underline;
+    color: blue;
+  }
 }
+
 
 .h-30 {
   height: 46vh !important;
@@ -345,7 +348,9 @@ td:hover {
     }
   }
 }
-
+*:focus {
+  outline: 0 !important;
+}
 .filter-item {
   padding: 2em;
   .searchText{
