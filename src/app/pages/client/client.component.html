@@ -108,12 +108,12 @@
                [class.selected]="item === selectedItem"
                [ngClass]="{'highlight-row': item === selectedItem}"
                class="card-wrapper mb-2 arrow-pointer">
-            <div class="">
+            <div class="sites-card-list">
               <div class="card-header">
                 <span class="mb-0">
-                  <div class="col-10 arrow-pointer card-list font-header f-w-b">
+                  <div class="col-12 arrow-pointer card-list font-header f-w-b">
                     <label class="arrow-pointer">{{item['name']}}</label>
-                    <span *ngIf="item === selectedItem" class="highlighted-item-row pt-2"> <!-- selected item highlight -->
+                    <span *ngIf="item === selectedItem" class="highlighted-item-row pt-2 float-right"> <!-- selected item highlight -->
                       &#x296C;
                     </span>
                   </div>
@@ -195,19 +195,10 @@
                       class="border-0 border-2 border-bottom m-r-1e f-s-1" name="currentDate">
                 <option *ngFor="let i of getDateFromMonth()" value="{{i}}">{{i}}</option>
               </select>
-              <!-- <button class="btn btn-outline-primary m-r-1e" (click)="updateDynamicDetailSelection(4)">
-                &#x2139;
-              </button> -->
               <div (click)="updateDynamicDetailSelection(4)" class="m-r-1e icon-info p-l-2e fa-2x" data-toggle="tooltip"
                    title="Information">
                 <i class="fa fa-info"></i>
               </div>
-              <!--<button class="btn btn-outline-danger m-r-1e">
-                &#x2715;
-              </button>
-              <button class="btn btn-outline-primary ">
-                &#x270E;
-              </button>-->
             </div>
           </div>
         </div>
@@ -406,7 +397,10 @@
             </tbody>
           </table>
         </div>
-
+        <span class="text-black-50 top-50 left-50 position-relative font-header">
+          <i class="fas fa-skull-crossbones"></i>
+          Please select any item from above.
+        </span>
       </div>
     </div>
   </div>
