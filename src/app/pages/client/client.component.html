@@ -542,11 +542,11 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-3">
-            <img src={{clientImageUrl}}
+            <img src={{siteImageUrl}}
                 class="img-fluid" alt="Client Modal Image">
           </div>
           <div class="col-9">
-            <form>
+            <form class="p-r-2e">
               <div class="row mb-3">
                 <div class="col-2">
                   <label class="form-label" for="client">Client</label>
@@ -581,10 +581,10 @@
               </div>
               <div class="row mb-3">
                 <div class="col-2">
-                  <label class="form-label" for="sites">Phone No.</label>
+                  <label class="form-label" for="sites">PhoneNo.</label>
                 </div>
                 <div class="col-10">
-                  <input [(ngModel)]="newSiteData.pincode" class="form-control" name="sitePhoneNo" type="number">
+                  <input [(ngModel)]="newSiteData.phoneNo" class="form-control" name="sitePhoneNo" type="number">
                 </div>
               </div>
             </form>
@@ -685,7 +685,7 @@
               class="img-fluid" alt="Client Modal Image">
           </div>
           <div class="col-9">
-            <form>
+            <form class="p-r-2e">
               <div class="row mb-3 form-group">
                 <label class="form-label p-l-r-0" for="client">Client Name</label>
                 <input [(ngModel)]="client.name" class="form-control" name="client.name">

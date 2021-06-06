@@ -51,7 +51,8 @@ export class ClientComponent implements OnInit {
   newSiteData = {
     name: '',
     address: '',
-    pincode: ''
+    pincode: '',
+    phoneNo:''
   };
   loader = {
     addUserLoader: false,
@@ -104,6 +105,7 @@ export class ClientComponent implements OnInit {
   selectedDesignation = this.availableDesignationList[0];
   selectedImageNotes: Array<any> = [];
   clientImageUrl='https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
+  siteImageUrl='https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase) {
@@ -356,6 +358,7 @@ export class ClientComponent implements OnInit {
       name: this.newSiteData.name,
       address: this.newSiteData.address,
       pincode: this.newSiteData.pincode,
+      phoneNo: this.newSiteData.phoneNo,
       addedOn: new Date(),
       refNo: '',
     };
