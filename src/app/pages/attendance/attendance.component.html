@@ -4,9 +4,11 @@
       <h5 class="text-uppercase">Your Site</h5>
     </div>
     <div class="card-body">
-      <h3 *ngIf="activeUser !== undefined">
-        {{activeUser['activeSite']}}
-      </h3>
+      <span *ngIf="activeUser !== undefined">
+        <h3 class="m-0">{{activeUser['activeSite'].site}}</h3>
+        <br>
+        <span class="text-black-50">{{activeUser['activeSite'].address}} - {{activeUser['activeSite'].pincode}}</span>
+      </span>
       <h3 *ngIf="activeUser === undefined || activeUser['activeSite'].length < 1">
         -
       </h3>

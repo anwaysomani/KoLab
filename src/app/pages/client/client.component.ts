@@ -264,12 +264,6 @@ export class ClientComponent implements OnInit {
 
     this.selectedClient = client;
 
-    // activeSite: {
-    //    name: '',
-    //    address: '',
-    //    pincode: ''
-    // }
-
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.selectedClient.sites.length; i++) {
       // get employees with active employees
