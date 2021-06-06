@@ -170,7 +170,6 @@ export class ClientComponent implements OnInit {
 
   /* get client & their associated sites listing with employees for each site */
   clientAndSiteListing(): void {
-    console.log('Hereby');
     this.clientDataStore();
     for (let i = 0; i < this.clientList.length; i++) {
       // tslint:disable-next-line:prefer-for-of
@@ -181,9 +180,6 @@ export class ClientComponent implements OnInit {
         };
         // get employees in list
         this.db.collection('users', ref => {
-          console.log(this.clientList[i].sites[j]);
-
-
           return ref.where('activeSite', '==', this.clientList[i].sites[j].refNo); // replace with site-id
         }).valueChanges().subscribe((emps: Array<any>) => {
           // tslint:disable-next-line:prefer-for-of
@@ -227,7 +223,9 @@ export class ClientComponent implements OnInit {
 
   /* dropdown item listing change for client */
   onClientSelectionChange(ebt: any): void { /* client selection change */
-    this.changeSiteDropdownList = this.clientList[this.getClientIndex(ebt.value)].sites;
+
+
+    // this.changeSiteDropdownList = this.clientList[this.getClientIndex(ebt.value)].sites;
   }
 
   getClientIndex(name: string): number {
@@ -473,7 +471,6 @@ export class ClientComponent implements OnInit {
         )
       )
     ).subscribe(data => {
-      console.log(data);
       this.selectedImageNotes = data;
     });
   }
