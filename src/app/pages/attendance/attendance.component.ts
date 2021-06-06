@@ -45,7 +45,6 @@ export class AttendanceComponent implements OnInit {
   /* check condition for button enable */
   getCurrentPincode(): void {
     if (navigator.geolocation) {
-      // @ts-ignore
       navigator.geolocation.getCurrentPosition((position) => {
         this.http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + position.coords.latitude
           + ',' + position.coords.longitude + '&key=' + environment.googleApiKey).toPromise().then((data) => {
@@ -110,5 +109,10 @@ export class AttendanceComponent implements OnInit {
   signOutUser(): void {
     localStorage.clear();
     this.route.navigateByUrl('/login');
+  }
+
+  /* current user status */
+  getCurrentUserStatus(): string {
+    return (this.activeUser && this.activeUser.currentStatus) ? this.activeUser.currentStatus : 'Sign Out';
   }
 }
