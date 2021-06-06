@@ -733,30 +733,7 @@
                         <thead class="card-title">
                         <tr>
                           <th class="col-6" scope="col"><h5>{{item.name}}</h5></th>
-                          <th class="col-6" scope="col">
-                            <div class="text-end">
-                              <!-- active - green - Sign In -->
-                              <label *ngIf="selectedSiteEmployeeStatus === 'Sign In'"
-                                     class="col-form-label text-success">
-                                <i class="fa fa-circle" data-bs-toggle="tooltip" title="Active"></i>Active
-                              </label>
-                              <!-- on leave - red - On Leave -->
-                              <label *ngIf="selectedSiteEmployeeStatus === 'On Leave'"
-                                     class="col-form-label text-danger">
-                                <i class="fa fa-circle" data-bs-toggle="tooltip" title="On Leave"></i>On Leave
-                              </label>
-                              <!-- at lunch - yellow -->
-                              <label *ngIf="selectedSiteEmployeeStatus === 'At Lunch'"
-                                     class="col-form-label text-warning">
-                                <i class="fa fa-circle" data-bs-toggle="tooltip" title="At Lunch"></i>At Lunch
-                              </label>
-                              <!-- offline - grey - Sign Out -->
-                              <label
-                                *ngIf="selectedSiteEmployeeStatus === '' || selectedSiteEmployeeStatus === 'Sign Out'"
-                                class="col-form-label text-black-50">
-                                <i class="fa fa-circle" data-bs-toggle="tooltip" title="Offline"></i>Offline
-                              </label>
-                            </div>
+                          <th class="col-6" scope="col">                            
                           </th>
                         </tr>
                         </thead>
@@ -767,6 +744,31 @@
                         </tr>
                         <tr>
                           <th>{{item.designation}}</th>
+                          <th>
+                            <div class="">
+                              <!-- active - green - Sign In -->
+                              <label *ngIf="selectedSiteEmployeeStatus === 'Sign In'"
+                                     class="col-form-label text-success">
+                                <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Active"></i>Active
+                              </label>
+                              <!-- on leave - red - On Leave -->
+                              <label *ngIf="selectedSiteEmployeeStatus === 'On Leave'"
+                                     class="col-form-label text-danger">
+                                <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="On Leave"></i>On Leave
+                              </label>
+                              <!-- at lunch - yellow -->
+                              <label *ngIf="selectedSiteEmployeeStatus === 'At Lunch'"
+                                     class="col-form-label text-warning">
+                                <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="At Lunch"></i>At Lunch
+                              </label>
+                              <!-- offline - grey - Sign Out -->
+                              <label
+                                *ngIf="selectedSiteEmployeeStatus === '' || selectedSiteEmployeeStatus === 'Sign Out'"
+                                class="col-form-label text-black-50">
+                                <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Offline"></i>Offline
+                              </label>
+                            </div>
+                          </th>
                         </tr>
                         <tr>
                           <td *ngIf="item.activeSite" colspan="2">{{item.activeSite}}</td>
