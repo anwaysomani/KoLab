@@ -22,8 +22,10 @@ export class AttendanceComponent implements OnInit {
   fb: string | undefined;
   downloadURL: Observable<string> | undefined;
   x = false;
+  currentPincode = 0;
 
-  constructor(private db: AngularFirestore, private storage: AngularFireStorage, private route: Router, private titleService: Title, private http: HttpClient) {
+  constructor(private db: AngularFirestore, private storage: AngularFireStorage, private route: Router, private titleService: Title,
+              private http: HttpClient) {
     // @ts-ignore
     this.uid = JSON.parse(localStorage.getItem('user')).uid;
     this.db.doc(`/users/${this.uid}`).valueChanges().subscribe((det) => {
@@ -37,25 +39,30 @@ export class AttendanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Employee Playground | ' + environment.brand);
-    this.x = this.checkEnableCondition();
+    this.getCurrentPincode();
   }
 
   /* check condition for button enable */
-  checkEnableCondition(): boolean {
+  getCurrentPincode(): void {
     if (navigator.geolocation) {
       // @ts-ignore
       navigator.geolocation.getCurrentPosition((position) => {
         this.http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + position.coords.latitude
           + ',' + position.coords.longitude + '&key=' + environment.googleApiKey).toPromise().then((data) => {
           // @ts-ignore
-          console.log(data.results[0].address_components.find(addr => addr.types[0] === 'postal_code').short_name);
+          this.currentPincode = data.results[0].address_components.find(addr => addr.types[0] === 'postal_code').short_name;
         });
       });
     } else {
       console.log('Geolocation is not supported by this browser.');
     }
+  }
 
-    return false;
+  checkActionEnableCondition(): boolean {
+    if (this.activeUser) {
+      return !(this.currentPincode === this.activeUser.activeSite.pincode);
+    }
+    return true;
   }
 
   /* mark user status */
@@ -75,7 +82,8 @@ export class AttendanceComponent implements OnInit {
 
     this.activeUser.attendance.push(x);
     this.db.doc(`/users/${this.uid}`).update({
-      attendance: this.activeUser.attendance
+      attendance: this.activeUser.attendance,
+      currentStatus: x.status
     });
   }
 
