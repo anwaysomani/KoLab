@@ -32,10 +32,8 @@
 
       <!-- upload material -->
       <div>
-        <input (change)="onFileSelected($event, true)" autocomplete="off" class="btn btn-primary"
-               hidden
-               id="uploadMaterial"
-               name="image" type="file"/>
+        <input (change)="onFileSelected($event, true)" [disabled]="checkUploadButtonCondition()" autocomplete="off"
+               class="btn btn-primary" hidden id="uploadMaterial" name="image" type="file"/>
         <label class="border-dark btn btn-light btn-close-white w-75" for="uploadMaterial">
           &#x2750;&nbsp;Upload Material
         </label>
@@ -43,10 +41,8 @@
 
       <!-- upload progress -->
       <div class="mt-2">
-        <input (change)="onFileSelected($event, false)" autocomplete="off" class="btn btn-primary"
-               hidden
-               id="uploadProgress"
-               name="image" type="file"/>
+        <input (change)="onFileSelected($event, false)" [disabled]="checkUploadButtonCondition()" autocomplete="off"
+               class="btn btn-primary" hidden id="uploadProgress" name="image" type="file"/>
         <label class="border-dark btn btn-light btn-close-white w-75" for="uploadProgress">
           &#x262F;&nbsp;Upload Progress
         </label>

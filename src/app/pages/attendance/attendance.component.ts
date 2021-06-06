@@ -115,4 +115,9 @@ export class AttendanceComponent implements OnInit {
   getCurrentUserStatus(): string {
     return (this.activeUser && this.activeUser.currentStatus) ? this.activeUser.currentStatus : 'Sign Out';
   }
+
+  /* check enable condition for upload buttons */
+  checkUploadButtonCondition(): boolean {
+    return !this.activeUser.activeSite && !this.activeUser.activeSite.site && this.activeUser.activeSite.site.length < 1;
+  }
 }
