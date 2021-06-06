@@ -8,35 +8,41 @@
     <div *ngIf="isEmployees" class="container mt-1 mb-1 main-nav__list">
       <ul class="nav nav-pills" id="pills-tab" role="tablist">
         <li class="nav-item">
-          <a (click)="userCategorySelectionChange('Admin')" aria-controls="pills-admin" aria-selected="true" class="nav-link context-menu-cursor active"
+          <a (click)="userCategorySelectionChange('Admin')" aria-controls="pills-admin" aria-selected="true"
+             class="nav-link context-menu-cursor active"
              data-toggle="pill" id="pills-admin-tab" role="tab">Admins</a>
         </li>
         <li class="nav-item">
-          <a (click)="userCategorySelectionChange('Sub-Admin')" aria-controls="pills-contractor" aria-selected="false" class="nav-link context-menu-cursor"
+          <a (click)="userCategorySelectionChange('Sub-Admin')" aria-controls="pills-contractor" aria-selected="false"
+             class="nav-link context-menu-cursor"
              data-toggle="pill" id="pills-contractor-tab" role="tab">Contractors</a>
         </li>
         <li class="nav-item">
-          <a (click)="userCategorySelectionChange('Menu-Admin')" aria-controls="pills-employee" aria-selected="false" class="nav-link context-menu-cursor"
+          <a (click)="userCategorySelectionChange('Menu-Admin')" aria-controls="pills-employee" aria-selected="false"
+             class="nav-link context-menu-cursor"
              data-toggle="pill" id="pills-employee-tab" role="tab">Employees</a>
         </li>
       </ul>
     </div>
 
+    <div *ngIf="!isEmployees" class="w-100">
+      <button #addClientModal class="btn btn-outline-dark btn-block w-100" data-target="#addClientModal"
+              data-toggle="modal">
+        <i class="fa fa-user-plus"></i>&nbsp;Add Client
+      </button>
+    </div>
+
     <div class="mb-2 mt-2 row input-group">
-      <div class="col-9 p-l-2e input-group_wrapper pt-0 pb-0 p-r-0">
-        <input (change)="clientSearch(searchText)" [(ngModel)]="searchText" class="form-control apply-gradient searchText" name="searchText"
-               placeholder="Search here...">
-      </div>
-      <div *ngIf="isEmployees" class="col-2 p-0 input-group_wrapper">
+      <!--<div *ngIf="isEmployees" class="p-0 input-group_wrapper">
         <div #addUserModal class="text-center icon-user-plus" data-target="#addUserModal" data-toggle="modal">
           <span data-toggle="tooltip" title="Add Employee"><i class="fa fa-user-plus"></i></span>
         </div>
-      </div>
+      </div>-->
 
-      <div *ngIf="!isEmployees" class="col-2 p-0 input-group_wrapper">
-        <div #addClientModal class="text-center icon-user-plus" data-target="#addClientModal" data-toggle="modal">
-          <span data-toggle="tooltip" title="Add Client"><i class="fa fa-user-plus"></i></span>
-        </div>
+      <div class="p-l-2e input-group_wrapper pt-0 pb-0 p-r-0">
+        <input (change)="clientSearch(searchText)" [(ngModel)]="searchText"
+               class="form-control apply-gradient searchText" name="searchText"
+               placeholder="Search here...">
       </div>
     </div>
 
@@ -86,8 +92,8 @@
           </div>
           <div class="col-5">
             <div class=" text-end mb-3">
-              <button class="btn btn-outline-primary" data-target="#addSiteModal" data-toggle="modal">
-                Add Site &#x2b;
+              <button class="btn btn-outline-dark" data-target="#addSiteModal" data-toggle="modal">
+                <i aria-hidden="true" class="fa fa-plus"></i>&nbsp;Add Site
               </button>
             </div>
           </div>
@@ -181,14 +187,15 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!isEmployees" class="col-7 shadow pt-3 bg-white rounded overflow-scroll right-sidebar apply-gradient h-92">
+  <div *ngIf="!isEmployees"
+       class="col-7 shadow pt-3 bg-white rounded overflow-scroll right-sidebar apply-gradient h-92">
     <!-- widget-3 -->
     <div class="card h-43 mb-3">
       <div class="card-header">
         <div *ngIf="selectedItem">
           <div class="row">
             <div class="col-6">
-              <h3><b>#</b> {{selectedItem['name']}}</h3>
+              <h3>{{selectedItem['name']}}</h3>
             </div>
             <div class="col-6 text-end">
               <select (click)="getDateFromMonth()" [(ngModel)]="currentDate"
@@ -204,40 +211,33 @@
         </div>
       </div>
       <div class="card-body overflow-scroll">
-        <div class="mb-3 row">
+        <div class="mb-3">
+
           <!-- materials -->
-          <div class="col-6">
-            <button (click)="selectMaterials('Materials')" class="btn btn-block btn-outline-primary btn-rounded waves-effect">
-              <i class="fa fa-home"></i><span class="font-header">Materials</span>
-            </button>
-            <label class="col-form-label-lg font-header"><span class="text-uppercase">&nbsp;
-              <span class="arrow-pointer icon-right-arrow">
-                <i class="fa fa-arrow-right"></i>
-              </span>
-            </span></label>
-          </div>
+          <button (click)="selectMaterials('Materials')"
+                  class="btn btn-block btn-outline-dark btn-rounded waves-effect w-25 m-r-1e">
+            <span class="font-header"><i class="fa fa-users"></i>&nbsp;Materials</span>
+          </button>
+
           <!-- work progress -->
-          <div class="col-6">
-            <button (click)="selectMaterials('Progress')" class="btn btn-block btn-outline-primary btn-rounded waves-effect">
-              <i class="fa fa-folder"></i><span class="font-header">Progress</span>
-            </button>
-            <label class="col-form-label-lg font-header"><b class="text-uppercase">&nbsp;
-              <span class="arrow-pointer icon-right-arrow">
-                <i class="fa fa-arrow-right"></i>
-              </span>
-            </b></label>
-          </div>
-      </div>
-        
+          <button (click)="selectMaterials('Progress')"
+                  class="btn btn-block btn-outline-dark btn-rounded waves-effect w-25">
+            <span class="font-header"><i class="fa fa-archive"></i>&nbsp;Progress</span>
+          </button>
+        </div>
+
 
         <!-- employees -->
-        <label class="col-form-label-lg text-uppercase"><span class="font-header f-w-b">Employees</span></label>
+        <label class="col-form-label-lg">
+          <span class="font-header f-w-b">Employees</span>
+        </label>
         <div *ngIf="selectedSiteEmployeeList.length < 1" class="row mb-3 g-0">
           (No employees allocated yet)
         </div>
         <div *ngIf="selectedSiteEmployeeList.length > 0" class="row g-3 mb-3">
           <div (click)="selectEmployee(employee.uid)"
-               *ngFor="let employee of selectedSiteEmployeeList" class="col-4 border-end border-bottom arrow-pointer item-selection font-body">
+               *ngFor="let employee of selectedSiteEmployeeList"
+               class="col-4 border-end border-bottom arrow-pointer item-selection font-body">
             {{employee.name}}
           </div>
         </div>
@@ -253,12 +253,12 @@
         <!-- images -->
         <!-- <div class="row mb-3">
           // materials
-          <div class="col-6">            
+          <div class="col-6">
             <img alt="Sample" height="200" src="{{defaultMaterialImage}}"/>
           </div>
 
           // work progress
-          <div class="col-6">            
+          <div class="col-6">
             <img alt="Sample" height="200" src="{{defaultProgressImage}}"/>
           </div>
         </div> -->
@@ -339,19 +339,22 @@
                   <span *ngIf="progressImagesDisplay" class="font-header f-w-b">Work Progress</span>
                 </span>
               </div>
-              <ngx-spinner *ngIf="loader.addClientLoader" [fullScreen]="false" bdColor="rgba(51, 51, 51, 0.8)" size="default"
+              <ngx-spinner *ngIf="loader.addClientLoader" [fullScreen]="false" bdColor="rgba(51, 51, 51, 0.8)"
+                           size="default"
                            type="square-jelly-box">
                 <p class="text-white">Please Wait...</p>
               </ngx-spinner>
               <div *ngFor="let img of renderImages();let i=index" class="col-4">
-                <a (click)="openImageModel(img,i)" data-target="#materials-progress-modal" data-toggle="modal">
-                  <img alt="" src={{img}}/>
+                <a (click)="openImageModel(img,i)" class="arrow-pointer" data-target="#materials-progress-modal"
+                   data-toggle="modal">
+                  <img alt="Error occurred in loading image" src={{img}}/>
                 </a>
               </div>
             </div>
           </div>
         </div>
-        <div aria-hidden="true" aria-labelledby="materials-progress-modal-label" class="modal fade" id="materials-progress-modal"
+        <div aria-hidden="true" aria-labelledby="materials-progress-modal-label" class="modal fade"
+             id="materials-progress-modal"
              role="dialog" tabindex="-1">
           <div class="modal-dialog  modal-lg" role="document">
             <div class="modal-content">
@@ -366,7 +369,7 @@
                             <span aria-hidden="true" class="carousel-control-prev-icon"></span>
                             <span class="sr-only">Previous</span>
                           </a>
-                          <img alt="First slide" class="d-block w-100 img-responsive" src={{image}}>
+                          <img alt="{{image}}" class="d-block w-100 img-responsive" src={{image}}>
                           <a class="carousel-control-next" data-slide="next" href="#image-modal-carousel" role="button">
                             <span aria-hidden="true" class="carousel-control-next-icon"></span>
                             <span class="sr-only">Next</span>
@@ -375,10 +378,33 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-5 pt-2">
-                    <label>12/02/2021</label>
-                    <p>Sample Text Message Here</p>
+                  <div class="col-5 pt-2 p-r-2e">
+                    <span class="font-header">
+                        NOTES
+                      </span>
                     <hr>
+
+                    <div class="col-12 h-65 overflow-scroll">
+                      <div class="card m-b-3" *ngFor="let i of selectedImageNotes">
+                        <div class="card-header">
+                          {{getDateAndTime(i.date)}}
+                        </div>
+                        <div class="card-body">
+                          {{i.message}}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row position-absolute bottom-0 w-50">
+                      <div class="col-8 m-b-3">
+                        <input class="form-control" [(ngModel)]="newNote" name="newNote" />
+                      </div>
+                      <div class="col-4 font-xlarge">
+                        <span class="arrow-pointer" (click)="recordNote()">
+                          <i aria-hidden="true" class="fa fa-bullhorn"></i>
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -419,37 +445,55 @@
         <div class="filter">
           <div class="filter-list">
             <div class="filter-item">
-              <div class="card card-body apply-gradient">
-                <span class="font-header f-w-b">Employees</span>
-                <div class="input-group mb-3">
-                  <input (change)="employeeSearch(searchText)" [(ngModel)]="searchText" aria-describedby="basic-addon2" aria-label="Free Text Search"
-                        class="form-control apply-gradient searchText" name="searchText"
-                        type="text">
-                 <!--  <span (click)="employeeSearch(searchText)" class="input-group-text fa fa-search"
-                        id="basic-addon2"></span> -->
+              <button class="btn btn-outline-dark w-100 m-b-3">
+                <i aria-hidden="true" class="fa fa-plus"></i>&nbsp;Add Employee
+              </button>
+
+              <div class="card apply-gradient m-b-3">
+                <div class="card-header">
+                  <span class="font-header f-w-b">Employees</span>
+                </div>
+                <div class="card-body">
+                  <div class="input-group mb-3">
+                    <input (change)="employeeSearch(searchText)" [(ngModel)]="searchText"
+                           aria-describedby="basic-addon2"
+                           aria-label="Free Text Search"
+                           class="form-control apply-gradient searchText" name="searchText"
+                           type="text">
+                  </div>
                 </div>
               </div>
-              <hr style="text-align:left;margin-left:0;color: #fff;">
-              <div class="card card-body apply-gradient">
-                <span class="font-header f-w-b">Designation</span>
-                <div *ngFor="let item of availableDesignationList let i=index" class="form-check">
-                  <input (change)="onDesignationSelection(item)" [(ngModel)]="selectedDesignation" class="form-check-input" id="{{item}}-designation"
-                        name="designation"
-                        type="radio" value="{{item}}">
-                  <label class="form-check-label" for="{{item}}-designation">
-                    {{item}}
-                  </label>
+
+              <div class="card apply-gradient m-b-3">
+                <div class="card-header">
+                  <span class="font-header f-w-b">Designation</span>
+                </div>
+                <div class="card-body">
+                  <div *ngFor="let item of availableDesignationList let i=index" class="form-check">
+                    <input (change)="onDesignationSelection(item)" [(ngModel)]="selectedDesignation"
+                           class="form-check-input" id="{{item}}-designation"
+                           name="designation"
+                           type="radio" value="{{item}}">
+                    <label class="form-check-label" for="{{item}}-designation">
+                      {{item}}
+                    </label>
+                  </div>
                 </div>
               </div>
-              <hr style="text-align:left;margin-left:0;color: #fff;">
-              <div class="card card-body apply-gradient">
-                <span class="font-header f-w-b">Status</span>
-                <div *ngFor="let item of availableStatusList" class="form-check">
-                  <input (change)="onStatusSelection(item)" [(ngModel)]="selectedStatus" class="form-check-input" id="{{item}}-status" name="status"
-                        type="radio" value="{{item}}">
-                  <label class="form-check-label" for="{{item}}-status">
-                    {{item}}
-                  </label>
+
+              <div class="card apply-gradient">
+                <div class="card-header">
+                  <span class="font-header f-w-b">Status</span>
+                </div>
+                <div class="card-body">
+                  <div *ngFor="let item of availableStatusList" class="form-check">
+                    <input (change)="onStatusSelection(item)" [(ngModel)]="selectedStatus" class="form-check-input"
+                           id="{{item}}-status" name="status"
+                           type="radio" value="{{item}}">
+                    <label class="form-check-label" for="{{item}}-status">
+                      {{item}}
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -458,49 +502,57 @@
       </div>
       <div *ngIf="isEmployees" class="col-9 employee-main-content h-92 p-0">
         <div class="employee-card-container h-92 apply-gradient m-3">
-          <div class="card-header mb-3">
-            <h3>EMPLOYEE DETAILS</h3>
-          </div>
           <div *ngIf="tempSelectedEmployees.length > 0" class="card-container">
             <div class="row">
               <div *ngFor="let item of tempSelectedEmployees;let j=index" class="card col-3">
-                <div (click)="openEmployeeDetailsModel(item,j)" class="card-body p-l-r-0 p-t-b-0_5" data-bs-target="#employeeDetailModal"
-                    data-bs-toggle="modal" data-toggle="modal">
-                  <div class="row">
-                    <div class="col-6">
-                      <span class="card-title font-header">{{item.name}}</span>
-                    </div>
-                    <div class="col-6">
-                      <div class="row">
-                        <div class="col-6">
-                          <label class="col-form-label text-uppercase">{{selectedSiteEmployee}}</label>
-                        </div>
-                        <div class="col-6 text-end">
-                          <!-- active - green - Sign In -->
-                          <label *ngIf="selectedSiteEmployeeStatus === 'Sign In'" class="col-form-label text-success"><i
-                            class="fa fa-circle" data-toggle="tooltip" title="Active"></i></label>
-                          <!-- on leave - red - On Leave -->
-                          <label *ngIf="selectedSiteEmployeeStatus === 'On Leave'" class="col-form-label text-danger"><i
-                            class="fa fa-circle" data-toggle="tooltip" title="On Leave"></i></label>
-                          <!-- at lunch - yellow -->
-                          <label *ngIf="selectedSiteEmployeeStatus === 'At Lunch'" class="col-form-label text-warning"><i
-                            class="fa fa-circle" data-toggle="tooltip" title="At Lunch"></i></label>
-                          <!-- offline - grey - Sign Out -->
-                          <label *ngIf="selectedSiteEmployeeStatus === '' || selectedSiteEmployeeStatus === 'Sign Out'"
-                                class="col-form-label text-black-50"><i
-                            class="fa fa-circle" data-toggle="tooltip" title="Offline"></i></label>
+                <div class="card-body p-l-r-0 p-t-b-0_5"
+                     data-bs-target="#employeeDetailModal"
+                     data-bs-toggle="modal" data-toggle="modal">
+                  <div (click)="openEmployeeDetailsModel(item,j)" class="arrow-pointer">
+                    <div class="row">
+                      <div class="col-6">
+                        <span class="card-title font-header">{{item.name}}</span>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div class="col-6">
+                            <label class="col-form-label text-uppercase">{{selectedSiteEmployee}}</label>
+                          </div>
+                          <div class="col-6 text-end">
+                            <!-- active - green - Sign In -->
+                            <label *ngIf="selectedSiteEmployeeStatus === 'Sign In'" class="col-form-label text-success"><i
+                              class="fa fa-circle" data-toggle="tooltip" title="Active"></i></label>
+                            <!-- on leave - red - On Leave -->
+                            <label *ngIf="selectedSiteEmployeeStatus === 'On Leave'" class="col-form-label text-danger"><i
+                              class="fa fa-circle" data-toggle="tooltip" title="On Leave"></i></label>
+                            <!-- at lunch - yellow -->
+                            <label *ngIf="selectedSiteEmployeeStatus === 'At Lunch'"
+                                   class="col-form-label text-warning"><i
+                              class="fa fa-circle" data-toggle="tooltip" title="At Lunch"></i></label>
+                            <!-- offline - grey - Sign Out -->
+                            <label
+                              *ngIf="selectedSiteEmployeeStatus === '' || selectedSiteEmployeeStatus === 'Sign Out'"
+                              class="col-form-label text-black-50"><i
+                              class="fa fa-circle" data-toggle="tooltip" title="Offline"></i></label>
+                          </div>
                         </div>
                       </div>
                     </div>
+                    <div class="subtitle font-body">
+                      <div class="mb-2 text-black-50">
+                        <i aria-hidden="true" class="fa fa-phone"></i>&nbsp;9096052940
+                      </div>
+                    </div>
                   </div>
-                  <div class="subtitle font-body">
-                    <span class="card-subtitle mb-2 text-muted">#998877665544</span>
-                    <span class="card-subtitle mb-2 text-muted t-a-r">{{item.designation}}</span>
-                  </div>
+                  <hr>
+
+                  <!-- active site -->
                   <div class="card-text font-body">
                     <span
-                      *ngIf="item.activeSite=== undefined || item.activeSite === null  || item.activeSite=='' ">-</span>
-                    <p>{{item.activeSite}}</p>
+                      *ngIf="item.activeSite=== undefined || item.activeSite === null  || item.activeSite==''">-</span>
+                    <span class="font-body font-header">
+                      <i aria-hidden="true" class="fa fa-map-marker"></i>&nbsp;{{item.activeSite}}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -521,7 +573,8 @@
 </div>
 
 <!-- Update Employee's Site -->
-<div aria-hidden="true" aria-labelledby="changeSiteModalLabel" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="true"
+<div aria-hidden="true" aria-labelledby="changeSiteModalLabel" class="modal fade" data-bs-backdrop="static"
+     data-bs-keyboard="true"
      id="changeSiteModal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -533,7 +586,8 @@
         <form>
           <div class="mb-3">
             <label class="form-label" for="client"><b>Client</b></label>
-            <select (change)="onClientSelectionChange($event.target)" [(ngModel)]="updateSite.client" class="form-select"
+            <select (change)="onClientSelectionChange($event.target)" [(ngModel)]="updateSite.client"
+                    class="form-select"
                     id="client" name="updateSite.client">
               <option *ngFor="let site of clientList" value="{{site.name}}">{{site.name}}</option>
             </select>
@@ -556,7 +610,8 @@
 </div>
 
 <!-- Add New Site -->
-<div aria-hidden="true" aria-labelledby="addSiteModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="true"
+<div aria-hidden="true" aria-labelledby="addSiteModal" class="modal fade" data-bs-backdrop="static"
+     data-bs-keyboard="true"
      id="addSiteModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -609,7 +664,8 @@
 </div>
 
 <!-- Add User -->
-<div aria-hidden="true" aria-labelledby="addUserModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="true"
+<div aria-hidden="true" aria-labelledby="addUserModal" class="modal fade" data-bs-backdrop="static"
+     data-bs-keyboard="true"
      id="addUserModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -673,7 +729,8 @@
 </div>
 
 <!-- Add Client -->
-<div aria-hidden="true" aria-labelledby="addClientModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="true"
+<div aria-hidden="true" aria-labelledby="addClientModal" class="modal fade" data-bs-backdrop="static"
+     data-bs-keyboard="true"
      id="addClientModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -739,21 +796,22 @@
                               <!-- active - green - Sign In -->
                               <label *ngIf="selectedSiteEmployeeStatus === 'Sign In'"
                                      class="col-form-label text-success"><i class="fa fa-circle"
-                                                                                         data-toggle="tooltip"
-                                                                                         title="Active"></i>Active</label>
+                                                                            data-toggle="tooltip"
+                                                                            title="Active"></i>Active</label>
                               <!-- on leave - red - On Leave -->
                               <label *ngIf="selectedSiteEmployeeStatus === 'On Leave'"
                                      class="col-form-label text-danger"><i class="fa fa-circle"
-                                                                                          data-toggle="tooltip"
-                                                                                          title="On Leave"></i>On Leave</label>
+                                                                           data-toggle="tooltip"
+                                                                           title="On Leave"></i>On Leave</label>
                               <!-- at lunch - yellow -->
                               <label *ngIf="selectedSiteEmployeeStatus === 'At Lunch'"
                                      class="col-form-label text-warning"><i class="fa fa-circle"
-                                                                                          data-toggle="tooltip"
-                                                                                          title="At Lunch"></i>At Lunch</label>
+                                                                            data-toggle="tooltip"
+                                                                            title="At Lunch"></i>At Lunch</label>
                               <!-- offline - grey - Sign Out -->
-                              <label *ngIf="selectedSiteEmployeeStatus === '' || selectedSiteEmployeeStatus === 'Sign Out'"
-                                     class="col-form-label text-black-50"><i
+                              <label
+                                *ngIf="selectedSiteEmployeeStatus === '' || selectedSiteEmployeeStatus === 'Sign Out'"
+                                class="col-form-label text-black-50"><i
                                 class="fa fa-circle" data-toggle="tooltip" title="Offline"></i>Offline</label>
                             </div>
                           </th>

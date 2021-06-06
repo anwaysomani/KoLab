@@ -6,6 +6,7 @@ import {Observable} from 'rxjs';
 import {Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {environment} from '../../../environments/environment';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-attendance',
@@ -20,8 +21,9 @@ export class AttendanceComponent implements OnInit {
   entireDate: string;
   fb: string | undefined;
   downloadURL: Observable<string> | undefined;
+  x = false;
 
-  constructor(private db: AngularFirestore, private storage: AngularFireStorage, private route: Router, private titleService: Title) {
+  constructor(private db: AngularFirestore, private storage: AngularFireStorage, private route: Router, private titleService: Title, private http: HttpClient) {
     // @ts-ignore
     this.uid = JSON.parse(localStorage.getItem('user')).uid;
     this.db.doc(`/users/${this.uid}`).valueChanges().subscribe((det) => {
@@ -35,6 +37,25 @@ export class AttendanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Employee Playground | ' + environment.brand);
+    this.x = this.checkEnableCondition();
+  }
+
+  /* check condition for button enable */
+  checkEnableCondition(): boolean {
+    if (navigator.geolocation) {
+      // @ts-ignore
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + position.coords.latitude
+          + ',' + position.coords.longitude + '&key=' + environment.googleApiKey).toPromise().then((data) => {
+          // @ts-ignore
+          console.log(data.results[0].address_components.find(addr => addr.types[0] === 'postal_code').short_name);
+        });
+      });
+    } else {
+      console.log('Geolocation is not supported by this browser.');
+    }
+
+    return false;
   }
 
   /* mark user status */

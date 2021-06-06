@@ -23,4 +23,5 @@ export const environment = {
     displayName: 'Employee',
     srch: 'Employee'
   }],
+  googleApiKey: 'AIzaSyDk-hbLho-8FLf1Qn_LCx15lTSKFSbTj44'
 };

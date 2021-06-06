@@ -7,6 +7,8 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {Title} from '@angular/platform-browser';
 import {AngularFireStorage} from '@angular/fire/storage';
+import {AngularFireDatabase} from '@angular/fire/database';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-client',
@@ -15,8 +17,8 @@ import {AngularFireStorage} from '@angular/fire/storage';
 })
 
 export class ClientComponent implements OnInit {
-  @ViewChild('addUserModal') closeAddExpenseModal: ElementRef | undefined;
 
+  @ViewChild('addUserModal') closeAddExpenseModal: ElementRef | undefined;
   entity: Array<any> = [];
   currMonYear: string;
   dates: number;
@@ -33,20 +35,19 @@ export class ClientComponent implements OnInit {
     sites: [],
     isSelected: false
   };
-
   selectedUser = {
     display: false,
     isSelected: true,
-    activeSite: '',
+    activeSite: {},
     sites: [],
     uid: '',
   };
-
   updateSite = {
     client: '',
     site: '',
+    address: '',
+    pincode: ''
   };
-
   newSiteData = {
     name: '',
     address: '',
@@ -60,7 +61,6 @@ export class ClientComponent implements OnInit {
   client = {
     name: '',
   };
-
   keyList: Array<string> = [];
   employee = {
     username: '',
@@ -82,7 +82,7 @@ export class ClientComponent implements OnInit {
   employeeAttendance: Array<any> = [];
   selectedSiteEmployeeStatus = '';
   currentDate = 1;
-
+  newNote = '';
   images = [
     {
       image: '',
@@ -95,8 +95,6 @@ export class ClientComponent implements OnInit {
   imgName: string = this.images[0].name;
   imgNumber = 1;
   imgLength: number = this.images.length;
-
-
   materialView = false;
   imgHref?: any = '';
   imgId = 0;
@@ -114,11 +112,12 @@ export class ClientComponent implements OnInit {
   filterApplied = false;
   selectedStatus = '';
   availableStatusList = ['Active', 'On Leave', 'At Lunch', 'Sign Out'];
-  availableDesignationList = ['EMPLOYEE', 'CONTRACTOR', 'ADMIN'];
+  availableDesignationList = ['Admin', 'Sub-Admin', 'Menu-Admin'];
   selectedDesignation = this.availableDesignationList[0];
+  selectedImageNotes: Array<any> = [];
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
-              private http: HttpClient, private titleService: Title, private storage: AngularFireStorage) {
+              private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase) {
     this.allow = localStorage.getItem('access') === '1';
     if (!this.allow) {
       router.navigateByUrl('/login');
@@ -132,6 +131,11 @@ export class ClientComponent implements OnInit {
       this.userTypes = environment.userTypes;
       this.getUserListing();
       this.titleService.setTitle('Employees | ' + environment.brand);
+
+      this.getAllUsers().then((data) => {
+        // @ts-ignore
+        this.tempSelectedEmployees = data;
+      });
     } else {
       this.clientDataStore();
       this.titleService.setTitle('Clients | ' + environment.brand);
@@ -174,6 +178,7 @@ export class ClientComponent implements OnInit {
 
   /* get client & their associated sites listing with employees for each site */
   clientAndSiteListing(): void {
+    console.log('Hereby');
     this.clientDataStore();
     for (let i = 0; i < this.clientList.length; i++) {
       // tslint:disable-next-line:prefer-for-of
@@ -184,6 +189,9 @@ export class ClientComponent implements OnInit {
         };
         // get employees in list
         this.db.collection('users', ref => {
+          console.log(this.clientList[i].sites[j]);
+
+
           return ref.where('activeSite', '==', this.clientList[i].sites[j].refNo); // replace with site-id
         }).valueChanges().subscribe((emps: Array<any>) => {
           // tslint:disable-next-line:prefer-for-of
@@ -203,6 +211,7 @@ export class ClientComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
   }
 
   loadDocInfo(item: any): void {
@@ -264,6 +273,12 @@ export class ClientComponent implements OnInit {
     };
 
     this.selectedClient = client;
+
+    // activeSite: {
+    //    name: '',
+    //    address: '',
+    //    pincode: ''
+    // }
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.selectedClient.sites.length; i++) {
@@ -369,7 +384,12 @@ export class ClientComponent implements OnInit {
 
       this.db.doc(`/users/${this.selectedUser.uid}`).update({
         sites: this.selectedUser.sites,
-        activeSite: this.updateSite.site + ', ' + this.updateSite.client,
+        activeSite: {
+          site: this.updateSite.site,
+          client: this.updateSite.client,
+          address: this.updateSite.address,
+          pincode: this.updateSite.pincode
+        },
       });
     }
   }
@@ -403,7 +423,7 @@ export class ClientComponent implements OnInit {
     });
   }
 
-  /* fetch and sort mployee listing on site selection */
+  /* fetch and sort employee listing on site selection */
   sortEmployeeList(site: string): void {
     // from site, get data
     this.db.collection('users', ref => {
@@ -440,10 +460,30 @@ export class ClientComponent implements OnInit {
     this.fetchRecentImages(this.materialView);
   }
 
+  /* extract date for card header */
+  getDateAndTime(key: string): string {
+    return (new Date(key)).toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+  }
+
+  /* open image modal */
   openImageModel(imgHref: any, imgId: number): void {
     this.imgHref = imgHref;
     this.imgId = imgId;
     this.imgNumber = imgId + 1;
+
+    this.fdb.list('notes', ref => { // fetch notes against image
+      return ref.orderByChild('url').equalTo(this.imgHref);
+    }).snapshotChanges().pipe(
+      map(data =>
+        data.map(d =>
+          // @ts-ignore
+          ({key: d.payload.key, ...d.payload.val()})
+        )
+      )
+    ).subscribe(data => {
+      console.log(data);
+      this.selectedImageNotes = data;
+    });
   }
 
   /* get image listing from storage */
@@ -539,20 +579,18 @@ export class ClientComponent implements OnInit {
     this.recordId = index;
   }
 
-  paginateRecords(data: any) {
-    return data.slice(0, 10);
-  }
-
+  /* designation filter change */
   onDesignationSelection(txt: string): void {
     this.filterApplied = !this.filterApplied;
-    if (this.employeeList.length < 0) {
-      this.tempSelectedEmployees = [];
-    }
-    this.tempSelectedEmployees = this.employeeList.filter(item => {
-      return item.designation.toLowerCase().includes(txt.toLowerCase());
+    this.tempSelectedEmployees = [];
+    this.selectedCategory = txt;
+    this.getAllUsers().then((data) => {
+      // @ts-ignore
+      this.tempSelectedEmployees = data;
     });
   }
 
+  /* status filter change */
   onStatusSelection(txt: string): void {
     this.filterApplied = !this.filterApplied;
     this.tempSelectedEmployees.splice(0, this.tempSelectedEmployees.length);
@@ -562,8 +600,14 @@ export class ClientComponent implements OnInit {
     this.tempSelectedEmployees = this.employeeList.filter(user => {
       return user.attendance[user.attendance.length - 1].status.toLowerCase().includes(txt.toLowerCase());
     });
-
   }
 
-
+  /* record note for image */
+  recordNote(): void {
+    this.fdb.list('notes').push({
+      url: this.imgHref,
+      message: this.newNote,
+      date: (new Date()).getTime()
+    });
+  }
 }
