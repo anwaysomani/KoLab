@@ -23,7 +23,7 @@
     </div>
 
     <div class="mb-2 mt-2 row input-group">
-      <div class="col-9 p-l-2e input-group_wrapper pt-0 pb-0 p-r-0">
+      <div class="col-9 p-l-2e input-group_wrapper pt-0 pb-0 p-r-0 p-l-1e">
         <input (change)="clientSearch(searchText)" [(ngModel)]="searchText" class="form-control apply-gradient searchText" name="searchText"
                placeholder="Search here...">
       </div>
@@ -197,7 +197,7 @@
               </select>
               <div (click)="updateDynamicDetailSelection(4)" class="m-r-1e icon-info p-l-2e fa-2x" data-toggle="tooltip"
                    title="Information">
-                <i class="fa fa-info"></i>
+                <i class="fa fa-info fs-18"></i>
               </div>
             </div>
           </div>
@@ -206,26 +206,16 @@
       <div class="card-body overflow-scroll">
         <div class="mb-3 row">
           <!-- materials -->
-          <div class="col-6">
+          <div class="col-2">
             <button (click)="selectMaterials('Materials')" class="btn btn-block btn-outline-primary btn-rounded waves-effect">
               <i class="fa fa-home"></i><span class="font-header">Materials</span>
             </button>
-            <label class="col-form-label-lg font-header"><span class="text-uppercase">&nbsp;
-              <span class="arrow-pointer icon-right-arrow">
-                <i class="fa fa-arrow-right"></i>
-              </span>
-            </span></label>
           </div>
           <!-- work progress -->
-          <div class="col-6">
+          <div class="col-2">
             <button (click)="selectMaterials('Progress')" class="btn btn-block btn-outline-primary btn-rounded waves-effect">
               <i class="fa fa-folder"></i><span class="font-header">Progress</span>
             </button>
-            <label class="col-form-label-lg font-header"><b class="text-uppercase">&nbsp;
-              <span class="arrow-pointer icon-right-arrow">
-                <i class="fa fa-arrow-right"></i>
-              </span>
-            </b></label>
           </div>
       </div>
         
