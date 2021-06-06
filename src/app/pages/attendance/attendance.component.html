@@ -69,8 +69,7 @@
           </button>
         </div>
         <div *ngIf="getCurrentUserStatus() === 'Sign In'" class="col-6">
-          <button (click)="markStatus('Sign Out')"
-                  [disabled]="checkActionEnableCondition()" class="btn btn-danger btn-lg w-100">
+          <button (click)="markStatus('Sign Out')" class="btn btn-danger btn-lg w-100">
             Sign Out
           </button>
         </div>
