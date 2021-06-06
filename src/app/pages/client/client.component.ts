@@ -66,7 +66,7 @@ export class ClientComponent implements OnInit {
     username: '',
     emailAddress: '',
     designation: '',
-    phoneNo:'',
+    phoneNo: '',
   };
   addUserError = false;
   selectedCategory = 'Admin';
@@ -104,9 +104,9 @@ export class ClientComponent implements OnInit {
   availableDesignationList = ['Admin', 'Sub-Admin', 'Menu-Admin'];
   selectedDesignation = this.availableDesignationList[0];
   selectedImageNotes: Array<any> = [];
-  clientImageUrl='https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
-  siteImageUrl='https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
-  userImageUrl='https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
+  clientImageUrl = 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
+  siteImageUrl = 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
+  userImageUrl = 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase) {
@@ -282,7 +282,7 @@ export class ClientComponent implements OnInit {
   /* add new user popup Add click */
   addUser(): void { // name, email address, designation
     this.loader.addUserLoader = true;
-    this.addUserService([this.employee.username, this.employee.emailAddress, this.employee.designation,this.employee.phoneNo]).then((data) => {
+    this.addUserService([this.employee.username, this.employee.emailAddress, this.employee.designation, this.employee.phoneNo]).then((data) => {
       this.loader.addUserLoader = false;
     }, (error) => {
       if (error.status === 200) {
@@ -591,6 +591,14 @@ export class ClientComponent implements OnInit {
       url: this.imgHref,
       message: this.newNote,
       date: (new Date()).getTime()
+    });
+  }
+
+  /* get site listing for change site popup */
+  getClientListing(): void {
+    // get client listing in employee screen
+    this.db.collection('clients').valueChanges().subscribe((det) => {
+      this.clientList = det;
     });
   }
 }
