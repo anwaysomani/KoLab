@@ -540,40 +540,56 @@
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
       </div>
       <div class="modal-body">
-        <form>
-          <div class="row mb-3">
-            <div class="col-2">
-              <label class="form-label" for="client">Client</label>
-            </div>
-            <div class="col-10">
-              <label>{{selectedClient.name}}</label>
-            </div>
+        <div class="row">
+          <div class="col-3">
+            <img src={{clientImageUrl}}
+                class="img-fluid" alt="Client Modal Image">
           </div>
-          <div class="row mb-3">
-            <div class="col-2">
-              <label class="form-label" for="sites">Name</label>
-            </div>
-            <div class="col-10">
-              <input [(ngModel)]="newSiteData.name" class="form-control" name="siteName">
-            </div>
+          <div class="col-9">
+            <form>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label class="form-label" for="client">Client</label>
+                </div>
+                <div class="col-10">
+                  <label>{{selectedClient.name}}</label>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label class="form-label" for="sites">Name</label>
+                </div>
+                <div class="col-10">
+                  <input [(ngModel)]="newSiteData.name" class="form-control" name="siteName">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label class="form-label" for="sites">Address</label>
+                </div>
+                <div class="col-10">
+                  <input [(ngModel)]="newSiteData.address" class="form-control" name="siteAddress">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label class="form-label" for="sites">Pincode</label>
+                </div>
+                <div class="col-10">
+                  <input [(ngModel)]="newSiteData.pincode" class="form-control" name="sitePincode" type="number">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label class="form-label" for="sites">Phone No.</label>
+                </div>
+                <div class="col-10">
+                  <input [(ngModel)]="newSiteData.pincode" class="form-control" name="sitePhoneNo" type="number">
+                </div>
+              </div>
+            </form>
           </div>
-          <div class="row mb-3">
-            <div class="col-2">
-              <label class="form-label" for="sites">Address</label>
-            </div>
-            <div class="col-10">
-              <input [(ngModel)]="newSiteData.address" class="form-control" name="siteAddress">
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-2">
-              <label class="form-label" for="sites">Pincode</label>
-            </div>
-            <div class="col-10">
-              <input [(ngModel)]="newSiteData.pincode" class="form-control" name="sitePincode" type="number">
-            </div>
-          </div>
-        </form>
+        </div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
@@ -663,21 +679,26 @@
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
       </div>
       <div class="modal-body">
-        <form>
-          <div class="row mb-3">
-            <div class="col-2">
-              <label class="form-label" for="client">Client Name</label>
-            </div>
-            <div class="col-10">
-              <input [(ngModel)]="client.name" class="form-control" name="client.name">
-            </div>
+        <div class="row">
+          <div class="col-3">
+            <img src={{clientImageUrl}}
+              class="img-fluid" alt="Client Modal Image">
           </div>
-          <div *ngIf="addUserError" class="mb-3">
-            <div class="alert alert-danger" role="alert">
-              Error occurred while creating new client
-            </div>
+          <div class="col-9">
+            <form>
+              <div class="row mb-3 form-group">
+                <label class="form-label p-l-r-0" for="client">Client Name</label>
+                <input [(ngModel)]="client.name" class="form-control" name="client.name">
+              </div>
+              <div *ngIf="addUserError" class="mb-3">
+                <div class="alert alert-danger" role="alert">
+                  Error occurred while creating new client
+                </div>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
+        
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>

@@ -103,6 +103,7 @@ export class ClientComponent implements OnInit {
   availableDesignationList = ['Admin', 'Sub-Admin', 'Menu-Admin'];
   selectedDesignation = this.availableDesignationList[0];
   selectedImageNotes: Array<any> = [];
+  clientImageUrl='https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase) {
