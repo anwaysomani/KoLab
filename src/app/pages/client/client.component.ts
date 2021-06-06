@@ -83,18 +83,7 @@ export class ClientComponent implements OnInit {
   selectedSiteEmployeeStatus = '';
   currentDate = 1;
   newNote = '';
-  images = [
-    {
-      image: '',
-      thumbImage: 'https://sanjayv.github.io/ng-image-slider/contents/assets/img/slider/5.jpg',
-      title: 'Hummingbirds are amazing creatures',
-      data: 'Nulla vitae elit libero, a pharetra augue mollis interdum.',
-      name: 'firstimage'
-    }
-  ];
-  imgName: string = this.images[0].name;
   imgNumber = 1;
-  imgLength: number = this.images.length;
   materialView = false;
   imgHref?: any = '';
   imgId = 0;
@@ -106,7 +95,6 @@ export class ClientComponent implements OnInit {
   defaultProgressImage = '';
   tempSelectedClients: Array<any> = [];
   tempSelectedEmployees: Array<any> = [];
-  tempSelectedStatus: Array<any> = [];
   record: any;
   recordId = 0;
   filterApplied = false;
@@ -597,7 +585,7 @@ export class ClientComponent implements OnInit {
     if (this.employeeList.length < 0) {
       this.tempSelectedEmployees = [];
     }
-    this.tempSelectedEmployees = this.employeeList.filter(user => {
+    this.tempSelectedEmployees = this.tempSelectedEmployees.filter(user => {
       return user.attendance[user.attendance.length - 1].status.toLowerCase().includes(txt.toLowerCase());
     });
   }

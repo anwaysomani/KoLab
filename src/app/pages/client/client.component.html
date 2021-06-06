@@ -10,43 +10,32 @@
         <li class="nav-item">
           <a (click)="userCategorySelectionChange('Admin')" aria-controls="pills-admin" aria-selected="true"
              class="nav-link context-menu-cursor active"
-             data-toggle="pill" id="pills-admin-tab" role="tab">Admins</a>
+             data-bs-toggle="pill" id="pills-admin-tab" role="tab">Admins</a>
         </li>
         <li class="nav-item">
           <a (click)="userCategorySelectionChange('Sub-Admin')" aria-controls="pills-contractor" aria-selected="false"
              class="nav-link context-menu-cursor"
-             data-toggle="pill" id="pills-contractor-tab" role="tab">Contractors</a>
+             data-bs-toggle="pill" id="pills-contractor-tab" role="tab">Contractors</a>
         </li>
         <li class="nav-item">
           <a (click)="userCategorySelectionChange('Menu-Admin')" aria-controls="pills-employee" aria-selected="false"
              class="nav-link context-menu-cursor"
-             data-toggle="pill" id="pills-employee-tab" role="tab">Employees</a>
+             data-bs-toggle="pill" id="pills-employee-tab" role="tab">Employees</a>
         </li>
       </ul>
     </div>
 
     <div *ngIf="!isEmployees" class="w-100">
-      <button #addClientModal class="btn btn-outline-dark btn-block w-100" data-target="#addClientModal"
-              data-toggle="modal">
+      <button #addClientModal class="btn btn-outline-dark btn-block w-100" data-bs-target="#addClientModal"
+              data-bs-toggle="modal">
         <i class="fa fa-user-plus"></i>&nbsp;Add Client
       </button>
     </div>
 
     <div class="mb-2 mt-2 row input-group">
-      <div class="col-9 p-l-2e input-group_wrapper pt-0 pb-0 p-r-0">
-        <input (change)="clientSearch(searchText)" [(ngModel)]="searchText" class="form-control apply-gradient searchText" name="searchText"
-               placeholder="Search here...">
-      </div>
-      <div *ngIf="isEmployees" class="col-2 p-0 input-group_wrapper">
-        <div #addUserModal class="text-center icon-user-plus" data-target="#addUserModal" data-toggle="modal">
-          <span data-toggle="tooltip" title="Add Employee"><i class="fa fa-user-plus"></i></span>
-        </div>
-      </div>-->
-
-      <div class="p-l-2e input-group_wrapper pt-0 pb-0 p-r-0">
+      <div class="col-9 p-l-1e input-group_wrapper pt-0 pb-0 p-r-0 w-100">
         <input (change)="clientSearch(searchText)" [(ngModel)]="searchText"
-               class="form-control apply-gradient searchText" name="searchText"
-               placeholder="Search here...">
+               class="form-control apply-gradient searchText" name="searchText" placeholder="Search here">
       </div>
     </div>
 
@@ -96,7 +85,7 @@
           </div>
           <div class="col-5">
             <div class=" text-end mb-3">
-              <button class="btn btn-outline-dark" data-target="#addSiteModal" data-toggle="modal">
+              <button class="btn btn-outline-dark" data-bs-target="#addSiteModal" data-bs-toggle="modal">
                 <i aria-hidden="true" class="fa fa-plus"></i>&nbsp;Add Site
               </button>
             </div>
@@ -140,57 +129,8 @@
       </div>
       <div class="row"></div>
     </div>
-
-    <!-- USER's DETAILS -->
-    <div *ngIf="isEmployees" class="col-9 h-92 side-nav"> <!-- DETAILS -->
-
-      <div class="row pt-3">
-        <div class="col-12">
-          <span class="font-xlarge"><i class="fa fa-map-marker"></i>&nbsp;{{selectedUser['activeSite']}}</span>
-          &nbsp;<span (click)="clientDataStore()" class="change-text" data-bs-target="#changeSiteModal"
-                      data-bs-toggle="modal">
-          Change
-        </span>
-        </div>
-        <div class="col-9 text-end"> <!-- CLIENT'S SITE NAME -->
-        </div>
-      </div>
-      <hr>
-      <div class="row container block-container">
-        <div class="list-group">
-          <div *ngFor="let key of keyList">
-
-            <div *ngFor="let item of renderList(key); let index = index;" [ngClass]="{'mb-1': index !== 0}" class="row">
-              <div class="col-1">
-                <span *ngIf="index === 0" class="display-day">{{getWeekDayText(key)}}</span>
-                <h4 *ngIf="index === 0" class="mb-0 mt--4">{{key}}</h4>
-              </div>
-              <div class="col-11">
-                <div class="list-group-item list-group-item-action">
-                  <div class="row">
-                    <div class="col-2"> <!-- time -->
-                      {{item.time}}
-                    </div>
-                    <div [ngClass]="{'bg-danger': item.status === 'On Leave', 'bg-warning': item.status === 'Sign Out',
-                       'bg-success': item.status === 'Sign In'}"
-                         class="col-2 badge">
-                      <!-- status -->
-                      {{item.status}}
-                    </div>
-                    <div class="col-8">
-                      <span *ngIf="!item.reason || item.reason.length < 5">{{item.site}}</span>
-                      <span *ngIf="item.reason && item.reason.length > 0"
-                            class="text-danger">Reason: {{item.reason}}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
+
   <div *ngIf="!isEmployees"
        class="col-7 shadow pt-3 bg-white rounded overflow-scroll right-sidebar apply-gradient h-92">
     <!-- widget-3 -->
@@ -202,13 +142,9 @@
               <h3>{{selectedItem['name']}}</h3>
             </div>
             <div class="col-6 text-end">
-              <select (click)="getDateFromMonth()" [(ngModel)]="currentDate"
-                      class="border-0 border-2 border-bottom m-r-1e f-s-1" name="currentDate">
-                <option *ngFor="let i of getDateFromMonth()" value="{{i}}">{{i}}</option>
-              </select>
-              <div (click)="updateDynamicDetailSelection(4)" class="m-r-1e icon-info p-l-2e fa-2x" data-toggle="tooltip"
+              <div (click)="updateDynamicDetailSelection(4)" class="m-r-1e icon-info fa-2x" data-bs-toggle="tooltip"
                    title="Information">
-                <i class="fa fa-info fs-18"></i>
+                <i class="fa fa-info fs-18 arrow-pointer"></i>
               </div>
             </div>
           </div>
@@ -246,26 +182,6 @@
           </div>
         </div>
 
-        <!-- visitors -->
-        <!--<label class="col-form-label-lg text-uppercase"><b>Visitors</b></label>
-        <div class="row g-3 mb-3">
-          <div class="col-4 border-end border-bottom arrow-pointer item-selection" *ngFor="let i of [1,2,3,4,5]">
-            Nicolas Timelane
-          </div>
-        </div>-->
-
-        <!-- images -->
-        <!-- <div class="row mb-3">
-          // materials
-          <div class="col-6">
-            <img alt="Sample" height="200" src="{{defaultMaterialImage}}"/>
-          </div>
-
-          // work progress
-          <div class="col-6">
-            <img alt="Sample" height="200" src="{{defaultProgressImage}}"/>
-          </div>
-        </div> -->
         <!-- project manager -->
         <div class="mb-3 row">
           <label class="col-sm-3 col-form-label"><span class="font-header f-w-b">Project Manager/s</span></label>
@@ -277,6 +193,7 @@
         </div>
       </div>
     </div>
+
     <ngx-spinner *ngIf="loader.addClientLoader" [fullScreen]="false" bdColor="rgba(51, 51, 51, 0.8)" size="default"
                  type="square-jelly-box">
       <p class="text-white">Please Wait...</p>
@@ -349,8 +266,8 @@
                 <p class="text-white">Please Wait...</p>
               </ngx-spinner>
               <div *ngFor="let img of renderImages();let i=index" class="col-4">
-                <a (click)="openImageModel(img,i)" class="arrow-pointer" data-target="#materials-progress-modal"
-                   data-toggle="modal">
+                <a (click)="openImageModel(img,i)" class="arrow-pointer" data-bs-target="#materials-progress-modal"
+                   data-bs-toggle="modal">
                   <img alt="Error occurred in loading image" src={{img}}/>
                 </a>
               </div>
@@ -389,7 +306,7 @@
                     <hr>
 
                     <div class="col-12 h-65 overflow-scroll">
-                      <div class="card m-b-3" *ngFor="let i of selectedImageNotes">
+                      <div *ngFor="let i of selectedImageNotes" class="card m-b-3">
                         <div class="card-header">
                           {{getDateAndTime(i.date)}}
                         </div>
@@ -401,10 +318,10 @@
 
                     <div class="row position-absolute bottom-0 w-50">
                       <div class="col-8 m-b-3">
-                        <input class="form-control" [(ngModel)]="newNote" name="newNote" />
+                        <input [(ngModel)]="newNote" class="form-control" name="newNote"/>
                       </div>
                       <div class="col-4 font-xlarge">
-                        <span class="arrow-pointer" (click)="recordNote()">
+                        <span (click)="recordNote()" class="arrow-pointer">
                           <i aria-hidden="true" class="fa fa-bullhorn"></i>
                         </span>
                       </div>
@@ -449,7 +366,8 @@
         <div class="filter">
           <div class="filter-list">
             <div class="filter-item">
-              <button class="btn btn-outline-dark w-100 m-b-3">
+              <button #addUserModal class="btn btn-outline-dark w-100 m-b-3" data-bs-target="#addUserModal"
+                      data-bs-toggle="modal">
                 <i aria-hidden="true" class="fa fa-plus"></i>&nbsp;Add Employee
               </button>
 
@@ -509,9 +427,7 @@
           <div *ngIf="tempSelectedEmployees.length > 0" class="card-container">
             <div class="row">
               <div *ngFor="let item of tempSelectedEmployees;let j=index" class="card col-3">
-                <div class="card-body p-l-r-0 p-t-b-0_5"
-                     data-bs-target="#employeeDetailModal"
-                     data-bs-toggle="modal" data-toggle="modal">
+                <div class="card-body p-l-r-0 p-t-b-0_5" data-bs-target="#employeeDetailModal" data-bs-toggle="modal">
                   <div (click)="openEmployeeDetailsModel(item,j)" class="arrow-pointer">
                     <div class="row">
                       <div class="col-6">
@@ -524,20 +440,20 @@
                           </div>
                           <div class="col-6 text-end">
                             <!-- active - green - Sign In -->
-                            <label *ngIf="selectedSiteEmployeeStatus === 'Sign In'" class="col-form-label text-success"><i
-                              class="fa fa-circle" data-toggle="tooltip" title="Active"></i></label>
+                            <label *ngIf="item.currentStatus === 'Sign In'" class="col-form-label text-success"><i
+                              class="fa fa-circle" data-bs-toggle="tooltip" title="Active"></i></label>
                             <!-- on leave - red - On Leave -->
-                            <label *ngIf="selectedSiteEmployeeStatus === 'On Leave'" class="col-form-label text-danger"><i
-                              class="fa fa-circle" data-toggle="tooltip" title="On Leave"></i></label>
+                            <label *ngIf="item.currentStatus === 'On Leave'" class="col-form-label text-danger"><i
+                              class="fa fa-circle" data-bs-toggle="tooltip" title="On Leave"></i></label>
                             <!-- at lunch - yellow -->
-                            <label *ngIf="selectedSiteEmployeeStatus === 'At Lunch'"
+                            <label *ngIf="item.currentStatus === 'At Lunch'"
                                    class="col-form-label text-warning"><i
-                              class="fa fa-circle" data-toggle="tooltip" title="At Lunch"></i></label>
+                              class="fa fa-circle" data-bs-toggle="tooltip" title="At Lunch"></i></label>
                             <!-- offline - grey - Sign Out -->
                             <label
-                              *ngIf="selectedSiteEmployeeStatus === '' || selectedSiteEmployeeStatus === 'Sign Out'"
+                              *ngIf="item.currentStatus === '' || item.currentStatus === 'Sign Out'"
                               class="col-form-label text-black-50"><i
-                              class="fa fa-circle" data-toggle="tooltip" title="Offline"></i></label>
+                              class="fa fa-circle" data-bs-toggle="tooltip" title="Offline"></i></label>
                           </div>
                         </div>
                       </div>
@@ -551,12 +467,12 @@
                   <hr>
 
                   <!-- active site -->
-                  <div class="card-text font-body">
-                    <span
-                      *ngIf="item.activeSite=== undefined || item.activeSite === null  || item.activeSite==''">-</span>
+                  <div class="card-text font-body arrow-pointer" data-bs-target="#changeSiteModal" data-bs-toggle="modal">
                     <span class="font-body font-header">
                       <i aria-hidden="true" class="fa fa-map-marker"></i>&nbsp;{{item.activeSite}}
                     </span>
+                    <span
+                      *ngIf="item.activeSite === undefined || item.activeSite === null  || item.activeSite === ''">-</span>
                   </div>
                 </div>
               </div>
@@ -772,7 +688,6 @@
 </div>
 
 <!-- Employee Detail Model -->
-
 <div aria-hidden="true" aria-labelledby="employeeDetailModal-label" class="modal fade" id="employeeDetailModal"
      role="dialog" tabindex="-1">
   <div class="modal-dialog  modal-lg" role="document">
@@ -799,24 +714,25 @@
                             <div class="text-end">
                               <!-- active - green - Sign In -->
                               <label *ngIf="selectedSiteEmployeeStatus === 'Sign In'"
-                                     class="col-form-label text-success"><i class="fa fa-circle"
-                                                                            data-toggle="tooltip"
-                                                                            title="Active"></i>Active</label>
+                                     class="col-form-label text-success">
+                                <i class="fa fa-circle" data-bs-toggle="tooltip" title="Active"></i>Active
+                              </label>
                               <!-- on leave - red - On Leave -->
                               <label *ngIf="selectedSiteEmployeeStatus === 'On Leave'"
-                                     class="col-form-label text-danger"><i class="fa fa-circle"
-                                                                           data-toggle="tooltip"
-                                                                           title="On Leave"></i>On Leave</label>
+                                     class="col-form-label text-danger">
+                                <i class="fa fa-circle" data-bs-toggle="tooltip" title="On Leave"></i>On Leave
+                              </label>
                               <!-- at lunch - yellow -->
                               <label *ngIf="selectedSiteEmployeeStatus === 'At Lunch'"
-                                     class="col-form-label text-warning"><i class="fa fa-circle"
-                                                                            data-toggle="tooltip"
-                                                                            title="At Lunch"></i>At Lunch</label>
+                                     class="col-form-label text-warning">
+                                <i class="fa fa-circle" data-bs-toggle="tooltip" title="At Lunch"></i>At Lunch
+                              </label>
                               <!-- offline - grey - Sign Out -->
                               <label
                                 *ngIf="selectedSiteEmployeeStatus === '' || selectedSiteEmployeeStatus === 'Sign Out'"
-                                class="col-form-label text-black-50"><i
-                                class="fa fa-circle" data-toggle="tooltip" title="Offline"></i>Offline</label>
+                                class="col-form-label text-black-50">
+                                <i class="fa fa-circle" data-bs-toggle="tooltip" title="Offline"></i>Offline
+                              </label>
                             </div>
                           </th>
                         </tr>
@@ -831,14 +747,13 @@
                         </tr>
                         <tr>
                           <td *ngIf="item.activeSite" colspan="2">{{item.activeSite}}</td>
-                          <td *ngIf="item.activeSite=== undefined || item.activeSite === null  || item.activeSite=='' ">
+                          <td *ngIf="item.activeSite === undefined || item.activeSite === null  || item.activeSite=='' ">
                             -
                           </td>
                         </tr>
                         </tbody>
                       </table>
-                      <table *ngIf="item.attendance.length>0" cellspacing="0" class="table borderless"
-                             id="employee-data-table" width="100%">
+                      <table *ngIf="item.attendance.length > 0" class="table borderless" id="employee-data-table">
                         <thead>
                         <tr>
                           <th class="th-sm">DATE
