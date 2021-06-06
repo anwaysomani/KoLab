@@ -106,6 +106,7 @@ export class ClientComponent implements OnInit {
   selectedImageNotes: Array<any> = [];
   clientImageUrl='https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
   siteImageUrl='https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
+  userImageUrl='https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase) {

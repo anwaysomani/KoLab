@@ -606,55 +606,63 @@
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
       </div>
       <div class="modal-body">
-        <form>
-          <div class="row mb-3">
-            <div class="col-2">
-              <label class="form-label" for="client">Name</label>
-            </div>
-            <div class="col-10">
-              <input [(ngModel)]="employee.username" class="form-control" name="employee.username">
-            </div>
+        <div class="row">
+          <div class="col-3">
+            <img src={{userImageUrl}}
+                class="img-fluid" alt="User Modal Image">
           </div>
-          <div class="row mb-3">
-            <div class="col-2">
-              <label class="form-label" for="sites">Email</label>
-            </div>
-            <div class="col-10">
-              <input [(ngModel)]="employee.emailAddress" class="form-control" name="employee.emailAddress">
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-2">
-              <label class="form-label" for="sites">Designation</label>
-            </div>
-            <div class="col-10">
-              <div class="row">
-                <div class="col-12">
-                  <select [(ngModel)]="employee.designation" class="form-select" name="employee.designation">
-                    <option *ngFor="let entity of userTypes"
-                            value="{{entity.srch}}">{{entity.srch}}</option>
-                  </select>
+          <div class="col-9">
+            <form class="p-r-2e">
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label class="form-label" for="client">Name</label>
+                </div>
+                <div class="col-10">
+                  <input [(ngModel)]="employee.username" class="form-control" name="employee.username">
                 </div>
               </div>
-            </div>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label class="form-label" for="sites">Email</label>
+                </div>
+                <div class="col-10">
+                  <input [(ngModel)]="employee.emailAddress" class="form-control" name="employee.emailAddress">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label class="form-label" for="sites">Designation</label>
+                </div>
+                <div class="col-10">
+                  <div class="row">
+                    <div class="col-12">
+                      <select [(ngModel)]="employee.designation" class="form-select" name="employee.designation">
+                        <option *ngFor="let entity of userTypes"
+                                value="{{entity.srch}}">{{entity.srch}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label class="form-label" for="client">PhoneNo.</label>
+                </div>
+                <div class="col-10">
+                  <input [(ngModel)]="employee.phoneNo" class="form-control" name="employee.phoneNo" type="number">
+                </div>
+              </div>
+              <div *ngIf="addUserError" class="mb-3">
+                <div class="alert alert-danger" role="alert">
+                  Error occurred while creating new user
+                </div>
+              </div>
+              <div class="row mb-3">
+                <span class="text-black-50"><b>Please Note</b>: Password for the user will be set as first name from name field with 123. Eg. Don Jon will have the password as don123</span>
+              </div>
+            </form>
           </div>
-          <div class="row mb-3">
-            <div class="col-2">
-              <label class="form-label" for="client">PhoneNo.</label>
-            </div>
-            <div class="col-10">
-              <input [(ngModel)]="employee.phoneNo" class="form-control" name="employee.phoneNo" type="number">
-            </div>
-          </div>
-          <div *ngIf="addUserError" class="mb-3">
-            <div class="alert alert-danger" role="alert">
-              Error occurred while creating new user
-            </div>
-          </div>
-          <div class="row mb-3">
-            <span class="text-black-50"><b>Please Note</b>: Password for the user will be set as first name from name field with 123. Eg. Don Jon will have the password as don123</span>
-          </div>
-        </form>
+        </div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
