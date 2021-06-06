@@ -9,7 +9,7 @@ const auth = admin.auth();
 module.exports.getAllUsers = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
     const arr = [];
-    admin.firestore().collection('users').where("designation", "==", req.body.designation)
+    admin.firestore().collection("users").where("designation", "==", req.body.designation)
       .get().then((data) => {
       for (var i in data.docs) {
         arr.push(data.docs[i].data());
@@ -32,7 +32,12 @@ module.exports.addUser = functions.https.onRequest((req, res) => {
       }).then(() => {
         admin.firestore().doc(`/users/${uid}`).set({
           designation: req.body.designation,
-          activeSite: "",
+          activeSite: {
+            site: "",
+            client: "",
+            address: "",
+            pincode: "",
+          },
           sites: [],
           uid: uid,
           email: req.body.email,
@@ -40,14 +45,14 @@ module.exports.addUser = functions.https.onRequest((req, res) => {
           isNewLogin: true,
           disable: true,
           attendance: [],
-          currentStatus: 'Sign Out',
+          currentStatus: "Sign Out",
         }).then(() => {
           res.sendStatus(200);
         }, () => {
           res.sendStatus(409);
         });
       }, (error) => {
-        res.statusMessage('Duplicate record entry attempted');
+        res.statusMessage("Duplicate record entry attempted");
         res.sendStatus(412);
         res.send();
       });
