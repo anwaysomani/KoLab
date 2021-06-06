@@ -33,7 +33,11 @@
     </div>
 
     <div class="mb-2 mt-2 row input-group">
-      <!--<div *ngIf="isEmployees" class="p-0 input-group_wrapper">
+      <div class="col-9 p-l-2e input-group_wrapper pt-0 pb-0 p-r-0">
+        <input (change)="clientSearch(searchText)" [(ngModel)]="searchText" class="form-control apply-gradient searchText" name="searchText"
+               placeholder="Search here...">
+      </div>
+      <div *ngIf="isEmployees" class="col-2 p-0 input-group_wrapper">
         <div #addUserModal class="text-center icon-user-plus" data-target="#addUserModal" data-toggle="modal">
           <span data-toggle="tooltip" title="Add Employee"><i class="fa fa-user-plus"></i></span>
         </div>
@@ -204,7 +208,7 @@
               </select>
               <div (click)="updateDynamicDetailSelection(4)" class="m-r-1e icon-info p-l-2e fa-2x" data-toggle="tooltip"
                    title="Information">
-                <i class="fa fa-info"></i>
+                <i class="fa fa-info fs-18"></i>
               </div>
             </div>
           </div>
