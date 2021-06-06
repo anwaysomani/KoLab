@@ -95,10 +95,10 @@
         <hr class="mt-0">
         <div *ngIf="selectedClient.sites !== undefined" class="row">
           <div *ngIf="selectedClient.sites.length < 1" class="no-data-dropbox text-center">
-            <div class="no-data-content">
-              <i class="fa fa-5x fa-dropbox"></i>
-              <h1 class="text-center" style="text-align: center">No Sites
-                Available</h1>
+            <div class="no-data-content left-25">
+              <i class="fa fa-3x fa-dropbox"></i>
+              <span class="text-center no-data-icon" style="text-align: center">No Sites
+                Available</span>
             </div>
           </div>
         </div>
@@ -502,8 +502,8 @@
         <div *ngIf="tempSelectedEmployees.length<1" class="row">
           <div class="no-data-dropbox text-center">
             <div class="no-data-content left-50">
-              <i class="fa fa-5x fa-dropbox"></i>
-              <h1 class="text-center" style="text-align: center">Data Not Available for selected filter</h1>
+              <i class="fa fa-3x fa-dropbox no-data-icon"></i>
+              <span class="text-center" style="text-align: center">Data Not Available for selected filter</span>
             </div>
           </div>
         </div>
