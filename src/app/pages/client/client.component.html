@@ -204,6 +204,30 @@
         </div>
       </div>
       <div class="card-body overflow-scroll">
+        <div class="mb-3 row">
+          <!-- materials -->
+          <div class="col-6">
+            <button (click)="selectMaterials('Materials')" class="btn btn-block btn-outline-primary btn-rounded waves-effect">
+              <i class="fa fa-home"></i><span class="font-header">Materials</span>
+            </button>
+            <label class="col-form-label-lg font-header"><span class="text-uppercase">&nbsp;
+              <span class="arrow-pointer icon-right-arrow">
+                <i class="fa fa-arrow-right"></i>
+              </span>
+            </span></label>
+          </div>
+          <!-- work progress -->
+          <div class="col-6">
+            <button (click)="selectMaterials('Progress')" class="btn btn-block btn-outline-primary btn-rounded waves-effect">
+              <i class="fa fa-folder"></i><span class="font-header">Progress</span>
+            </button>
+            <label class="col-form-label-lg font-header"><b class="text-uppercase">&nbsp;
+              <span class="arrow-pointer icon-right-arrow">
+                <i class="fa fa-arrow-right"></i>
+              </span>
+            </b></label>
+          </div>
+      </div>
         <!-- project manager -->
         <div class="mb-3 row">
           <label class="col-sm-3 col-form-label"><span class="font-header f-w-b">Project Manager/s</span></label>
@@ -235,34 +259,17 @@
         </div>-->
 
         <!-- images -->
-        <div class="row mb-3">
-          <!-- materials -->
-          <div class="col-6">
-            <div>
-              <button (click)="selectMaterials('Materials')" class="btn btn-block">
-                <span class="font-header f-w-b">Materials</span>
-              </button>
-              <label class="col-form-label-lg"><span class="text-uppercase">&nbsp;
-                <span class="arrow-pointer icon-right-arrow">
-                  <i class="fa fa-arrow-right"></i>
-                </span>
-              </span></label>
-            </div>
+        <!-- <div class="row mb-3">
+          // materials
+          <div class="col-6">            
             <img alt="Sample" height="200" src="{{defaultMaterialImage}}"/>
           </div>
 
-          <!-- work progress -->
-          <div class="col-6">
-            <div>
-              <label class="col-form-label-lg font-header"><b class="text-uppercase">Progress&nbsp;
-                <span (click)="selectMaterials('Progress')" class="arrow-pointer icon-right-arrow">
-                  <i class="fa fa-arrow-right"></i>
-                </span>
-              </b></label>
-            </div>
+          // work progress
+          <div class="col-6">            
             <img alt="Sample" height="200" src="{{defaultProgressImage}}"/>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <ngx-spinner *ngIf="loader.addClientLoader" [fullScreen]="false" bdColor="rgba(51, 51, 51, 0.8)" size="default"
