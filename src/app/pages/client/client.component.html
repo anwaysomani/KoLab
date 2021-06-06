@@ -579,14 +579,6 @@
                   <input [(ngModel)]="newSiteData.pincode" class="form-control" name="sitePincode" type="number">
                 </div>
               </div>
-              <div class="row mb-3">
-                <div class="col-2">
-                  <label class="form-label" for="sites">PhoneNo.</label>
-                </div>
-                <div class="col-10">
-                  <input [(ngModel)]="newSiteData.phoneNo" class="form-control" name="sitePhoneNo" type="number">
-                </div>
-              </div>
             </form>
           </div>
         </div>
@@ -644,6 +636,14 @@
                   </select>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-2">
+              <label class="form-label" for="client">PhoneNo.</label>
+            </div>
+            <div class="col-10">
+              <input [(ngModel)]="employee.phoneNo" class="form-control" name="employee.phoneNo" type="number">
             </div>
           </div>
           <div *ngIf="addUserError" class="mb-3">

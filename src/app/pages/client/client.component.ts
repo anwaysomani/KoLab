@@ -52,7 +52,6 @@ export class ClientComponent implements OnInit {
     name: '',
     address: '',
     pincode: '',
-    phoneNo:''
   };
   loader = {
     addUserLoader: false,
@@ -66,7 +65,8 @@ export class ClientComponent implements OnInit {
   employee = {
     username: '',
     emailAddress: '',
-    designation: ''
+    designation: '',
+    phoneNo:'',
   };
   addUserError = false;
   selectedCategory = 'Admin';
@@ -289,7 +289,7 @@ export class ClientComponent implements OnInit {
   /* add new user popup Add click */
   addUser(): void { // name, email address, designation
     this.loader.addUserLoader = true;
-    this.addUserService([this.employee.username, this.employee.emailAddress, this.employee.designation]).then((data) => {
+    this.addUserService([this.employee.username, this.employee.emailAddress, this.employee.designation,this.employee.phoneNo]).then((data) => {
       this.loader.addUserLoader = false;
     }, (error) => {
       if (error.status === 200) {
@@ -358,7 +358,6 @@ export class ClientComponent implements OnInit {
       name: this.newSiteData.name,
       address: this.newSiteData.address,
       pincode: this.newSiteData.pincode,
-      phoneNo: this.newSiteData.phoneNo,
       addedOn: new Date(),
       refNo: '',
     };
