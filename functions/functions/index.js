@@ -1,70 +1,56 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const cors = require("cors")({origin: true});
 
 admin.initializeApp();
 
 const auth = admin.auth();
 
-const getAllUsers = (req, res) => {
-  // const maxResults = 1; // optional arg.
-
-  // console.log(req);
-  auth.listUsers().then((userRecords) => {
-    //   auth.createUser({
-    //     uid: '9193',
-    //     email: 'aksar11@mail.com',
-    //     displayName: 'Aksar 011',
-    //     password: 'anway123',
-    //     designation: 'Sub-Contractor'
-    //   });
-
+module.exports.getAllUsers = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
     const arr = [];
-    userRecords.users.forEach((user) => {
-      // console.log(user.uid);
+    admin.firestore().collection('users').where("designation", "==", req.body.designation)
+      .get().then((data) => {
+      for (var i in data.docs) {
+        arr.push(data.docs[i].data());
+      }
+      res.send(arr);
     });
-    res.send(arr);
-    // res.send('Hellow');
-  }).catch((error) => console.log(error));
-};
-
-/* get count of all users */
-const getAllUserCount = function() {
-  let le = 0;
-  auth.listUsers().then((userRecords) => {
-    le = userRecords.length;
-    return le;
   });
-  return le;
-};
+});
 
-const addUser = function(req, res) {
-  // params: email, displayName, designation
-  // generator: pass will be generated from first displayName and 123 later
-  // resetPassword in user database will be set to true. User when logged in
-  // from app should reset password if this flag is true
-
-  // designation will be stored to firestore database
-  auth.createUser({
-    uid: "JCP" + (getAllUserCount() + 1),
-    email: req.body.email,
-    displayName: req.body.name,
-    password: req.body.name.split(" ")[0] + "123",
-    designation: req.body.designation,
+/* add new user */
+module.exports.addUser = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+    auth.listUsers().then((userRecords) => {
+      const uid = "JCP" + (userRecords["users"].length + 1);
+      auth.createUser({
+        uid: uid,
+        email: req.body.email,
+        displayName: req.body.name,
+        password: req.body.name.split(" ")[0].toLowerCase() + "123",
+      }).then(() => {
+        admin.firestore().doc(`/users/${uid}`).set({
+          designation: req.body.designation,
+          activeSite: "",
+          sites: [],
+          uid: uid,
+          email: req.body.email,
+          name: req.body.name,
+          isNewLogin: true,
+          disable: true,
+          attendance: [],
+          currentStatus: 'Sign Out',
+        }).then(() => {
+          res.sendStatus(200);
+        }, () => {
+          res.sendStatus(409);
+        });
+      }, (error) => {
+        res.statusMessage('Duplicate record entry attempted');
+        res.sendStatus(412);
+        res.send();
+      });
+    });
   });
-
-  res.send("User added successfully");
-  res.sendStatus(200);
-};
-
-// for first time user login, passwordReset will call firebase function
-//
-// const resetPassword = function (req, res) {
-//   // params: userId, newPass
-// };
-
-module.exports = {
-  // app.route('/ur').post(getAllUsers);
-  run: functions.https.onRequest(getAllUsers),
-  api: functions.https.onRequest(getAllUsers),
-  addUser: functions.https.onRequest(addUser),
-};
+});
