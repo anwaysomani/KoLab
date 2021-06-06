@@ -14,14 +14,15 @@
       <h6>({{entireDate}})</h6>
     </div>
   </div>
-  <div class="card mb-4"
-       *ngIf="activeUser !== undefined && activeUser.designation !== undefined && activeUser.designation === 'Sub-Admin'">
+  <div
+    *ngIf="activeUser !== undefined && activeUser.designation !== undefined && activeUser.designation === 'Sub-Admin'"
+    class="card mb-4">
     <!-- permission only if second level admin -->
     <div class="card-header">
       <h5 class="text-uppercase">Site Updates&nbsp;
         <span class="position-absolute right-1">
-          <img src="https://image.flaticon.com/icons/png/512/1827/1827422.png" alt="notification" width="20"
-               height="20"/>
+          <img alt="notification" height="20" src="https://image.flaticon.com/icons/png/512/1827/1827422.png"
+               width="20"/>
         </span>
       </h5>
     </div>
@@ -29,10 +30,10 @@
 
       <!-- upload material -->
       <div>
-        <input type="file" class="btn btn-primary" id="uploadMaterial"
-               (change)="onFileSelected($event, true)"
-               name="image"
-               autocomplete="off" hidden/>
+        <input (change)="onFileSelected($event, true)" autocomplete="off" class="btn btn-primary"
+               hidden
+               id="uploadMaterial"
+               name="image" type="file"/>
         <label class="border-dark btn btn-light btn-close-white w-75" for="uploadMaterial">
           &#x2750;&nbsp;Upload Material
         </label>
@@ -40,10 +41,10 @@
 
       <!-- upload progress -->
       <div class="mt-2">
-        <input type="file" class="btn btn-primary" id="uploadProgress"
-               (change)="onFileSelected($event, false)"
-               name="image"
-               autocomplete="off" hidden/>
+        <input (change)="onFileSelected($event, false)" autocomplete="off" class="btn btn-primary"
+               hidden
+               id="uploadProgress"
+               name="image" type="file"/>
         <label class="border-dark btn btn-light btn-close-white w-75" for="uploadProgress">
           &#x262F;&nbsp;Upload Progress
         </label>
@@ -53,41 +54,51 @@
   </div>
   <div class="card mb-4">
     <div class="card-header">
-      <h5 class="text-uppercase">Regular Actions</h5>
+      <h5 class="text-uppercase">Actions</h5>
     </div>
     <div class="card-body">
       <div class="row">
-        <div class="col-6">
-          <button class="btn btn-primary btn-lg w-100" (click)="markStatus('Sign In')" [disabled]="true">
+        <div
+          *ngIf="(getCurrentUserStatus() === 'Sign Out' || getCurrentUserStatus() === '' || getCurrentUserStatus() !== undefined || getCurrentUserStatus() === 'At Lunch') && getCurrentUserStatus() !== 'Sign In'"
+          class="col-6">
+          <button (click)="markStatus('Sign In')" [disabled]="checkActionEnableCondition()"
+                  class="btn btn-primary btn-lg w-100">
             Sign In
           </button>
         </div>
-        <div class="col-6">
-          <button class="btn btn-danger btn-lg w-100" (click)="markStatus('Sign Out')" [disabled]="true">
+        <div *ngIf="getCurrentUserStatus() === 'Sign In'" class="col-6">
+          <button (click)="markStatus('Sign Out')"
+                  [disabled]="checkActionEnableCondition()" class="btn btn-danger btn-lg w-100">
             Sign Out
+          </button>
+        </div>
+        <div *ngIf="getCurrentUserStatus() === 'Sign In'" class="col-6">
+          <button (click)="markStatus('At Lunch')"
+                  [disabled]="checkActionEnableCondition()" class="btn btn-warning btn-lg w-100">
+            At Lunch
           </button>
         </div>
       </div>
     </div>
   </div>
-  <div class="card mb-4">
+  <div *ngIf="getCurrentUserStatus() !== 'Sign In' && getCurrentUserStatus() !== 'At Lunch'" class="card mb-4">
     <div class="card-header">
       <h5 class="text-uppercase">Apply for leave</h5>
     </div>
     <div class="card-body">
       <div class="form-group mb-3">
-        <label for="reason" class="mb-2 text-capitalize text-black-50">Enter reason for leave</label>
-        <input name="reason" id="reason" [(ngModel)]="reason" class="form-control" placeholder="Type here...">
+        <label class="mb-2 text-capitalize text-black-50" for="reason">Enter reason for leave</label>
+        <input [(ngModel)]="reason" class="form-control" id="reason" name="reason" placeholder="Type here...">
       </div>
       <hr>
-      <button class="btn btn-outline-dark btn-lg" [disabled]="reason.length < 3" (click)="markStatus('On Leave')">
+      <button (click)="markStatus('On Leave')" [disabled]="reason.length < 3" class="btn btn-outline-dark btn-lg">
         Apply Leave
       </button>
     </div>
   </div>
 
   <!-- logout -->
-  <button class="btn btn-danger btn-lg w-75" (click)="signOutUser()">
+  <button (click)="signOutUser()" class="btn btn-danger btn-lg w-75">
     Logout
   </button>
 </div>
