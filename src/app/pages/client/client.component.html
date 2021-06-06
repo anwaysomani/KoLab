@@ -23,8 +23,8 @@
     </div>
 
     <div class="mb-2 mt-2 row input-group">
-      <div class="col-9 p-l-2e input-group_wrapper">
-        <input (change)="clientSearch(searchText)" [(ngModel)]="searchText" class="form-control" name="searchText"
+      <div class="col-9 p-l-2e input-group_wrapper pt-0 pb-0 p-r-0">
+        <input (change)="clientSearch(searchText)" [(ngModel)]="searchText" class="form-control apply-gradient searchText" name="searchText"
                placeholder="Search here...">
       </div>
       <div *ngIf="isEmployees" class="col-2 p-0 input-group_wrapper">
@@ -228,15 +228,7 @@
             </b></label>
           </div>
       </div>
-        <!-- project manager -->
-        <div class="mb-3 row">
-          <label class="col-sm-3 col-form-label"><span class="font-header f-w-b">Project Manager/s</span></label>
-          <div class="col-sm-9 col-form-label arrow-pointer item-selection font-body">
-            <span (click)="selectEmployee(employee.uid)"
-                  *ngFor="let employee of selectedSiteContractorList">{{employee.name}}</span>
-            <span *ngIf="selectedSiteContractorList.length < 1">-</span>
-          </div>
-        </div>
+        
 
         <!-- employees -->
         <label class="col-form-label-lg text-uppercase"><span class="font-header f-w-b">Employees</span></label>
@@ -270,6 +262,15 @@
             <img alt="Sample" height="200" src="{{defaultProgressImage}}"/>
           </div>
         </div> -->
+        <!-- project manager -->
+        <div class="mb-3 row">
+          <label class="col-sm-3 col-form-label"><span class="font-header f-w-b">Project Manager/s</span></label>
+          <div class="col-sm-9 col-form-label arrow-pointer item-selection font-body">
+            <span (click)="selectEmployee(employee.uid)"
+                  *ngFor="let employee of selectedSiteContractorList">{{employee.name}}</span>
+            <span *ngIf="selectedSiteContractorList.length < 1">-</span>
+          </div>
+        </div>
       </div>
     </div>
     <ngx-spinner *ngIf="loader.addClientLoader" [fullScreen]="false" bdColor="rgba(51, 51, 51, 0.8)" size="default"
