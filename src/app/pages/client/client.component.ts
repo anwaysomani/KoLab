@@ -597,8 +597,22 @@ export class ClientComponent implements OnInit {
   /* get site listing for change site popup */
   getClientListing(): void {
     // get client listing in employee screen
-    this.db.collection('clients').valueChanges().subscribe((det) => {
+    /* this.db.collection('clients').valueChanges().subscribe((det) => {
       this.clientList = det;
+    }); */
+    this.db.collection('clients').valueChanges().subscribe((det) => {
+      this.clientList =[];
+      for (let i = 0; i < det.length; i++) {
+        // @ts-ignore
+        for (let j = 0; j < det[i].sites.length; j++) {
+          this.clientList.push({
+            // @ts-ignore
+            ...det[i].sites[j],
+            // @ts-ignore
+            client:det[i].name
+          });
+        }        
+      }
     });
   }
 }

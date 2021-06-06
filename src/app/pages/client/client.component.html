@@ -503,23 +503,20 @@
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
       </div>
       <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label class="form-label" for="client"><b>Client</b></label>
-            <select (change)="onClientSelectionChange($event.target)" [(ngModel)]="updateSite.client"
-                    class="form-select"
-                    id="client" name="updateSite.client">
-              <option *ngFor="let site of clientList" value="{{site.name}}">{{site.name}}</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label" for="sites"><b>Sites</b></label>
-            <select [(ngModel)]="updateSite.site" class="form-select" id="sites" name="updateSite.site">
-              <option *ngFor="let site of changeSiteDropdownList" [disabled]="changeSiteDropdownList.length < 1"
-                      value="{{site.name}}">{{site.name}}</option>
-            </select>
-          </div>
-        </form>
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let client of clientList">
+            <div class="row">
+              <div class="col-1">
+                <input class="form-check-input me-1" type="radio" name="changeSite" value="{{client}}" 
+                id="{{client}}-site">   
+              </div>
+              <div class="col-10">
+                <label class="mb-1 font-header">{{client.name}},{{client.client}}</label>
+                <span class="mb-1 font-body display-block text-black-50">{{client.address}}-{{client.pincode}}</span>
+              </div>
+           </div>
+          </li>
+        </ul>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
