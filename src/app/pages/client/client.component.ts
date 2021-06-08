@@ -19,7 +19,6 @@ import {map} from 'rxjs/operators';
 export class ClientComponent implements OnInit {
 
   @ViewChild('addUserModal') closeAddExpenseModal: ElementRef | undefined;
-  @ViewChild('changeSiteModal') closeChangeSiteModal: ElementRef | undefined;
   entity: Array<any> = [];
   currMonYear: string;
   dates: number;
@@ -605,13 +604,16 @@ export class ClientComponent implements OnInit {
   }
 
   /* get site listing for change site popup */
-  getClientListing(): void {
+  getClientListing(data:any): void {
     // get client listing in employee screen
     /* this.db.collection('clients').valueChanges().subscribe((det) => {
       this.clientList = det;
     }); */
     this.db.collection('clients').valueChanges().subscribe((det) => {
       this.clientList =[];
+      this.selectedUser.activeSite = data.activeSite;
+      this.selectedUser.sites = data.sites;
+      this.selectedUser.uid = data.uid;
       for (let i = 0; i < det.length; i++) {
         // @ts-ignore
         for (let j = 0; j < det[i].sites.length; j++) {
