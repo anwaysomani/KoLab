@@ -19,6 +19,7 @@ import {map} from 'rxjs/operators';
 export class ClientComponent implements OnInit {
 
   @ViewChild('addUserModal') closeAddExpenseModal: ElementRef | undefined;
+  @ViewChild('changeSiteModal') closeChangeSiteModal: ElementRef | undefined;
   entity: Array<any> = [];
   currMonYear: string;
   dates: number;
@@ -66,7 +67,7 @@ export class ClientComponent implements OnInit {
     username: '',
     emailAddress: '',
     designation: '',
-    phoneNo: '',
+    mobile: '',
   };
   addUserError = false;
   selectedCategory = 'Admin';
@@ -282,7 +283,7 @@ export class ClientComponent implements OnInit {
   /* add new user popup Add click */
   addUser(): void { // name, email address, designation
     this.loader.addUserLoader = true;
-    this.addUserService([this.employee.username, this.employee.emailAddress, this.employee.designation, this.employee.phoneNo]).then((data) => {
+    this.addUserService([this.employee.username, this.employee.emailAddress, this.employee.designation, this.employee.mobile]).then((data) => {
       this.loader.addUserLoader = false;
     }, (error) => {
       if (error.status === 200) {
@@ -305,6 +306,8 @@ export class ClientComponent implements OnInit {
       email: mod[1],
       designation: mod[2],
       password: mod[0].split(',')[0].toLowerCase() + '123',
+      mobile:mod[3],
+      
     }).toPromise();
   }
 
@@ -376,6 +379,13 @@ export class ClientComponent implements OnInit {
         },
       });
     }
+  }
+
+  updateChangeSite(data:any): void {
+    this.updateSite.site = data.name;
+    this.updateSite.client = data.client;
+    this.updateSite.address = data.address;
+    this.updateSite.pincode = data.pincode;
   }
 
   /* update state of widget04-details */
