@@ -101,7 +101,7 @@ export class ClientComponent implements OnInit {
   filterApplied = false;
   selectedStatus = '';
   availableStatusList = ['Active', 'On Leave', 'At Lunch', 'Sign Out'];
-  availableDesignationList = ['Admin', 'Sub-Admin', 'Menu-Admin'];
+  availableDesignationList = ['Admin', 'Contractor', 'Employee'];
   selectedDesignation = this.availableDesignationList[0];
   selectedImageNotes: Array<any> = [];
   clientImageUrl = 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
@@ -306,7 +306,7 @@ export class ClientComponent implements OnInit {
       designation: mod[2],
       password: mod[0].split(',')[0].toLowerCase() + '123',
       mobile:mod[3],
-      
+
     }).toPromise();
   }
 
@@ -423,8 +423,8 @@ export class ClientComponent implements OnInit {
       const x = '' + site + ', ' + this.selectedClient.name;
       return ref.where('activeSite', '==', x);
     }).valueChanges().subscribe((det: Array<any>) => {
-      this.selectedSiteEmployeeList = det.filter(s => s.designation === 'Menu-Admin');
-      this.selectedSiteContractorList = det.filter(s => s.designation === 'Sub-Admin');
+      this.selectedSiteEmployeeList = det.filter(s => s.designation === 'Employee');
+      this.selectedSiteContractorList = det.filter(s => s.designation === 'Contractor');
     }, (err) => {
       console.log(err);
     });
@@ -623,7 +623,7 @@ export class ClientComponent implements OnInit {
             // @ts-ignore
             client:det[i].name
           });
-        }        
+        }
       }
     });
   }

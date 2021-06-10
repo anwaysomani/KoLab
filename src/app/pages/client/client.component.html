@@ -13,12 +13,12 @@
              data-bs-toggle="pill" id="pills-admin-tab" role="tab">Admins</a>
         </li>
         <li class="nav-item">
-          <a (click)="userCategorySelectionChange('Sub-Admin')" aria-controls="pills-contractor" aria-selected="false"
+          <a (click)="userCategorySelectionChange('Contractor')" aria-controls="pills-contractor" aria-selected="false"
              class="nav-link context-menu-cursor"
              data-bs-toggle="pill" id="pills-contractor-tab" role="tab">Contractors</a>
         </li>
         <li class="nav-item">
-          <a (click)="userCategorySelectionChange('Menu-Admin')" aria-controls="pills-employee" aria-selected="false"
+          <a (click)="userCategorySelectionChange('Employee')" aria-controls="pills-employee" aria-selected="false"
              class="nav-link context-menu-cursor"
              data-bs-toggle="pill" id="pills-employee-tab" role="tab">Employees</a>
         </li>
@@ -529,8 +529,8 @@
           <li class="list-group-item" *ngFor="let client of clientList">
             <div class="row">
               <div class="col-1">
-                <input class="form-check-input me-1" type="radio" name="changeSite" value="{{client}}" 
-                id="{{client}}-site" (change)="updateChangeSite(client)">   
+                <input class="form-check-input me-1" type="radio" name="changeSite" value="{{client}}"
+                id="{{client}}-site" (change)="updateChangeSite(client)">
               </div>
               <div class="col-10">
                 <label class="mb-1 font-header">{{client.name}},{{client.client}}</label>
@@ -755,7 +755,7 @@
                         <thead class="card-title">
                         <tr>
                           <th class="col-6" scope="col"><h5>{{item.name}}</h5></th>
-                          <th class="col-6" scope="col">                            
+                          <th class="col-6" scope="col">
                           </th>
                         </tr>
                         </thead>
