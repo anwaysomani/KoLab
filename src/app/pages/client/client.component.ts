@@ -289,6 +289,11 @@ export class ClientComponent implements OnInit {
         // handle success user
         setTimeout(() => {
           this.closeAddExpenseModal?.nativeElement.click();
+          /* ON Modal close refresh to show recent data */
+          this.getAllUsers().then((data) => {
+            // @ts-ignore
+            this.tempSelectedEmployees = data;
+          });
         }, 2000);
       } else if (error.status === 0) {
         this.addUserError = true;

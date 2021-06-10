@@ -482,7 +482,7 @@
                     </div>
                     <div class="subtitle font-body">
                       <div class="mb-2 text-black-50">
-                        <i aria-hidden="true" class="fa fa-phone"></i>&nbsp;9096052940
+                        <i aria-hidden="true" class="fa fa-phone"></i>&nbsp;{{item.mobile}}
                       </div>
                     </div>
                   </div>
@@ -744,7 +744,7 @@
               <div class="carousel-inner" role="listbox">
                 <div *ngFor="let item of employeeList let k = index" [ngClass]="{'active': k == recordId }"
                      class="carousel-item">
-                  <a class="carousel-control-prev" data-slide="prev" href="#employeeDetail-carousel" role="button">
+                  <a class="carousel-control-prev" data-slide="prev" href="#employeeDetail-carousel" role="button" data-toggle="tooltip" title="Previous">
                     <span class=" fa fa-angle-left fa-2x"></span>
                     <span class="sr-only">Previous</span>
                   </a>
@@ -761,7 +761,7 @@
                         </thead>
                         <tbody>
                         <tr>
-                          <td>#998877665544</td>
+                          <td>{{item.mobile}}</td>
                           <td>{{item.email}}</td>
                         </tr>
                         <tr>
@@ -793,7 +793,7 @@
                           </th>
                         </tr>
                         <tr>
-                          <td *ngIf="item.activeSite" colspan="2">{{item.activeSite}}</td>
+                          <td *ngIf="item.activeSite" colspan="2">{{item.activeSite.site}},{{item.activeSite.client}}</td>
                           <td *ngIf="item.activeSite === undefined || item.activeSite === null  || item.activeSite=='' ">
                             -
                           </td>
@@ -839,7 +839,7 @@
                       </div>
                     </div>
                   </div>
-                  <a class="carousel-control-next" data-slide="next" href="#employeeDetail-carousel" role="button">
+                  <a class="carousel-control-next" data-slide="next" href="#employeeDetail-carousel" role="button" data-toggle="tooltip" title="Next">
                     <span class=" fa fa-angle-right fa-2x"></span>
                     <span class="sr-only">Next</span>
                   </a>
