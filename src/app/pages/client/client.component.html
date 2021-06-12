@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <div class="list-group">
+    <div class="list-group overflow-y-scroll">
       <div *ngIf="(isEmployees ? employeeList : clientList).length > 0">
         <span *ngIf="getFilteredClientList().length > 0">
           <li (click)="loadDocInfo(item)" *ngFor="let item of getFilteredClientList()"
@@ -132,7 +132,7 @@
   </div>
 
   <div *ngIf="!isEmployees"
-       class="col-7 shadow pt-3 bg-white rounded overflow-scroll right-sidebar apply-gradient h-92">
+       class="col-7 shadow pt-3 bg-white rounded overflow-y-scroll right-sidebar apply-gradient h-92">
     <!-- widget-3 -->
     <div class="card h-43 mb-3">
       <div class="card-header">
@@ -150,7 +150,7 @@
           </div>
         </div>
       </div>
-      <div class="card-body overflow-scroll">
+      <div class="card-body overflow-y-scroll">
         <div class="mb-3">
 
           <!-- materials -->
@@ -221,7 +221,7 @@
       <p class="text-white">Please Wait...</p>
     </ngx-spinner>
     <!-- dynamic column for data display -->
-    <div class="card h-43 overflow-scroll">
+    <div class="card h-43 overflow-y-scroll">
       <div class="card-body">
         <!-- for employee/contractor attendance display -->
         <div *ngIf="displayEmployeeDetail" class="employee-detail-list">
@@ -327,7 +327,7 @@
                       </span>
                     <hr>
 
-                    <div class="col-12 h-65 overflow-scroll">
+                    <div class="col-12 h-65 overflow-y-scroll">
                       <div *ngFor="let i of selectedImageNotes" class="card m-b-3">
                         <div class="card-header">
                           {{getDateAndTime(i.date)}}
