@@ -11,7 +11,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~11.2.7",
+    "@angular/animations": "^11.2.14",
     "@angular/common": "~11.2.7",
     "@angular/compiler": "~11.2.7",
     "@angular/core": "~11.2.7",
@@ -23,6 +23,7 @@
     "firebase": "^8.4.3",
     "font-awesome": "^4.7.0",
     "ngx-spinner": "^11.0.1",
+    "ngx-toastr": "^14.0.0",
     "ngx-ui-loader": "^11.0.0",
     "rxjs": "^6.6.7",
     "rxjs-compat": "^6.6.7",

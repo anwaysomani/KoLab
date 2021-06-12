@@ -9,6 +9,7 @@ import {Title} from '@angular/platform-browser';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {map} from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-client',
@@ -107,9 +108,10 @@ export class ClientComponent implements OnInit {
   clientImageUrl = 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
   siteImageUrl = 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
   userImageUrl = 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
+  counter=1;
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
-              private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase) {
+              private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase,private toastr: ToastrService) {
     this.allow = localStorage.getItem('access') === '1';
     if (!this.allow) {
       router.navigateByUrl('/login');
@@ -287,6 +289,7 @@ export class ClientComponent implements OnInit {
     }, (error) => {
       if (error.status === 200) {
         // handle success user
+        this.showToaster(error.status);
         setTimeout(() => {
           this.closeAddExpenseModal?.nativeElement.click();
           /* ON Modal close refresh to show recent data */
@@ -300,6 +303,7 @@ export class ClientComponent implements OnInit {
       }
     }).finally(() => {
       this.loader.addUserLoader = false;
+      this.clearFields();
     });
   }
 
@@ -350,6 +354,8 @@ export class ClientComponent implements OnInit {
       dateAdded: new Date(),
       sites: [],
     });
+    this.clearFields();
+    this.showToaster(200);
   }
 
   /* add new site for client */
@@ -366,6 +372,8 @@ export class ClientComponent implements OnInit {
     this.db.doc(`/clients/${this.selectedClient.name}`).update({
       sites: this.selectedClient.sites
     });
+    this.clearFields();
+    this.showToaster(200);
   }
 
   updateUserSite(): void {
@@ -598,6 +606,21 @@ export class ClientComponent implements OnInit {
       return user.attendance[user.attendance.length - 1].status.toLowerCase().includes(txt.toLowerCase());
     });
   }
+  
+  radioToggle(event:Event,selectedStatus:string){
+    this.counter += 1;
+    if (this.selectedStatus != selectedStatus) {
+      (event.target as HTMLInputElement).checked = true;
+    }
+    else {
+      if (this.counter % 2 == 0) {
+        (event.target as HTMLInputElement).checked = true;
+      }
+      else {
+        (event.target as HTMLInputElement).checked = false;
+      }
+    }
+  }
 
   /* record note for image */
   recordNote(): void {
@@ -632,4 +655,19 @@ export class ClientComponent implements OnInit {
       }
     });
   }
+  clearFields(){
+    this.employee.username = '';
+    this.employee.emailAddress = '';
+    this.employee.designation = '';
+    this.employee.mobile = '';
+    this.client.name='';
+    this.newSiteData.name='';
+    this.newSiteData.address='';
+    this.newSiteData.pincode='';
+  }
+  showToaster(status:any){
+    if(status==200){
+      this.toastr.success("Record added successfully.")
+    }
+}
 }

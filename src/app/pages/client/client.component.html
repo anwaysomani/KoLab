@@ -431,7 +431,7 @@
                 </div>
                 <div class="card-body">
                   <div *ngFor="let item of availableStatusList" class="form-check">
-                    <input (change)="onStatusSelection(item)" [(ngModel)]="selectedStatus" class="form-check-input"
+                    <input (change)="onStatusSelection(item)" [(ngModel)]="selectedStatus"  (click)="radioToggle($event,item)" class="form-check-input"
                            id="{{item}}-status" name="status"
                            type="radio" value="{{item}}">
                     <label class="form-check-label" for="{{item}}-status">
@@ -557,7 +557,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="addSiteLabel">Add New Site</h5>
-        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button" (click)="clearFields()"></button>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -603,7 +603,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button" (click)="clearFields()">Cancel</button>
         <button (click)="addSite()" data-bs-dismiss="modal" class="btn btn-primary" type="button">Add Site</button>
       </div>
     </div>
@@ -622,7 +622,7 @@
       </ngx-spinner>
       <div class="modal-header">
         <h5 class="modal-title" id="addUserLabel">Add New User</h5>
-        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button" (click)="clearFields()"></button>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -683,7 +683,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+        <button class="btn btn-secondary" data-bs-dismiss="modal" (click)="clearFields()" type="button">Cancel</button>
         <button (click)="addUser()" class="btn btn-primary" type="button">Add User</button>
       </div>
     </div>
@@ -702,7 +702,7 @@
       </ngx-spinner>
       <div class="modal-header">
         <h5 class="modal-title" id="addClientLabel">Add New Client</h5>
-        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button" (click)="clearFields()"></button>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -726,7 +726,7 @@
 
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button" (click)="clearFields()">Cancel</button>
         <button (click)="addNewClient()" data-bs-dismiss="modal"  class="btn btn-primary" type="button">Add Client</button>
       </div>
     </div>
