@@ -482,7 +482,8 @@
                     </div>
                     <div class="subtitle font-body">
                       <div class="mb-2 text-black-50">
-                        <i aria-hidden="true" class="fa fa-phone"></i>&nbsp;{{item.mobile}}
+                        <i aria-hidden="true" class="fa fa-phone"></i>&nbsp;{{item.mobile}}&nbsp;
+                        <span *ngIf="item.mobile === undefined || item.mobile === null  || item.mobile === ''">-</span>
                       </div>
                     </div>
                   </div>
@@ -742,7 +743,7 @@
           <div class="col-12">
             <div class="carousel slide" data-interval="false" id="employeeDetail-carousel">
               <div class="carousel-inner" role="listbox">
-                <div *ngFor="let item of employeeList let k = index" [ngClass]="{'active': k == recordId }"
+                <div *ngFor="let item of tempSelectedEmployees let k = index" [ngClass]="{'active': k == recordId }"
                      class="carousel-item">
                   <a class="carousel-control-prev" data-slide="prev" href="#employeeDetail-carousel" role="button" data-toggle="tooltip" title="Previous">
                     <span class=" fa fa-angle-left fa-2x"></span>
@@ -756,17 +757,6 @@
                         <tr>
                           <th class="col-6" scope="col"><h5>{{item.name}}</h5></th>
                           <th class="col-6" scope="col">
-                          </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                          <td>{{item.mobile}}</td>
-                          <td>{{item.email}}</td>
-                        </tr>
-                        <tr>
-                          <th>{{item.designation}}</th>
-                          <th>
                             <div class="">
                               <!-- active - green - Sign In -->
                               <label *ngIf="selectedSiteEmployeeStatus === 'Sign In'"
@@ -785,18 +775,37 @@
                               </label>
                               <!-- offline - grey - Sign Out -->
                               <label
-                                *ngIf="selectedSiteEmployeeStatus === '' || selectedSiteEmployeeStatus === 'Sign Out'"
+                                *ngIf="selectedSiteEmployeeStatus === '' || (selectedSiteEmployeeStatus !== 'At Lunch' && 
+                                selectedSiteEmployeeStatus !== 'On Leave' && selectedSiteEmployeeStatus !== 'Sign In')"
                                 class="col-form-label text-black-50">
                                 <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Offline"></i>Offline
                               </label>
                             </div>
                           </th>
                         </tr>
+                        </thead>
+                        <tbody>
                         <tr>
-                          <td *ngIf="item.activeSite" colspan="2">{{item.activeSite.site}},{{item.activeSite.client}}</td>
+                          <td><i aria-hidden="true" class="fa fa-phone"></i>&nbsp;{{item.mobile}}&nbsp;<span
+                              *ngIf="item.mobile === undefined || item.mobile === null  || item.mobile === ''">-</span></td>
+                          <td>{{item.email}}</td>
+                        </tr>
+                        <tr>
+                          <th>{{item.designation}}</th>
+                          <th>                          
+                          </th>
+                        </tr>
+                        <tr>
+                          <td *ngIf="item.activeSite" colspan="2"><i aria-hidden="true" class="fa fa-map-marker"></i>&nbsp;{{item.activeSite.site}},{{item.activeSite.address}}-{{item.activeSite.pincode}}</td>                          
                           <td *ngIf="item.activeSite === undefined || item.activeSite === null  || item.activeSite=='' ">
                             -
                           </td>
+                        </tr>
+                        <tr>
+                          <td *ngIf="item.activeSite === undefined || item.activeSite === null  || item.activeSite=='' || item.activeSite.client=='' ">
+                            -
+                          </td>
+                          <td *ngIf="item.activeSite"colspan="2">{{item.activeSite.client}}</td>                          
                         </tr>
                         </tbody>
                       </table>
@@ -829,10 +838,10 @@
                         <div class="col-12">
                           <nav aria-label="page navigation example" style="color: white !important;">
                             <ul class="pagination">
-                              <li class="page-item"><a class="page-link" href="javascript:void(0);">«
+                              <!-- <li class="page-item"><a class="page-link" href="javascript:void(0);">«
                                 Previous</a></li>
                               <li class="page-item"><a class="page-link" href="javascript:void(0);">Next
-                                »</a></li>
+                                »</a></li> -->
                             </ul>
                           </nav>
                         </div>
