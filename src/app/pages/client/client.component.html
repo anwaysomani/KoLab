@@ -630,15 +630,18 @@
             <div class="icon-add-user m-l-3"></div>
           </div>
           <div class="col-9">
-            <form class="p-r-2e needs-validation" >
+            <form class="p-r-2e" (ngSubmit)="onSubmit()" #userForm="ngForm">
               <div class="row mb-3">
-                <div class="col-2">
+                <div class="col-2 position-relative">
                   <label class="form-label" for="client">Name</label>
                 </div>
                 <div class="col-10">
-                  <input [(ngModel)]="employee.username" class="form-control" name="employee.username" required>
-                  <div class="valid-feedback">Valid Username.</div>
-                  <div class="invalid-feedback">Please fill out this field.</div>
+                  <input [(ngModel)]="employee.username" class="form-control" name="username" #username="ngModel" required>
+                  <div *ngIf="username.invalid && (username.dirty || username.touched)" class="alert alert-danger">                  
+                    <div *ngIf="username.errors?.required">
+                      Name is required.
+                    </div>                 
+                  </div>
                 </div>
               </div>
               <div class="row mb-3">
@@ -646,7 +649,12 @@
                   <label class="form-label" for="sites">Email</label>
                 </div>
                 <div class="col-10">
-                  <input [(ngModel)]="employee.emailAddress" class="form-control" name="employee.emailAddress">
+                  <input [(ngModel)]="employee.emailAddress" class="form-control" name="emailAddress" type="email" #emailAddress="ngModel" required>
+                  <div *ngIf="emailAddress.invalid && (emailAddress.dirty || emailAddress.touched)" class="alert alert-danger">                  
+                    <div *ngIf="emailAddress.errors?.required">
+                      Email is required.
+                    </div>                 
+                  </div>
                 </div>
               </div>
               <div class="row mb-3">
@@ -656,10 +664,15 @@
                 <div class="col-10">
                   <div class="row">
                     <div class="col-12">
-                      <select [(ngModel)]="employee.designation" class="form-select" name="employee.designation">
+                      <select [(ngModel)]="employee.designation" class="form-select" name="designation" #designation="ngModel" required>
                         <option *ngFor="let entity of userTypes"
                                 value="{{entity.srch}}">{{entity.srch}}</option>
                       </select>
+                      <div *ngIf="designation.invalid && (designation.dirty || designation.touched)" class="alert alert-danger">                  
+                        <div *ngIf="designation.errors?.required">
+                          Designation is required.
+                        </div>                 
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -669,14 +682,22 @@
                   <label class="form-label" for="client">Mobile</label>
                 </div>
                 <div class="col-10">
-                  <input [(ngModel)]="employee.mobile" class="form-control" name="employee.mobile" type="number" maxlength="10">
+                  <input [(ngModel)]="employee.mobile" class="form-control" name="mobile" [pattern]="mobNumberPattern" #mobile="ngModel" required>
+                  <div *ngIf="mobile.invalid && (designation.dirty || mobile.touched)" class="alert alert-danger">                  
+                    <div *ngIf="mobile.errors?.required">
+                      Mobile number is required.
+                    </div>
+                    <div *ngIf="mobile.errors?.pattern">
+                      Mobile number not valid.
+                    </div>                  
+                  </div>
                 </div>
               </div>
               <div class="row mb-3">
                 <div class="col-12">
                   <div class="form-group form-check">
                     <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox" name="remember" [(ngModel)]="isChecked" required> Add another user.
+                      <input class="form-check-input" type="checkbox" name="remember" [(ngModel)]="isChecked"> Add another user.
                     </label>
                   </div>
                 </div>
@@ -696,7 +717,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" data-bs-dismiss="modal" (click)="clearFields(0)" type="button">Cancel</button>
-        <button (click)="addUser()" class="btn btn-primary" type="button">Add User</button>
+        <button (click)="addUser()" class="btn btn-primary" type="button" [disabled]="!userForm.form.valid">Add User</button>
       </div>
     </div>
   </div>

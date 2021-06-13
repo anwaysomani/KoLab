@@ -111,6 +111,8 @@ export class ClientComponent implements OnInit {
   counter=1;
   isChecked=false;
   skipField=0;
+  submitted=false;
+  mobNumberPattern = "^((\\+91-?)|0)?[0-9]{10}$";//[1-9]{1}[0-9]{9}
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase,private toastr: ToastrService) {
@@ -677,4 +679,6 @@ export class ClientComponent implements OnInit {
       this.toastr.success("Record added successfully.")
     }
 }
+
+  onSubmit() { this.submitted = true; }
 }
