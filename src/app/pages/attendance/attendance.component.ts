@@ -160,14 +160,12 @@ export class AttendanceComponent implements OnInit {
   visitorEntry(name: string, status: boolean, index: number): void {
     const date = new Date();
 
-    // in
     if (status) {
       const x = {
         name,
         status: 'In',
         signInTime: date.getHours() + ':' + date.getMinutes(),
       };
-      // @ts-ignore
       this.visitorList.push(x);
     } else {
       // @ts-ignore
