@@ -62,19 +62,19 @@
 
       <!-- visitors -->
       <div class="form-group mb-3">
-        <input [(ngModel)]="newVisitor" class="form-control" id="newVisitor" name="new-visitor">
+        <input [(ngModel)]="newVisitor" class="form-control" id="newVisitor" name="new-visitor" placeholder="Enter visitor name here">
       </div>
       <button (click)="visitorEntry(this.newVisitor, true, 0)" [disabled]="newVisitor.length < 2"
               class="btn btn-outline-dark btn-lg">
         Add Visitor
       </button>
 
-      <ul class="list-group mt-4">
+      <ul class="list-group list-group-flush mt-4">
         <li *ngFor="let i of visitorList; let index = index;"
             class="list-group-item d-flex justify-content-between align-items-center">
           <span>{{i.name}}</span>
           <button (click)="visitorEntry(i.name, false, index)" *ngIf="i.status === 'In'"
-                  class="btn btn-primary">Out
+                  class="badge text-dark">Out
           </button>
         </li>
       </ul>
