@@ -102,12 +102,11 @@
           </div>
         </div>
         <div *ngIf="selectedClient['sites'] && selectedClient.sites.length > 0"
-             id="client-sites" class="row">
+             class="row" id="client-sites">
           <div (click)="onSelect(item)" *ngFor="let item of selectedClient['sites']"
                [class.selected]="item === selectedItem"
-               [ngClass]="{'highlight-row': item === selectedItem}"
                class="card-wrapper mb-2 arrow-pointer col-12">
-            <div class="sites-card-list">
+            <div [ngClass]="{'highlight-row': item === selectedItem}" class="sites-card-list">
               <div class="card-header">
                 <span class="mb-0">
                   <div class="col-12 arrow-pointer card-list font-header f-w-b">
@@ -193,16 +192,16 @@
           <div (click)="selectEmployee(employee.uid)" *ngFor="let employee of selectedSiteEmployeeList"
             class="col-4 border-end border-bottom arrow-pointer item-selection font-body">
             <label>{{employee.name}}</label> -->
-            <!-- Visitor In - green - Visitor In -->
-            <!-- <label *ngIf="'In' === 'In'" class=" text-success float-right">
-              <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Visitor In"></i>IN
-            </label> -->
-            <!-- Visitor Out - red - Visitor Out -->
-            <!-- <label *ngIf="selectedSiteEmployeeStatus === 'Out'" class="text-danger float-right">
-              <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Visitor Out"></i>OUT
-            </label>
-          </div>
-        </div> -->
+        <!-- Visitor In - green - Visitor In -->
+        <!-- <label *ngIf="'In' === 'In'" class=" text-success float-right">
+          <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Visitor In"></i>IN
+        </label> -->
+        <!-- Visitor Out - red - Visitor Out -->
+        <!-- <label *ngIf="selectedSiteEmployeeStatus === 'Out'" class="text-danger float-right">
+          <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Visitor Out"></i>OUT
+        </label>
+      </div>
+    </div> -->
 
         <!-- project manager -->
         <div class="mb-3 row">
@@ -431,7 +430,8 @@
                 </div>
                 <div class="card-body">
                   <div *ngFor="let item of availableStatusList" class="form-check">
-                    <input (change)="onStatusSelection(item)" [(ngModel)]="selectedStatus"  (click)="radioToggle($event,item)" class="form-check-input"
+                    <input (change)="onStatusSelection(item)" (click)="radioToggle($event,item)"
+                           [(ngModel)]="selectedStatus" class="form-check-input"
                            id="{{item}}-status" name="status"
                            type="radio" value="{{item}}">
                     <label class="form-check-label" for="{{item}}-status">
@@ -472,10 +472,11 @@
                                    class="col-form-label text-warning"><i
                               class="fa fa-circle" data-bs-toggle="tooltip" title="At Lunch"></i></label>
                             <!-- offline - grey - Sign Out -->
-                            <label *ngIf="item.currentStatus === '' || (item.currentStatus !== 'At Lunch' && 
+                            <label *ngIf="item.currentStatus === '' || (item.currentStatus !== 'At Lunch' &&
                                                         item.currentStatus !== 'On Leave' && item.currentStatus !== 'Sign In')"
-                              class="col-form-label text-black-50"><i class="fa fa-circle" data-bs-toggle="tooltip" title="Offline"></i></label>
-                            </div>
+                                   class="col-form-label text-black-50"><i class="fa fa-circle" data-bs-toggle="tooltip"
+                                                                           title="Offline"></i></label>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -489,12 +490,17 @@
                   <hr>
 
                   <!-- active site -->
-                  <div class="card-text font-body arrow-pointer" data-bs-target="#changeSiteModal" data-bs-toggle="modal" (click)="getClientListing(item)">
-                    <span class="font-body font-header">
-                      <i aria-hidden="true" class="fa fa-map-marker"></i>&nbsp;{{item.activeSite.site}},{{item.activeSite.client}}
+                  <div (click)="getClientListing(item)" class="card-text font-body arrow-pointer"
+                       data-bs-target="#changeSiteModal" data-bs-toggle="modal">
+                    <span
+                      *ngIf="item.activeSite.site !== undefined && item.activeSite.site !== null  && item.activeSite.site !== ''"
+                      class="font-body font-header">
+                      <i aria-hidden="true" class="fa fa-map-marker"></i>&nbsp;{{item.activeSite.site}}
+                      ,{{item.activeSite.client}}
                     </span>
                     <span
-                      *ngIf="item.activeSite === undefined || item.activeSite === null  || item.activeSite === ''">-</span>
+                      *ngIf="item.activeSite.site === undefined || item.activeSite.site === null  || item.activeSite.site === ''">
+                      <i aria-hidden="true" class="fa fa-map-marker"></i>&nbsp;-</span>
                   </div>
                 </div>
               </div>
@@ -526,23 +532,25 @@
       </div>
       <div class="modal-body">
         <ul class="list-group">
-          <li class="list-group-item" *ngFor="let client of clientList">
+          <li *ngFor="let client of clientList" class="list-group-item">
             <div class="row">
               <div class="col-1">
-                <input class="form-check-input me-1" type="radio" name="changeSite" value="{{client}}"
-                id="{{client}}-site" (change)="updateChangeSite(client)">
+                <input (change)="updateChangeSite(client)" class="form-check-input me-1" id="{{client}}-site"
+                       name="changeSite"
+                       type="radio" value="{{client}}">
               </div>
               <div class="col-10">
                 <label class="mb-1 font-header">{{client.name}},{{client.client}}</label>
                 <span class="mb-1 font-body display-block text-black-50">{{client.address}}-{{client.pincode}}</span>
               </div>
-           </div>
+            </div>
           </li>
         </ul>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
-        <button (click)="updateUserSite()" data-bs-dismiss="modal" class="btn btn-primary" type="button">Update Site</button>
+        <button (click)="updateUserSite()" class="btn btn-primary" data-bs-dismiss="modal" type="button">Update Site
+        </button>
       </div>
     </div>
   </div>
@@ -556,7 +564,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="addSiteLabel">Add New Site</h5>
-        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button" (click)="clearFields(0)"></button>
+        <button (click)="clearFields(0)" aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                type="button"></button>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -602,8 +611,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button" (click)="clearFields(0)">Cancel</button>
-        <button (click)="addSite()" data-bs-dismiss="modal" class="btn btn-primary" type="button">Add Site</button>
+        <button (click)="clearFields(0)" class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+        <button (click)="addSite()" class="btn btn-primary" data-bs-dismiss="modal" type="button">Add Site</button>
       </div>
     </div>
   </div>
@@ -621,7 +630,8 @@
       </ngx-spinner>
       <div class="modal-header">
         <h5 class="modal-title" id="addUserLabel">Add New User</h5>
-        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button" (click)="clearFields(0)"></button>
+        <button (click)="clearFields(0)" aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                type="button"></button>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -629,48 +639,55 @@
             <div class="icon-add-user m-l-3"></div>
           </div>
           <div class="col-9">
-            <form class="p-r-2e" (ngSubmit)="onSubmit()" #userForm="ngForm">
+            <form #userForm="ngForm" (ngSubmit)="onSubmit()" class="p-r-2e">
               <div class="row mb-3">
                 <div class="col-2 position-relative">
-                  <label class="form-label" for="client">Name</label>
+                  <label class="form-label" for="username">Name</label>
                 </div>
                 <div class="col-10">
-                  <input [(ngModel)]="employee.username" class="form-control" name="username" #username="ngModel" required>
-                  <div *ngIf="username.invalid && (username.dirty || username.touched)" class="alert alert-danger">                  
+                  <input #username="ngModel" [(ngModel)]="employee.username" class="form-control" name="username"
+                         required>
+                  <div *ngIf="username.invalid && (username.dirty || username.touched)"
+                       class="alert alert-danger p-t-b-0">
                     <div *ngIf="username.errors?.required">
                       Name is required.
-                    </div>                 
+                    </div>
                   </div>
                 </div>
               </div>
               <div class="row mb-3">
                 <div class="col-2">
-                  <label class="form-label" for="sites">Email</label>
+                  <label class="form-label" for="emailAddress">Email</label>
                 </div>
                 <div class="col-10">
-                  <input [(ngModel)]="employee.emailAddress" class="form-control" name="emailAddress" type="email" #emailAddress="ngModel" required>
-                  <div *ngIf="emailAddress.invalid && (emailAddress.dirty || emailAddress.touched)" class="alert alert-danger">                  
+                  <input #emailAddress="ngModel" [(ngModel)]="employee.emailAddress" class="form-control"
+                         name="emailAddress"
+                         required type="email">
+                  <div *ngIf="emailAddress.invalid && (emailAddress.dirty || emailAddress.touched)"
+                       class="alert alert-danger p-t-b-0">
                     <div *ngIf="emailAddress.errors?.required">
                       Email is required.
-                    </div>                 
+                    </div>
                   </div>
                 </div>
               </div>
               <div class="row mb-3">
                 <div class="col-2">
-                  <label class="form-label" for="sites">Designation</label>
+                  <label class="form-label" for="newUserDesignation">Designation</label>
                 </div>
                 <div class="col-10">
                   <div class="row">
                     <div class="col-12">
-                      <select [(ngModel)]="employee.designation" class="form-select" name="designation" #designation="ngModel" required>
+                      <select #designation="ngModel" [(ngModel)]="employee.designation" class="form-select"
+                              id="newUserDesignation" name="designation" required>
                         <option *ngFor="let entity of userTypes"
                                 value="{{entity.srch}}">{{entity.srch}}</option>
                       </select>
-                      <div *ngIf="designation.invalid && (designation.dirty || designation.touched)" class="alert alert-danger">                  
+                      <div *ngIf="designation.invalid && (designation.dirty || designation.touched)"
+                           class="alert alert-danger p-t-b-0">
                         <div *ngIf="designation.errors?.required">
                           Designation is required.
-                        </div>                 
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -678,17 +695,20 @@
               </div>
               <div class="row mb-3">
                 <div class="col-2">
-                  <label class="form-label" for="client">Mobile</label>
+                  <label class="form-label" for="mobile">Mobile</label>
                 </div>
                 <div class="col-10">
-                  <input [(ngModel)]="employee.mobile" class="form-control" name="mobile" [pattern]="mobNumberPattern" #mobile="ngModel" required>
-                  <div *ngIf="mobile.invalid && (designation.dirty || mobile.touched)" class="alert alert-danger">                  
+                  <input #mobile="ngModel" [(ngModel)]="employee.mobile" [pattern]="mobNumberPattern"
+                         class="form-control"
+                         name="mobile" required>
+                  <div *ngIf="mobile.invalid && (designation.dirty || mobile.touched)"
+                       class="alert alert-danger p-t-b-0">
                     <div *ngIf="mobile.errors?.required">
                       Mobile number is required.
                     </div>
                     <div *ngIf="mobile.errors?.pattern">
                       Mobile number not valid.
-                    </div>                  
+                    </div>
                   </div>
                 </div>
               </div>
@@ -696,11 +716,12 @@
                 <div class="col-12">
                   <div class="form-group form-check">
                     <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox" name="remember" [(ngModel)]="isChecked"> Add another user.
+                      <input [(ngModel)]="isChecked" class="form-check-input" name="remember" type="checkbox"> Add
+                      another user.
                     </label>
                   </div>
                 </div>
-                
+
               </div>
               <div *ngIf="addUserError" class="mb-3">
                 <div class="alert alert-danger" role="alert">
@@ -715,8 +736,9 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal" (click)="clearFields(0)" type="button">Cancel</button>
-        <button (click)="addUser()" class="btn btn-primary" type="button" [disabled]="!userForm.form.valid">Add User</button>
+        <button (click)="clearFields(0)" class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+        <button (click)="addUser()" [disabled]="!userForm.form.valid" class="btn btn-primary" type="button">Add User
+        </button>
       </div>
     </div>
   </div>
@@ -734,7 +756,8 @@
       </ngx-spinner>
       <div class="modal-header">
         <h5 class="modal-title" id="addClientLabel">Add New Client</h5>
-        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button" (click)="clearFields(0)"></button>
+        <button (click)="clearFields(0)" aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                type="button"></button>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -758,8 +781,9 @@
 
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button" (click)="clearFields(0)">Cancel</button>
-        <button (click)="addNewClient()" data-bs-dismiss="modal"  class="btn btn-primary" type="button">Add Client</button>
+        <button (click)="clearFields(0)" class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+        <button (click)="addNewClient()" class="btn btn-primary" data-bs-dismiss="modal" type="button">Add Client
+        </button>
       </div>
     </div>
   </div>
@@ -777,7 +801,9 @@
               <div class="carousel-inner" role="listbox">
                 <div *ngFor="let item of tempSelectedEmployees let k = index" [ngClass]="{'active': k == recordId }"
                      class="carousel-item">
-                  <a class="carousel-control-prev" data-slide="prev" href="#employeeDetail-carousel" role="button" data-toggle="tooltip" title="Previous">
+                  <a class="carousel-control-prev" data-slide="prev" data-toggle="tooltip"
+                     href="#employeeDetail-carousel"
+                     role="button" title="Previous">
                     <span class=" fa fa-angle-left fa-2x"></span>
                     <span class="sr-only">Previous</span>
                   </a>
@@ -807,7 +833,7 @@
                               </label>
                               <!-- offline - grey - Sign Out -->
                               <label
-                                *ngIf="selectedSiteEmployeeStatus === '' || (selectedSiteEmployeeStatus !== 'At Lunch' && 
+                                *ngIf="selectedSiteEmployeeStatus === '' || (selectedSiteEmployeeStatus !== 'At Lunch' &&
                                 selectedSiteEmployeeStatus !== 'On Leave' && selectedSiteEmployeeStatus !== 'Sign In')"
                                 class="col-form-label text-black-50">
                                 <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Offline"></i>Offline
@@ -819,25 +845,29 @@
                         <tbody>
                         <tr>
                           <td><i aria-hidden="true" class="fa fa-phone"></i>&nbsp;{{item.mobile}}&nbsp;<span
-                              *ngIf="item.mobile === undefined || item.mobile === null  || item.mobile === ''">-</span></td>
+                            *ngIf="item.mobile === undefined || item.mobile === null  || item.mobile === ''">-</span>
+                          </td>
                           <td>{{item.email}}</td>
                         </tr>
                         <tr>
                           <th>{{item.designation}}</th>
-                          <th>                          
+                          <th>
                           </th>
                         </tr>
                         <tr>
-                          <td *ngIf="item.activeSite" colspan="2"><i aria-hidden="true" class="fa fa-map-marker"></i>&nbsp;{{item.activeSite.site}},{{item.activeSite.address}}-{{item.activeSite.pincode}}</td>                          
-                          <td *ngIf="item.activeSite === undefined || item.activeSite === null  || item.activeSite=='' ">
+                          <td *ngIf="item.activeSite" colspan="2"><i aria-hidden="true" class="fa fa-map-marker"></i>&nbsp;{{item.activeSite.site}}
+                            ,{{item.activeSite.address}}-{{item.activeSite.pincode}}</td>
+                          <td
+                            *ngIf="item.activeSite === undefined || item.activeSite === null  || item.activeSite=='' ">
                             -
                           </td>
                         </tr>
                         <tr>
-                          <td *ngIf="item.activeSite === undefined || item.activeSite === null  || item.activeSite=='' || item.activeSite.client=='' ">
+                          <td
+                            *ngIf="item.activeSite === undefined || item.activeSite === null  || item.activeSite=='' || item.activeSite.client=='' ">
                             -
                           </td>
-                          <td *ngIf="item.activeSite"colspan="2">{{item.activeSite.client}}</td>                          
+                          <td *ngIf="item.activeSite" colspan="2">{{item.activeSite.client}}</td>
                         </tr>
                         </tbody>
                       </table>
@@ -880,7 +910,9 @@
                       </div>
                     </div>
                   </div>
-                  <a class="carousel-control-next" data-slide="next" href="#employeeDetail-carousel" role="button" data-toggle="tooltip" title="Next">
+                  <a class="carousel-control-next" data-slide="next" data-toggle="tooltip"
+                     href="#employeeDetail-carousel"
+                     role="button" title="Next">
                     <span class=" fa fa-angle-right fa-2x"></span>
                     <span class="sr-only">Next</span>
                   </a>

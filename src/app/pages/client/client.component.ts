@@ -373,6 +373,7 @@ export class ClientComponent implements OnInit {
       pincode: this.newSiteData.pincode,
       addedOn: new Date(),
       refNo: '',
+      visitors: [],
     };
     // @ts-ignore
     this.selectedClient.sites.push(newSite);
@@ -622,7 +623,7 @@ export class ClientComponent implements OnInit {
       return user.currentStatus.toLowerCase().includes(txt.toLowerCase());
     });
   }
-  
+
   radioToggle(event:Event,selectedStatus:string){
     this.counter += 1;
     if (this.selectedStatus != selectedStatus) {
