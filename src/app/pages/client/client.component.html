@@ -458,7 +458,7 @@
                       <div class="col-6">
                         <div class="row">
                           <div class="col-6">
-                            <label class="col-form-label text-uppercase">{{selectedSiteEmployee}}</label>
+                            <!-- <label class="col-form-label text-uppercase">{{selectedSiteEmployee}}</label> -->
                           </div>
                           <div class="col-6 text-end">
                             <!-- active - green - Sign In -->
@@ -472,11 +472,10 @@
                                    class="col-form-label text-warning"><i
                               class="fa fa-circle" data-bs-toggle="tooltip" title="At Lunch"></i></label>
                             <!-- offline - grey - Sign Out -->
-                            <label
-                              *ngIf="item.currentStatus === '' || item.currentStatus === 'Sign Out'"
-                              class="col-form-label text-black-50"><i
-                              class="fa fa-circle" data-bs-toggle="tooltip" title="Offline"></i></label>
-                          </div>
+                            <label *ngIf="item.currentStatus === '' || (item.currentStatus !== 'At Lunch' && 
+                                                        item.currentStatus !== 'On Leave' && item.currentStatus !== 'Sign In')"
+                              class="col-form-label text-black-50"><i class="fa fa-circle" data-bs-toggle="tooltip" title="Offline"></i></label>
+                            </div>
                         </div>
                       </div>
                     </div>

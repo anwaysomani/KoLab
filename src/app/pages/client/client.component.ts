@@ -611,12 +611,15 @@ export class ClientComponent implements OnInit {
   /* status filter change */
   onStatusSelection(txt: string): void {
     this.filterApplied = !this.filterApplied;
-    this.tempSelectedEmployees.splice(0, this.tempSelectedEmployees.length);
+    /* this.tempSelectedEmployees.splice(0, this.tempSelectedEmployees.length); */
     if (this.employeeList.length < 0) {
       this.tempSelectedEmployees = [];
     }
-    this.tempSelectedEmployees = this.tempSelectedEmployees.filter(user => {
+    /* this.tempSelectedEmployees = this.tempSelectedEmployees.filter(user => {
       return user.attendance[user.attendance.length - 1].status.toLowerCase().includes(txt.toLowerCase());
+    }); */
+    this.tempSelectedEmployees = this.tempSelectedEmployees.filter(user => {
+      return user.currentStatus.toLowerCase().includes(txt.toLowerCase());
     });
   }
   
