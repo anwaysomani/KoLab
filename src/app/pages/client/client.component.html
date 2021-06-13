@@ -145,6 +145,9 @@
                    title="Information">
                 <i class="fa fa-info fs-18 arrow-pointer text-dark"></i>
               </div>
+              <div class="m-r-1e icon-info fa-2x" data-bs-toggle="tooltip" title="Delete Site" (click)="deleteSite()">
+                <i class="fa fa-trash fs-18 arrow-pointer text-dark"></i>
+              </div>
             </div>
           </div>
         </div>
@@ -155,7 +158,7 @@
           <!-- materials -->
           <button (click)="selectMaterials('Materials')"
                   class="btn btn-block btn-outline-dark btn-rounded waves-effect w-25 m-r-1e">
-            <span class="font-header"><i class="fa fa-users"></i>&nbsp;Materials</span>
+            <span class="font-header"><i class="fa fa-server"></i>&nbsp;Materials</span>
           </button>
 
           <!-- work progress -->
@@ -172,7 +175,7 @@
 
 
         <!-- employees -->
-        <label class="col-form-label-lg">
+        <label class="col-form-label-lg pt-0">
           <span class="font-header f-w-b">Employees</span>
         </label>
         <div *ngIf="selectedSiteEmployeeList.length < 1" class="row mb-3 g-0">
@@ -231,7 +234,7 @@
           </div>
           <!-- display last three status -->
           <div *ngIf="employeeAttendance.length > 0" class="row g-3 mb-3">
-            <table class="table">
+            <table class="table table-hover table-striped">
               <thead>
               <tr>
                 <th scope="col">Date</th>
@@ -256,8 +259,12 @@
             <div class="row">
               <div class="col-12 mb-1 p-0">
                 <span class="text-uppercase">
-                  <span *ngIf="materialImagesDisplay" class="font-header f-w-b">Materials</span>
-                  <span *ngIf="progressImagesDisplay" class="font-header f-w-b">Work Progress</span>
+                  <span *ngIf="materialImagesDisplay" class="font-header f-w-b">Materials&nbsp;
+                    <span class="text-black-50">({{renderImages().length}})</span>
+                  </span>
+                  <span *ngIf="progressImagesDisplay" class="font-header f-w-b">Work Progress&nbsp;
+                    <span class="text-black-50">({{renderImages().length}})</span>
+                  </span>
                 </span>
               </div>
               <ngx-spinner *ngIf="loader.addClientLoader" [fullScreen]="false" bdColor="rgba(51, 51, 51, 0.8)"
@@ -270,6 +277,9 @@
                    data-bs-toggle="modal">
                   <img alt="Error occurred in loading image" src={{img}}/>
                 </a>
+              </div>
+              <div *ngIf="renderImages().length < 1">
+                <span class="text-black-50">(No images available)</span>
               </div>
             </div>
           </div>
@@ -335,12 +345,8 @@
 
         <!-- site info -->
         <div *ngIf="displayInfoView" class="m-t-1e" id="InfoView">
-          <table class="table table-striped">
+          <table class="table table-striped table-hover">
             <tbody>
-            <tr>
-              <th class="text-uppercase" scope="col">Ref</th>
-              <td>{{selectedItem['refNo']}}</td>
-            </tr>
             <tr>
               <th class="text-uppercase" scope="col">Address</th>
               <td>{{selectedItem['address']}}</td>
@@ -354,29 +360,37 @@
         </div>
 
         <!-- visitors info -->
-        <div *ngIf="displayVisitorInfo" class="m-t-1e" id="VisitorInfo">
-          <label class="col-form-label-lg">
-            <span class="font-header f-w-b">Visitor</span>
-          </label>
+        <div *ngIf="displayVisitorInfo" id="VisitorInfo">
+          <div class="col-12 mb-1 p-0">
+                <span class="text-uppercase">
+                  <span class="font-header f-w-b">Visitors</span>
+                  <span class="text-black-50">({{selectedItem.visitors.length}})</span>
+                </span>
+          </div>
           <div *ngIf="selectedSiteEmployeeList.length < 1" class="row mb-3 g-0">
             (No Visitors yet)
           </div>
-          <div *ngIf="selectedSiteEmployeeList.length > 0" class="row g-3 mb-3">
-            <div (click)="selectEmployee(employee.uid)" *ngFor="let employee of selectedSiteEmployeeList"
-                 class="col-4 border-end border-bottom arrow-pointer item-selection font-body">
-              <label>{{employee.name}}</label> -->
-              <!-- Visitor In - green - Visitor In -->
-              <label *ngIf="'In' === 'In'" class=" text-success float-right">
-                <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Visitor In"></i>
-              </label>
-              <!-- Visitor Out - red - Visitor Out -->
-              <label *ngIf="selectedSiteEmployeeStatus === 'Out'" class="text-danger float-right">
-                <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Visitor Out"></i>
-              </label>
-            </div>
+          <div *ngIf="selectedSiteEmployeeList.length > 0" class="row g-3 mb-3 mt-1">
+            <table class="table table-striped table-hover">
+              <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col" class="text-center">Sign In</th>
+                <th scope="col" class="text-center">Sign Out</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let visitor of selectedItem.visitors">
+                <td>{{visitor.name}}</td>
+                <td class="text-center">{{visitor.signInTime}}</td>
+                <td class="text-center">{{visitor.signOutTime !== undefined && visitor.signOutTime !== null ? visitor.signOutTime : '-'}}</td>
+              </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-        <span class="text-black-50 top-50 left-50 position-relative font-header">
+
+        <span *ngIf="checkWidgetDisplayConfig()" class="text-black-50 top-50 left-35 position-relative font-header">
           <i class="fas fa-skull-crossbones"></i>
           Please select any item from above.
         </span>
@@ -865,16 +879,11 @@
                       <table *ngIf="item.attendance.length > 0" class="table borderless" id="employee-data-table">
                         <thead>
                         <tr>
-                          <th class="th-sm">DATE
-                          </th>
-                          <th class="th-sm">TIME
-                          </th>
-                          <th class="th-sm">SITE
-                          </th>
-                          <th class="th-sm">STATUS
-                          </th>
-                          <th class="th-sm">REASON
-                          </th>
+                          <th class="th-sm">DATE</th>
+                          <th class="th-sm">TIME</th>
+                          <th class="th-sm">SITE</th>
+                          <th class="th-sm">STATUS</th>
+                          <th class="th-sm">REASON</th>
                         </tr>
                         </thead>
                         <tbody *ngFor="let row of item.attendance">

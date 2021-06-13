@@ -601,4 +601,26 @@ export class ClientComponent implements OnInit {
   onSubmit(): void {
     this.submitted = true;
   }
+
+  /* check empty widget_04 config */
+  checkWidgetDisplayConfig(): boolean {
+    return !this.materialImagesDisplay && !this.progressImagesDisplay && !this.displayInfoView && !this.displayVisitorInfo;
+  }
+
+  /* delete site */
+  deleteSite(): void {
+    console.log(this.selectedClient);
+    this.db.doc(`clients/${this.selectedClient.name}`).get().subscribe((d) => {
+      // @ts-ignore
+      const entity = d.data().sites;
+      // @ts-ignore
+      const index = entity.findIndex((er) => {
+        return er.name === this.selectedItem.name;
+      });
+      entity.splice(index, 1);
+      this.db.doc(`/clients/${this.selectedClient.name}`).update({
+        sites: entity,
+      });
+    });
+  }
 }
