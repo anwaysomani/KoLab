@@ -480,6 +480,10 @@ export class ClientComponent implements OnInit {
     this.fetchRecentImages(this.materialView);
   }
 
+  /* update widget-04 for Material/Progress selection */
+  visitors(): void {
+  }
+
   /* extract date for card header */
   getDateAndTime(key: string): string {
     return (new Date(key)).toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
