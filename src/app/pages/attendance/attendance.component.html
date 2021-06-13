@@ -17,7 +17,7 @@
     </div>
   </div>
   <div
-    *ngIf="activeUser !== undefined && activeUser.designation !== undefined && activeUser.designation === 'Sub-Admin'"
+    *ngIf="activeUser !== undefined && activeUser.designation !== undefined && activeUser.designation === 'Contractor'"
     class="card mb-4">
     <!-- permission only if second level admin -->
     <div class="card-header">
@@ -50,6 +50,37 @@
 
     </div>
   </div>
+
+  <div
+    *ngIf="activeUser !== undefined && activeUser.designation !== undefined && activeUser.designation === 'Contractor'"
+    class="card mb-4">
+    <!-- permission only if second level admin -->
+    <div class="card-header">
+      <h5 class="text-uppercase">Visitors</h5>
+    </div>
+    <div class="card-body">
+
+      <!-- visitors -->
+      <div class="form-group mb-3">
+        <input [(ngModel)]="newVisitor" class="form-control" id="newVisitor" name="new-visitor">
+      </div>
+      <button (click)="visitorEntry(this.newVisitor, true, 0)" [disabled]="newVisitor.length < 2"
+              class="btn btn-outline-dark btn-lg">
+        Add Visitor
+      </button>
+
+      <ul class="list-group mt-4">
+        <li *ngFor="let i of visitorList; let index = index;"
+            class="list-group-item d-flex justify-content-between align-items-center">
+          <span>{{i.name}}</span>
+          <button (click)="visitorEntry(i.name, false, index)" *ngIf="i.status === 'In'"
+                  class="btn btn-primary">Out
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
   <div class="card mb-4">
     <div class="card-header">
       <h5 class="text-uppercase">Actions</h5>
@@ -57,7 +88,7 @@
     <div class="card-body">
       <div class="row">
         <div
-          *ngIf="(getCurrentUserStatus() === 'Sign Out' || getCurrentUserStatus() === '' || getCurrentUserStatus() !== undefined || getCurrentUserStatus() === 'At Lunch') && getCurrentUserStatus() !== 'Sign In'"
+          *ngIf="(getCurrentUserStatus() === 'Sign Out' || getCurrentUserStatus() === '' || getCurrentUserStatus() !== undefined) && getCurrentUserStatus() !== 'Sign In'"
           class="col-6">
           <button (click)="markStatus('Sign In')" [disabled]="checkActionEnableCondition()"
                   class="btn btn-primary btn-lg w-100">
@@ -69,16 +100,10 @@
             Sign Out
           </button>
         </div>
-        <div *ngIf="getCurrentUserStatus() === 'Sign In'" class="col-6">
-          <button (click)="markStatus('At Lunch')"
-                  [disabled]="checkActionEnableCondition()" class="btn btn-warning btn-lg w-100">
-            At Lunch
-          </button>
-        </div>
       </div>
     </div>
   </div>
-  <div *ngIf="getCurrentUserStatus() !== 'Sign In' && getCurrentUserStatus() !== 'At Lunch'" class="card mb-4">
+  <div *ngIf="getCurrentUserStatus() !== 'Sign In'" class="card mb-4">
     <div class="card-header">
       <h5 class="text-uppercase">Apply for leave</h5>
     </div>

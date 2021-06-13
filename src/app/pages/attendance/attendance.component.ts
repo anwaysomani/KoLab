@@ -23,6 +23,8 @@ export class AttendanceComponent implements OnInit {
   downloadURL: Observable<string> | undefined;
   x = false;
   currentPincode = 0;
+  newVisitor = '';
+  visitorList: Array<any> = [];
 
   constructor(private db: AngularFirestore, private storage: AngularFireStorage, private route: Router, private titleService: Title,
               private http: HttpClient) {
@@ -30,6 +32,7 @@ export class AttendanceComponent implements OnInit {
     this.uid = JSON.parse(localStorage.getItem('user')).uid;
     this.db.doc(`/users/${this.uid}`).valueChanges().subscribe((det) => {
       this.activeUser = det;
+      this.getVisitorListing();
     });
 
     const date = new Date();
@@ -57,9 +60,10 @@ export class AttendanceComponent implements OnInit {
     }
   }
 
+  /* check current location */
   checkActionEnableCondition(): boolean {
     if (this.activeUser) {
-      return !(this.currentPincode === this.activeUser.activeSite.pincode);
+      return this.currentPincode === this.activeUser.activeSite.pincode;
     }
     return true;
   }
@@ -69,17 +73,36 @@ export class AttendanceComponent implements OnInit {
     const currTime = new Date();
     const x = {
       date: this.date,
-      time: currTime.getHours() + ':' + currTime.getMinutes() + ':' + currTime.getSeconds(),
+      time: currTime.getHours() + ':' + currTime.getMinutes(),
       site: this.activeUser.activeSite,
       status,
-      reason: '',
+      reason: ''
     };
     if (status === 'On Leave') {
       x.reason = this.reason;
       this.reason = '';
     }
+    if (status === 'Sign Out') {
+      // get last record from attendance array - i.e supposed to be Sign In
+      // calculate total hours in whole numbers(TODO: interval of 30-mins)
+      // tslint:disable-next-line:radix
+      const lastSignInRecordTime = parseInt(this.activeUser.attendance[this.activeUser.attendance.length - 1].time.split(':')[0]);
+      // get current hours
+      const currentTime = (new Date()).getHours();
+      // calculate total time spent
+      const calcTime = this.activeUser.totalTimeToday + (currentTime - lastSignInRecordTime);
+      // assign to totalTimeToday
+      this.db.doc(`/users/${this.uid}`).update({
+        totalTimeToday: calcTime,
+      });
+    }
 
-    this.activeUser.attendance.push(x);
+    if (this.activeUser.attendance !== undefined) {
+      this.activeUser.attendance.push(x);
+    } else {
+      this.activeUser.attendance = [x];
+    }
+
     this.db.doc(`/users/${this.uid}`).update({
       attendance: this.activeUser.attendance,
       currentStatus: x.status
@@ -119,5 +142,56 @@ export class AttendanceComponent implements OnInit {
   /* check enable condition for upload buttons */
   checkUploadButtonCondition(): boolean {
     return !this.activeUser.activeSite && !this.activeUser.activeSite.site && this.activeUser.activeSite.site.length < 1;
+  }
+
+  /* get visitors list */
+  getVisitorListing(): void {
+    this.db.doc(`clients/${this.activeUser.activeSite.client}`).get().subscribe((d) => {
+      // @ts-ignore
+      const y = d.data().sites.findIndex((er) => {
+        return er.name === this.activeUser.activeSite.site;
+      });
+      // @ts-ignore
+      this.visitorList = d.data().sites[y].visitors;
+    });
+  }
+
+  /* add visitor */
+  visitorEntry(name: string, status: boolean, index: number): void {
+    const date = new Date();
+
+    // in
+    if (status) {
+      const x = {
+        name,
+        status: 'In',
+        signInTime: date.getHours() + ':' + date.getMinutes(),
+      };
+      // @ts-ignore
+      this.visitorList.push(x);
+    } else {
+      // @ts-ignore
+      this.visitorList[index].status = 'Out';
+
+      // @ts-ignore
+      this.visitorList[index].signOutTime = date.getHours() + ':' + date.getMinutes();
+    }
+
+    this.db.doc(`clients/${this.activeUser.activeSite.client}`).get().subscribe((d) => {
+      // @ts-ignore
+      const y = d.data().sites.findIndex((er) => {
+        return er.name === this.activeUser.activeSite.site;
+      });
+
+      // @ts-ignore
+      const sitesArr = d.data().sites;
+      sitesArr[y].visitors = this.visitorList;
+
+      this.db.doc(`/clients/${this.activeUser.activeSite.client}`).update({
+        sites: sitesArr,
+      });
+    });
+
+    this.newVisitor = '';
   }
 }
