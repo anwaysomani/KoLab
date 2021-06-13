@@ -113,6 +113,7 @@ export class ClientComponent implements OnInit {
   skipField=0;
   submitted=false;
   mobNumberPattern = "^((\\+91-?)|0)?[0-9]{10}$";//[1-9]{1}[0-9]{9}
+  displayVisitorInfo=false;
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase,private toastr: ToastrService) {
@@ -420,6 +421,7 @@ export class ClientComponent implements OnInit {
     this.materialImagesDisplay = (state === 2); // update view for material images
     this.progressImagesDisplay = (state === 3); // update view for progress images
     this.displayInfoView = (state === 4); // update view for info
+    this.displayVisitorInfo = (state === 5);
   }
 
   /* update widget-04 for employee selection */
@@ -482,6 +484,7 @@ export class ClientComponent implements OnInit {
 
   /* update widget-04 for Material/Progress selection */
   visitors(): void {
+    this.updateDynamicDetailSelection(5);
   }
 
   /* extract date for card header */
