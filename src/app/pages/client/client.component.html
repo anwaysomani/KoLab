@@ -398,7 +398,7 @@
                 </div>
                 <div class="card-body">
                   <div class="input-group mb-3">
-                    <input (change)="employeeSearch(searchText)" [(ngModel)]="searchText"
+                    <input (change)="employeeSearch(searchText)" (keyup.enter)="employeeSearch(searchText)" [(ngModel)]="searchText"
                            aria-describedby="basic-addon2"
                            aria-label="Free Text Search"
                            class="form-control apply-gradient searchText" name="searchText"

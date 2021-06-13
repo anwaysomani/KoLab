@@ -601,11 +601,14 @@ export class ClientComponent implements OnInit {
   /* designation filter change */
   onDesignationSelection(txt: string): void {
     this.filterApplied = !this.filterApplied;
+    this.searchText='';
     this.tempSelectedEmployees = [];
     this.selectedCategory = txt;
     this.getAllUsers().then((data) => {
       // @ts-ignore
       this.tempSelectedEmployees = data;
+      // @ts-ignore
+      this.employeeList = data;
     });
   }
 
