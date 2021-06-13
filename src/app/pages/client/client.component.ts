@@ -397,6 +397,12 @@ export class ClientComponent implements OnInit {
           pincode: this.updateSite.pincode
         },
       });
+      this.showToaster(200);
+      /* ON Modal close refresh to show recent data */
+      this.getAllUsers().then((data) => {
+        // @ts-ignore
+        this.tempSelectedEmployees = data;
+      });
     }
   }
 
