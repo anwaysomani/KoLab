@@ -9,7 +9,7 @@ import {Title} from '@angular/platform-browser';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {map} from 'rxjs/operators';
-import { ToastrService } from 'ngx-toastr';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-client',
@@ -26,11 +26,7 @@ export class ClientComponent implements OnInit {
   isEmployees: boolean;
   clientList: Array<any> = [];
   employeeList: Array<any> = [];
-  sitesList: Array<string> = [];
-  changeSiteDropdownList: any = [];
-  activeTab = 'activeEmployee';
   selectedItem?: any;
-  weekDay: Array<string> = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   selectedClient = {
     name: '',
     sites: [],
@@ -75,8 +71,7 @@ export class ClientComponent implements OnInit {
   allow: boolean;
   searchText = '';
   prevClientItem = '';
-  prevEmployeeItem = '';
-  itemClicked = false;
+
   displayEmployeeDetail = false;
   selectedSiteEmployeeList: Array<any> = [];
   selectedSiteContractorList: Array<any> = [];
@@ -101,22 +96,19 @@ export class ClientComponent implements OnInit {
   recordId = 0;
   filterApplied = false;
   selectedStatus = '';
-  availableStatusList = ['Active', 'On Leave', 'At Lunch', 'Sign Out'];
+  availableStatusList = ['Active', 'On Leave', 'Sign Out'];
   availableDesignationList = ['Admin', 'Contractor', 'Employee'];
   selectedDesignation = this.availableDesignationList[0];
   selectedImageNotes: Array<any> = [];
-  clientImageUrl = 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
-  siteImageUrl = 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
-  userImageUrl = 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
-  counter=1;
-  isChecked=false;
-  skipField=0;
-  submitted=false;
-  mobNumberPattern = "^((\\+91-?)|0)?[0-9]{10}$";//[1-9]{1}[0-9]{9}
-  displayVisitorInfo=false;
+  counter = 1;
+  isChecked = false;
+  skipField = 0;
+  submitted = false;
+  mobNumberPattern = '^((\\+91-?)|0)?[0-9]{10}$';
+  displayVisitorInfo = false;
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
-              private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase,private toastr: ToastrService) {
+              private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
     this.allow = localStorage.getItem('access') === '1';
     if (!this.allow) {
       router.navigateByUrl('/login');
@@ -147,9 +139,10 @@ export class ClientComponent implements OnInit {
     this.dates = new Date(year, month, 0).getDate();
   }
 
+  /* get client listing */
   clientDataStore(): void { /* client data records */
     this.db.collection('clients', ref => {
-      return ref; // .where('id', 'in', ['client01', 'client02']);
+      return ref;
     }).valueChanges().subscribe((det) => {
       this.clientList = det;
       if (this.clientList.length > 0) {
@@ -164,51 +157,10 @@ export class ClientComponent implements OnInit {
     });
   }
 
-  employeeDataStore(): void { /* employee data records */
-    this.db.collection('users', ref => {
-      return ref; // .where('id', 'in', ['client01', 'client02']);
-    }).valueChanges().subscribe((det) => {
-      this.employeeList = det;
-      this.clientAndSiteListing();
-    }, (err) => {
-      console.log(err);
-    });
-  }
-
-  /* get client & their associated sites listing with employees for each site */
-  clientAndSiteListing(): void {
-    this.clientDataStore();
-    for (let i = 0; i < this.clientList.length; i++) {
-      // tslint:disable-next-line:prefer-for-of
-      for (let j = 0; j < this.clientList[i].sites.length; j++) {
-        this.clientList[i].sites[j].employees = {
-          second: [],
-          third: [],
-        };
-        // get employees in list
-        this.db.collection('users', ref => {
-          return ref.where('activeSite', '==', this.clientList[i].sites[j].refNo); // replace with site-id
-        }).valueChanges().subscribe((emps: Array<any>) => {
-          // tslint:disable-next-line:prefer-for-of
-          for (let k = 0; k < emps.length; k++) {
-            if (emps[k].designation === 2) {
-              this.clientList[i].sites[i].employees.second.push(emps[k].name);
-            } else if (emps[k].designation === 3) {
-              this.clientList[i].sites[i].employees.third.push(emps[k].name);
-            }
-          }
-          this.sitesList.push(this.clientList[i].sites[j]);
-        }, (err) => {
-          console.log(err);
-        });
-      }
-    }
-  }
-
   ngOnInit(): void {
-
   }
 
+  /* filter client list */
   loadDocInfo(item: any): void {
     item.isSelected = true;
     if (this.isEmployees) {
@@ -228,41 +180,11 @@ export class ClientComponent implements OnInit {
     }
   }
 
-  /* dropdown item listing change for client */
-  onClientSelectionChange(ebt: any): void { /* client selection change */
-
-
-    // this.changeSiteDropdownList = this.clientList[this.getClientIndex(ebt.value)].sites;
-  }
-
-  getClientIndex(name: string): number {
-    for (let i = 0; i < this.clientList.length; i++) {
-      if (this.clientList[i].name === name) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  getWeekDayText(str: string): string { /* get day as text */
-    const today = new Date();
-    // tslint:disable-next-line:radix
-    return this.weekDay[(new Date(today.getFullYear(), today.getMonth(), parseInt(str))).getDay()];
-  }
-
-  renderList(item: string): Array<any> { /* render attendance listing */
-    // @ts-ignore
-    return this.selectedUser.attendance.filter((er) => {
-      return er.date === item;
-    });
-  }
-
   selectClientItem(client: any): void {
     if (client !== this.prevClientItem) {
       this.selectedClient.isSelected = false;
     }
     this.prevClientItem = client;
-    /* this.selectedClient.isSelected = false; */
     this.selectedClient = {
       name: '',
       sites: [],
@@ -286,10 +208,10 @@ export class ClientComponent implements OnInit {
     }
   }
 
-  /* add new user popup Add click */
+  /* add new user popup add click */
   addUser(): void { // name, email address, designation
     this.loader.addUserLoader = true;
-    this.skipField=this.isChecked==true?1:0;
+    this.skipField = this.isChecked ? 1 : 0;
     this.addUserService([this.employee.username, this.employee.emailAddress, this.employee.designation, this.employee.mobile]).then((data) => {
       this.loader.addUserLoader = false;
     }, (error) => {
@@ -297,7 +219,7 @@ export class ClientComponent implements OnInit {
         // handle success user
         this.showToaster(error.status);
         setTimeout(() => {
-          if(!this.isChecked){
+          if (!this.isChecked) {
             this.closeAddExpenseModal?.nativeElement.click();
           }
           /* ON Modal close refresh to show recent data */
@@ -315,6 +237,8 @@ export class ClientComponent implements OnInit {
     });
   }
 
+  /* add user to db */
+
   // tslint:disable-next-line:typedef
   async addUserService(mod: Array<string>) {
     return await this.http.post(environment.funcUrl + 'addUser/', {
@@ -322,14 +246,12 @@ export class ClientComponent implements OnInit {
       email: mod[1],
       designation: mod[2],
       password: mod[0].split(',')[0].toLowerCase() + '123',
-      mobile:mod[3],
+      mobile: mod[3],
 
     }).toPromise();
   }
 
-  // maintain 3-4 flags for different types of data
-  // change status of each on selection
-
+  /* service for user listing */
   getUserListing(): void {
     this.loader.pageLoader = true;
     this.getAllUsers().then((data) => {
@@ -342,6 +264,8 @@ export class ClientComponent implements OnInit {
     });
   }
 
+  /* get all users listing */
+
   // tslint:disable-next-line:typedef
   async getAllUsers() {
     return await this.http.post(environment.funcUrl + 'getAllUsers', {
@@ -349,7 +273,7 @@ export class ClientComponent implements OnInit {
     }).toPromise();
   }
 
-  // user category selection change
+  /* user category selection change */
   userCategorySelectionChange(entity: string): void {
     this.selectedCategory = entity;
     this.getUserListing();
@@ -385,6 +309,7 @@ export class ClientComponent implements OnInit {
     this.showToaster(200);
   }
 
+  /* update user active site */
   updateUserSite(): void {
     if (this.updateSite.site.length > 0) {
       // @ts-ignore
@@ -400,7 +325,7 @@ export class ClientComponent implements OnInit {
         },
       });
       this.showToaster(200);
-      /* ON Modal close refresh to show recent data */
+      /* on modal close refresh to show recent data */
       this.getAllUsers().then((data) => {
         // @ts-ignore
         this.tempSelectedEmployees = data;
@@ -408,7 +333,8 @@ export class ClientComponent implements OnInit {
     }
   }
 
-  updateChangeSite(data:any): void {
+  /* update site entry */
+  updateChangeSite(data: any): void {
     this.updateSite.site = data.name;
     this.updateSite.client = data.client;
     this.updateSite.address = data.address;
@@ -428,8 +354,7 @@ export class ClientComponent implements OnInit {
   selectEmployee(uid: string): void {
     this.loader.addClientLoader = true;
     this.updateDynamicDetailSelection(1);
-    // get selected employee detail
-    this.db.collection('users').doc(uid).valueChanges().subscribe((det: any) => {
+    this.db.collection('users').doc(uid).valueChanges().subscribe((det: any) => { // get selected employee detail
       this.selectedSiteEmployee = det.name;
       this.employeeAttendance = det.attendance;
       if (det.currentStatus) {
@@ -449,8 +374,7 @@ export class ClientComponent implements OnInit {
   sortEmployeeList(site: string): void {
     // from site, get data
     this.db.collection('users', ref => {
-      const x = '' + site + ', ' + this.selectedClient.name;
-      return ref.where('activeSite', '==', x);
+      return ref.where('activeSite.site', '==', site);
     }).valueChanges().subscribe((det: Array<any>) => {
       this.selectedSiteEmployeeList = det.filter(s => s.designation === 'Employee');
       this.selectedSiteContractorList = det.filter(s => s.designation === 'Contractor');
@@ -459,15 +383,12 @@ export class ClientComponent implements OnInit {
     });
   }
 
+  /* on item selected */
   onSelect(item: any): void {
     this.selectedItem = item;
     this.sortEmployeeList(item.name);
     this.renderDisplayImage();
     this.updateDynamicDetailSelection(0);
-  }
-
-  activateContractor(activeTab: string): void {
-    this.activeTab = activeTab;
   }
 
   /* update widget-04 for Material/Progress selection */
@@ -559,17 +480,6 @@ export class ClientComponent implements OnInit {
     this.loader.addClientLoader = false;
   }
 
-  /* get date for month */
-  getDateFromMonth(): Array<number> {
-    const date = new Date();
-    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-    const arr = [];
-    for (let i = 1; i <= lastDay; i++) {
-      arr.push(i);
-    }
-    return arr;
-  }
-
   /* client listing search */
   clientSearch(txt: string): void {
     if (this.clientList.length < 0) {
@@ -595,11 +505,7 @@ export class ClientComponent implements OnInit {
     });
   }
 
-  /* delete site */
-  deleteSite(): void {
-
-  }
-
+  /* assign variables to values on opening employee details modal */
   openEmployeeDetailsModel(data: any, index: number): void {
     this.record = data;
     this.recordId = index;
@@ -608,7 +514,7 @@ export class ClientComponent implements OnInit {
   /* designation filter change */
   onDesignationSelection(txt: string): void {
     this.filterApplied = !this.filterApplied;
-    this.searchText='';
+    this.searchText = '';
     this.tempSelectedEmployees = [];
     this.selectedCategory = txt;
     this.getAllUsers().then((data) => {
@@ -622,30 +528,20 @@ export class ClientComponent implements OnInit {
   /* status filter change */
   onStatusSelection(txt: string): void {
     this.filterApplied = !this.filterApplied;
-    /* this.tempSelectedEmployees.splice(0, this.tempSelectedEmployees.length); */
     if (this.employeeList.length < 0) {
       this.tempSelectedEmployees = [];
     }
-    /* this.tempSelectedEmployees = this.tempSelectedEmployees.filter(user => {
-      return user.attendance[user.attendance.length - 1].status.toLowerCase().includes(txt.toLowerCase());
-    }); */
     this.tempSelectedEmployees = this.tempSelectedEmployees.filter(user => {
       return user.currentStatus.toLowerCase().includes(txt.toLowerCase());
     });
   }
 
-  radioToggle(event:Event,selectedStatus:string){
+  radioToggle(event: Event, selectedStatus: string): void {
     this.counter += 1;
-    if (this.selectedStatus != selectedStatus) {
+    if (this.selectedStatus !== selectedStatus) {
       (event.target as HTMLInputElement).checked = true;
-    }
-    else {
-      if (this.counter % 2 == 0) {
-        (event.target as HTMLInputElement).checked = true;
-      }
-      else {
-        (event.target as HTMLInputElement).checked = false;
-      }
+    } else {
+      (event.target as HTMLInputElement).checked = this.counter % 2 === 0;
     }
   }
 
@@ -659,46 +555,50 @@ export class ClientComponent implements OnInit {
   }
 
   /* get site listing for change site popup */
-  getClientListing(data:any): void {
-    // get client listing in employee screen
-    /* this.db.collection('clients').valueChanges().subscribe((det) => {
-      this.clientList = det;
-    }); */
+  getClientListing(data: any): void {
     this.db.collection('clients').valueChanges().subscribe((det) => {
-      this.clientList =[];
+      this.clientList = [];
       this.selectedUser.activeSite = data.activeSite;
       this.selectedUser.sites = data.sites;
       this.selectedUser.uid = data.uid;
+      /* tslint:disable-next-line:prefer-for-of */
       for (let i = 0; i < det.length; i++) {
-        // @ts-ignore
+        /* tslint:disable-next-line:prefer-for-of */ // @ts-ignore
         for (let j = 0; j < det[i].sites.length; j++) {
           this.clientList.push({
             // @ts-ignore
             ...det[i].sites[j],
             // @ts-ignore
-            client:det[i].name
+            client: det[i].name
           });
         }
       }
     });
   }
-  clearFields(skipField:any){
+
+  /* clear popup fields */
+  clearFields(skipField: any): void {
     this.employee.username = '';
     this.employee.emailAddress = '';
-    if(skipField==0){
+    if (skipField === 0) {
       this.employee.designation = '';
     }
     this.employee.mobile = '';
-    this.client.name='';
-    this.newSiteData.name='';
-    this.newSiteData.address='';
-    this.newSiteData.pincode='';
+    this.client.name = '';
+    this.newSiteData.name = '';
+    this.newSiteData.address = '';
+    this.newSiteData.pincode = '';
   }
-  showToaster(status:any){
-    if(status==200){
-      this.toastr.success("Record added successfully.")
-    }
-}
 
-  onSubmit() { this.submitted = true; }
+  /* display toaster on screen */
+  showToaster(status: any): void {
+    if (status === 200) {
+      this.toastr.success('Record added successfully.');
+    }
+  }
+
+  /* add another popup for employee popup */
+  onSubmit(): void {
+    this.submitted = true;
+  }
 }

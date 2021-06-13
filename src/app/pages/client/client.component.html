@@ -47,7 +47,7 @@
               class="arrow-pointer list-group-item list-group-item-action p-l-2e mb-2">
             <div class="d-flex w-100 justify-content-between">
               <span class="mb-1">{{item.name}}</span>
-              <span *ngIf="item.isSelected" class="highlighted-item-row"> <!-- selected item highlight -->
+              <span *ngIf="item.isSelected" class="highlighted-item-row">
                 &#x296C;
               </span>
             </div>
@@ -59,7 +59,7 @@
               class="arrow-pointer list-group-item list-group-item-action p-l-2e mb-2">
               <div class="d-flex w-100 justify-content-between">
                 <span class="mb-1 font-header f-w-b">{{item.name}}</span>
-                <span *ngIf="item.isSelected" class="highlighted-item-row"> <!-- selected item highlight -->
+                <span *ngIf="item.isSelected" class="highlighted-item-row">
                   &#x296C;
                 </span>
               </div>
@@ -75,7 +75,7 @@
   </div>
 
   <!-- CLIENT's DETAILS -->
-  <div *ngIf="!isEmployees" class="col-3 h-92"> <!-- DETAILS -->
+  <div *ngIf="!isEmployees" class="col-3 h-92">
     <div class="row m-0 main-section">
 
       <div class="shadow p-3 bg-white rounded h-92 main-section-list apply-gradient">
@@ -111,7 +111,7 @@
                 <span class="mb-0">
                   <div class="col-12 arrow-pointer card-list font-header f-w-b">
                     <label class="arrow-pointer">{{item['name']}}</label>
-                    <span *ngIf="item === selectedItem" class="highlighted-item-row pt-2 float-right"> <!-- selected item highlight -->
+                    <span *ngIf="item === selectedItem" class="highlighted-item-row pt-2 float-right">
                       &#x296C;
                     </span>
                   </div>
@@ -164,7 +164,7 @@
             <span class="font-header"><i class="fa fa-archive"></i>&nbsp;Progress</span>
           </button>
 
-           <!-- Visitors -->
+          <!-- visitors -->
           <button (click)="visitors()" class="btn btn-block btn-outline-dark btn-rounded waves-effect w-25">
             <span class="font-header"><i class="fa fa-users"></i>&nbsp;Visitors</span>
           </button>
@@ -185,28 +185,6 @@
             {{employee.name}}
           </div>
         </div>
-
-        <!-- Visitor -->
-        <!-- <label class="col-form-label-lg">
-          <span class="font-header f-w-b">Visitor</span>
-        </label>
-        <div *ngIf="selectedSiteEmployeeList.length < 1" class="row mb-3 g-0">
-          (No Visitors yet)
-        </div>
-        <div *ngIf="selectedSiteEmployeeList.length > 0" class="row g-3 mb-3">
-          <div (click)="selectEmployee(employee.uid)" *ngFor="let employee of selectedSiteEmployeeList"
-            class="col-4 border-end border-bottom arrow-pointer item-selection font-body">
-            <label>{{employee.name}}</label> -->
-        <!-- Visitor In - green - Visitor In -->
-        <!-- <label *ngIf="'In' === 'In'" class=" text-success float-right">
-          <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Visitor In"></i>IN
-        </label> -->
-        <!-- Visitor Out - red - Visitor Out -->
-        <!-- <label *ngIf="selectedSiteEmployeeStatus === 'Out'" class="text-danger float-right">
-          <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Visitor Out"></i>OUT
-        </label>
-      </div>
-    </div> -->
 
         <!-- project manager -->
         <div class="mb-3 row">
@@ -241,10 +219,6 @@
               <label *ngIf="selectedSiteEmployeeStatus === 'On Leave'" class="col-form-label text-danger"><i
                 class="icon-dot">&#x26AC;&nbsp;</i>On
                 Leave</label>
-              <!-- at lunch - yellow -->
-              <label *ngIf="selectedSiteEmployeeStatus === 'At Lunch'" class="col-form-label text-warning"><i
-                class="icon-dot">&#x26AC;&nbsp;</i>At
-                Lunch</label>
               <!-- offline - grey - Sign Out -->
               <label *ngIf="selectedSiteEmployeeStatus === '' || selectedSiteEmployeeStatus === 'Sign Out'"
                      class="col-form-label text-black-50"><i
@@ -253,9 +227,9 @@
           </div>
 
           <div *ngIf="employeeAttendance.length < 1" class="row mb-3 g-0">
-            (No attendance record found for this month.)
+            (No attendance record found for this month)
           </div>
-          <!-- display last three status-es -->
+          <!-- display last three status -->
           <div *ngIf="employeeAttendance.length > 0" class="row g-3 mb-3">
             <table class="table">
               <thead>
@@ -378,8 +352,9 @@
             </tbody>
           </table>
         </div>
-        <!-- Visitors info -->
-        <div id="VisitorInfo" *ngIf="displayVisitorInfo" class="m-t-1e">
+
+        <!-- visitors info -->
+        <div *ngIf="displayVisitorInfo" class="m-t-1e" id="VisitorInfo">
           <label class="col-form-label-lg">
             <span class="font-header f-w-b">Visitor</span>
           </label>
@@ -388,15 +363,15 @@
           </div>
           <div *ngIf="selectedSiteEmployeeList.length > 0" class="row g-3 mb-3">
             <div (click)="selectEmployee(employee.uid)" *ngFor="let employee of selectedSiteEmployeeList"
-              class="col-4 border-end border-bottom arrow-pointer item-selection font-body">
+                 class="col-4 border-end border-bottom arrow-pointer item-selection font-body">
               <label>{{employee.name}}</label> -->
               <!-- Visitor In - green - Visitor In -->
               <label *ngIf="'In' === 'In'" class=" text-success float-right">
-                <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Visitor In"></i>IN
+                <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Visitor In"></i>
               </label>
               <!-- Visitor Out - red - Visitor Out -->
               <label *ngIf="selectedSiteEmployeeStatus === 'Out'" class="text-danger float-right">
-                <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Visitor Out"></i>OUT
+                <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Visitor Out"></i>
               </label>
             </div>
           </div>
@@ -408,6 +383,7 @@
       </div>
     </div>
   </div>
+
   <!-- Employee Screen -->
   <div class="employee-container">
     <div class="row">
@@ -426,11 +402,10 @@
                 </div>
                 <div class="card-body">
                   <div class="input-group mb-3">
-                    <input (change)="employeeSearch(searchText)" (keyup.enter)="employeeSearch(searchText)" [(ngModel)]="searchText"
-                           aria-describedby="basic-addon2"
-                           aria-label="Free Text Search"
+                    <input (change)="employeeSearch(searchText)" (keyup.enter)="employeeSearch(searchText)"
+                           [(ngModel)]="searchText" aria-describedby="add-on" aria-label="Free Text Search"
                            class="form-control apply-gradient searchText" name="searchText"
-                           type="text">
+                           placeholder="Search employee" type="text">
                   </div>
                 </div>
               </div>
@@ -485,9 +460,7 @@
                       </div>
                       <div class="col-6">
                         <div class="row">
-                          <div class="col-6">
-                            <!-- <label class="col-form-label text-uppercase">{{selectedSiteEmployee}}</label> -->
-                          </div>
+                          <div class="col-6"></div>
                           <div class="col-6 text-end">
                             <!-- active - green - Sign In -->
                             <label *ngIf="item.currentStatus === 'Sign In'" class="col-form-label text-success"><i
@@ -495,15 +468,11 @@
                             <!-- on leave - red - On Leave -->
                             <label *ngIf="item.currentStatus === 'On Leave'" class="col-form-label text-danger"><i
                               class="fa fa-circle" data-bs-toggle="tooltip" title="On Leave"></i></label>
-                            <!-- at lunch - yellow -->
-                            <label *ngIf="item.currentStatus === 'At Lunch'"
-                                   class="col-form-label text-warning"><i
-                              class="fa fa-circle" data-bs-toggle="tooltip" title="At Lunch"></i></label>
                             <!-- offline - grey - Sign Out -->
-                            <label *ngIf="item.currentStatus === '' || (item.currentStatus !== 'At Lunch' &&
-                                                        item.currentStatus !== 'On Leave' && item.currentStatus !== 'Sign In')"
-                                   class="col-form-label text-black-50"><i class="fa fa-circle" data-bs-toggle="tooltip"
-                                                                           title="Offline"></i></label>
+                            <label
+                              *ngIf="item.currentStatus === '' || (item.currentStatus !== 'On Leave' && item.currentStatus !== 'Sign In')"
+                              class="col-form-label text-black-50"><i class="fa fa-circle" data-bs-toggle="tooltip"
+                                                                      title="Offline"></i></label>
                           </div>
                         </div>
                       </div>
@@ -854,15 +823,9 @@
                                      class="col-form-label text-danger">
                                 <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="On Leave"></i>On Leave
                               </label>
-                              <!-- at lunch - yellow -->
-                              <label *ngIf="selectedSiteEmployeeStatus === 'At Lunch'"
-                                     class="col-form-label text-warning">
-                                <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="At Lunch"></i>At Lunch
-                              </label>
                               <!-- offline - grey - Sign Out -->
                               <label
-                                *ngIf="selectedSiteEmployeeStatus === '' || (selectedSiteEmployeeStatus !== 'At Lunch' &&
-                                selectedSiteEmployeeStatus !== 'On Leave' && selectedSiteEmployeeStatus !== 'Sign In')"
+                                *ngIf="selectedSiteEmployeeStatus === '' || (selectedSiteEmployeeStatus !== 'On Leave' && selectedSiteEmployeeStatus !== 'Sign In')"
                                 class="col-form-label text-black-50">
                                 <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Offline"></i>Offline
                               </label>
@@ -918,24 +881,12 @@
                         <tr>
                           <td>{{row.date}}-{{currMonYear}}</td>
                           <td>{{row.time}}</td>
-                          <td>{{row.site}}</td>
+                          <td>{{row.site.site}}</td>
                           <td>{{row.status}}</td>
-                          <td>{{row.reason}}</td>
+                          <td>{{row.reason.length < 1 ? '-' : row.reason}}</td>
                         </tr>
                         </tbody>
                       </table>
-                      <div class="row">
-                        <div class="col-12">
-                          <nav aria-label="page navigation example" style="color: white !important;">
-                            <ul class="pagination">
-                              <!-- <li class="page-item"><a class="page-link" href="javascript:void(0);">«
-                                Previous</a></li>
-                              <li class="page-item"><a class="page-link" href="javascript:void(0);">Next
-                                »</a></li> -->
-                            </ul>
-                          </nav>
-                        </div>
-                      </div>
                     </div>
                   </div>
                   <a class="carousel-control-next" data-slide="next" data-toggle="tooltip"
