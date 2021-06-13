@@ -109,6 +109,8 @@ export class ClientComponent implements OnInit {
   siteImageUrl = 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
   userImageUrl = 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(55).jpg';
   counter=1;
+  isChecked=false;
+  skipField=0;
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase,private toastr: ToastrService) {
@@ -284,6 +286,7 @@ export class ClientComponent implements OnInit {
   /* add new user popup Add click */
   addUser(): void { // name, email address, designation
     this.loader.addUserLoader = true;
+    this.skipField=this.isChecked==true?1:0;
     this.addUserService([this.employee.username, this.employee.emailAddress, this.employee.designation, this.employee.mobile]).then((data) => {
       this.loader.addUserLoader = false;
     }, (error) => {
@@ -291,7 +294,9 @@ export class ClientComponent implements OnInit {
         // handle success user
         this.showToaster(error.status);
         setTimeout(() => {
-          this.closeAddExpenseModal?.nativeElement.click();
+          if(!this.isChecked){
+            this.closeAddExpenseModal?.nativeElement.click();
+          }
           /* ON Modal close refresh to show recent data */
           this.getAllUsers().then((data) => {
             // @ts-ignore
@@ -303,7 +308,7 @@ export class ClientComponent implements OnInit {
       }
     }).finally(() => {
       this.loader.addUserLoader = false;
-      this.clearFields();
+      this.clearFields(this.skipField);
     });
   }
 
@@ -354,7 +359,7 @@ export class ClientComponent implements OnInit {
       dateAdded: new Date(),
       sites: [],
     });
-    this.clearFields();
+    this.clearFields(this.skipField);
     this.showToaster(200);
   }
 
@@ -372,7 +377,7 @@ export class ClientComponent implements OnInit {
     this.db.doc(`/clients/${this.selectedClient.name}`).update({
       sites: this.selectedClient.sites
     });
-    this.clearFields();
+    this.clearFields(this.skipField);
     this.showToaster(200);
   }
 
@@ -655,10 +660,12 @@ export class ClientComponent implements OnInit {
       }
     });
   }
-  clearFields(){
+  clearFields(skipField:any){
     this.employee.username = '';
     this.employee.emailAddress = '';
-    this.employee.designation = '';
+    if(skipField==0){
+      this.employee.designation = '';
+    }
     this.employee.mobile = '';
     this.client.name='';
     this.newSiteData.name='';
