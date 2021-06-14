@@ -939,7 +939,7 @@
 
 <!-- Verify Delete Site -->
 <div aria-hidden="true" aria-labelledby="verifyDeleteModal-label" class="modal fade" id="verifyDeleteModal"
-     role="dialog" tabindex="-1">
+     role="dialog" tabindex="-1" *ngIf="this.selectedItem !== undefined && this.selectedItem !== null">
   <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header text-black-50">
