@@ -647,6 +647,7 @@ export class ClientComponent implements OnInit {
       this.db.doc(`/clients/${this.selectedClient.name}`).update({
         sites: entity,
       });
+      this.showToaster(204);
     });
   }
 
