@@ -663,6 +663,7 @@ export class ClientComponent implements OnInit {
     });
   }
 
+  /* construct date for entity */
   makeDate(viewDate: string): string {
     const dt = new Date(viewDate);
     return dt.getDate() + '-' + dt.getMonth() + '-' + dt.getFullYear();
