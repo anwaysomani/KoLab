@@ -14,9 +14,9 @@
              data-bs-toggle="pill" id="pills-admin-tab" role="tab">Admins</a>
         </li>
         <li class="nav-item">
-          <a (click)="userCategorySelectionChange('Contractor')" aria-controls="pills-contractor" aria-selected="false"
+          <a (click)="userCategorySelectionChange('Supervisor')" aria-controls="pills-supervisor" aria-selected="false"
              class="nav-link context-menu-cursor"
-             data-bs-toggle="pill" id="pills-contractor-tab" role="tab">Contractors</a>
+             data-bs-toggle="pill" id="pills-supervisor-tab" role="tab">Supervisors</a>
         </li>
         <li class="nav-item">
           <a (click)="userCategorySelectionChange('Employee')" aria-controls="pills-employee" aria-selected="false"
@@ -219,7 +219,7 @@
     <!-- dynamic column for data display -->
     <div class="card h-39 overflow-y-scroll">
       <div class="card-body">
-        <!-- for employee/contractor attendance display -->
+        <!-- for employee/supervisor attendance display -->
         <div *ngIf="displayEmployeeDetail" class="employee-detail-list">
           <div class="row">
             <div class="col-6">

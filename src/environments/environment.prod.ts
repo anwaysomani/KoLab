@@ -17,8 +17,8 @@ export const environment = {
     displayName: 'Admins',
     srch: 'Admin'
   }, {
-    displayName: 'Contractors',
-    srch: 'Contractor'
+    displayName: 'Supervisors',
+    srch: 'Supervisor'
   }, {
     displayName: 'Employee',
     srch: 'Employee'

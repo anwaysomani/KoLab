@@ -97,7 +97,7 @@ export class ClientComponent implements OnInit {
   filterApplied = false;
   selectedStatus = '';
   availableStatusList = ['Active', 'On Leave', 'Sign Out'];
-  availableDesignationList = ['Admin', 'Contractor', 'Employee'];
+  availableDesignationList = ['Admin', 'Supervisor', 'Employee'];
   selectedDesignation = this.availableDesignationList[0];
   selectedImageNotes: Array<any> = [];
   counter = 1;
@@ -380,7 +380,7 @@ export class ClientComponent implements OnInit {
       return ref.where('activeSite.site', '==', site);
     }).valueChanges().subscribe((det: Array<any>) => {
       this.selectedSiteEmployeeList = det.filter(s => s.designation === 'Employee');
-      this.selectedSiteContractorList = det.filter(s => s.designation === 'Contractor');
+      this.selectedSiteContractorList = det.filter(s => s.designation === 'Supervisor');
     }, (err) => {
       console.log(err);
     });
