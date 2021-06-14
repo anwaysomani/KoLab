@@ -167,20 +167,26 @@
 
           <!-- materials -->
           <button (click)="selectMaterials('Materials')"
-                  class="btn btn-block btn-outline-dark btn-rounded waves-effect w-25 m-r-1e">
+                  class="btn btn-block btn-outline-dark btn-rounded waves-effect w-23 m-r-1e">
             <span class="font-header"><i class="fa fa-server"></i>&nbsp;Materials</span>
           </button>
 
           <!-- work progress -->
           <button (click)="selectMaterials('Progress')"
-                  class="btn btn-block btn-outline-dark btn-rounded waves-effect w-25 m-r-1e">
+                  class="btn btn-block btn-outline-dark btn-rounded waves-effect w-23 m-r-1e">
             <span class="font-header"><i class="fa fa-archive"></i>&nbsp;Progress</span>
           </button>
 
           <!-- visitors -->
           <button (click)="this.updateDynamicDetailSelection(5)"
-                  class="btn btn-block btn-outline-dark btn-rounded waves-effect w-25">
+                  class="btn btn-block btn-outline-dark btn-rounded waves-effect w-23 m-r-1e">
             <span class="font-header"><i class="fa fa-users"></i>&nbsp;Visitors</span>
+          </button>
+
+          <!-- Contractor -->
+          <button (click)="this.updateDynamicDetailSelection(7)"
+                  class="btn btn-block btn-outline-dark btn-rounded waves-effect w-23">
+            <span class="font-header"><i class="fa fa-users"></i>&nbsp;Contractor</span>
           </button>
         </div>
 
@@ -383,6 +389,40 @@
                 <span class="text-uppercase">
                   <span class="font-header f-w-b">Visitors</span>
                   <span class="text-black-50">({{getVisitors().length}})</span>
+                </span>
+          </div>
+          <div class="row g-3 mb-3 mt-1">
+            <table class="table table-striped table-hover">
+              <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th class="text-center" scope="col">Sign In</th>
+                <th class="text-center" scope="col">Sign Out</th>
+              </tr>
+              </thead>
+              <tbody>
+
+              <tr *ngIf="getVisitors().length < 1">
+                <td class="text-center" colspan="3">(No visitors yet)</td>
+              </tr>
+
+              <tr *ngFor="let visitor of getVisitors()">
+                <td>{{visitor.name}}</td>
+                <td class="text-center">{{visitor.signInTime}}</td>
+                <td
+                  class="text-center">{{visitor.signOutTime !== undefined && visitor.signOutTime !== null ? visitor.signOutTime : '-'}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Contractors info -->
+        <div *ngIf="displayContractorInfo" id="ContractorInfo">
+          <div class="col-12 mb-1 p-0">
+                <span class="text-uppercase">
+                  <span class="font-header f-w-b">Contractor</span>
+                  <span class="text-black-50">({{getContractors().length}})</span>
                 </span>
           </div>
           <div class="row g-3 mb-3 mt-1">

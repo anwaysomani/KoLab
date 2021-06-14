@@ -107,6 +107,7 @@ export class ClientComponent implements OnInit {
   mobNumberPattern = '^((\\+91-?)|0)?[0-9]{10}$';
   displayVisitorInfo = false;
   activeSiteDate = new Date().getDate();
+  displayContractorInfo=false;
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
@@ -350,6 +351,7 @@ export class ClientComponent implements OnInit {
     this.progressImagesDisplay = (state === 3); // update view for progress images
     this.displayInfoView = (state === 4); // update view for info
     this.displayVisitorInfo = (state === 5);
+    this.displayContractorInfo = (state === 7);
   }
 
   /* update widget-04 for employee selection */
@@ -663,6 +665,13 @@ export class ClientComponent implements OnInit {
   /* get visitors listing */
   getVisitors(): Array<any> {
     return this.selectedItem.visitors.filter((item: any) => {
+      return Number(item.date) === Number(this.currentDate);
+    });
+  }
+
+  /* get visitors listing */
+  getContractors(): Array<any> {
+    return this.selectedItem.contractors.filter((item: any) => {
       return Number(item.date) === Number(this.currentDate);
     });
   }
