@@ -154,8 +154,9 @@
                    title="Information">
                 <i class="fa fa-info fs-18 arrow-pointer text-dark"></i>
               </div>
-              <div (click)="deleteSite()" class="m-r-1e icon-info fa-2x" data-bs-toggle="tooltip" title="Delete Site">
-                <i class="fa fa-trash fs-18 arrow-pointer text-dark"></i>
+              <div class="m-r-1e icon-info fa-2x" data-bs-toggle="tooltip" title="Delete Site">
+                <i class="fa fa-trash fs-18 arrow-pointer text-dark" data-bs-target="#verifyDeleteModal"
+                   data-bs-toggle="modal"></i>
               </div>
             </div>
           </div>
@@ -177,7 +178,8 @@
           </button>
 
           <!-- visitors -->
-          <button (click)="visitors()" class="btn btn-block btn-outline-dark btn-rounded waves-effect w-25">
+          <button (click)="this.updateDynamicDetailSelection(5)"
+                  class="btn btn-block btn-outline-dark btn-rounded waves-effect w-25">
             <span class="font-header"><i class="fa fa-users"></i>&nbsp;Visitors</span>
           </button>
         </div>
@@ -380,7 +382,7 @@
           <div class="col-12 mb-1 p-0">
                 <span class="text-uppercase">
                   <span class="font-header f-w-b">Visitors</span>
-                  <span class="text-black-50">({{selectedItem.visitors.length}})</span>
+                  <span class="text-black-50">({{getVisitors().length}})</span>
                 </span>
           </div>
           <div class="row g-3 mb-3 mt-1">
@@ -394,11 +396,11 @@
               </thead>
               <tbody>
 
-              <tr *ngIf="selectedItem.visitors.length < 1">
+              <tr *ngIf="getVisitors().length < 1">
                 <td class="text-center" colspan="3">(No visitors yet)</td>
               </tr>
 
-              <tr *ngFor="let visitor of selectedItem.visitors">
+              <tr *ngFor="let visitor of getVisitors()">
                 <td>{{visitor.name}}</td>
                 <td class="text-center">{{visitor.signInTime}}</td>
                 <td
@@ -930,6 +932,27 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Verify Delete Site -->
+<div aria-hidden="true" aria-labelledby="verifyDeleteModal-label" class="modal fade" id="verifyDeleteModal"
+     role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-black-50">
+        Confirm Delete
+      </div>
+      <div class="modal-body">
+        <div class="col-12">
+          Are you sure you want to delete the site <span class="bg-warning">&nbsp;{{this.selectedItem.name}}&nbsp;</span>?
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="deleteSite()" class="btn btn-outline-danger">Yes</button>
+        <button class="btn btn-outline-dark" data-bs-dismiss="modal" type="button">No</button>
       </div>
     </div>
   </div>

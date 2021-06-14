@@ -406,11 +406,6 @@ export class ClientComponent implements OnInit {
     this.fetchRecentImages(this.materialView);
   }
 
-  /* update widget-04 for Material/Progress selection */
-  visitors(): void {
-    this.updateDynamicDetailSelection(5);
-  }
-
   /* extract date for card header */
   getDateAndTime(key: string): string {
     return (new Date(key)).toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
@@ -659,6 +654,13 @@ export class ClientComponent implements OnInit {
   changeEvent(): void {
     this.activeSiteDate = Number(this.currentDate);
     this.updateDynamicDetailSelection(6);
+  }
+
+  /* get visitors listing */
+  getVisitors(): Array<any> {
+    return this.selectedItem.visitors.filter((item: any) => {
+      return Number(item.date) === Number(this.currentDate);
+    });
   }
 
   makeDate(viewDate: string): string {
