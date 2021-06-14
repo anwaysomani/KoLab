@@ -83,16 +83,9 @@ export class AttendanceComponent implements OnInit {
       this.reason = '';
     }
     if (status === 'Sign Out') {
-      // get last record from attendance array - i.e supposed to be Sign In
-      // calculate total hours in whole numbers(TODO: interval of 30-mins)
       // tslint:disable-next-line:radix
-      const lastSignInRecordTime = parseInt(this.activeUser.attendance[this.activeUser.attendance.length - 1].time.split(':')[0]);
-      // get current hours
-      const currentTime = (new Date()).getHours();
-      // calculate total time spent
-      const calcTime = this.activeUser.totalTimeToday + (currentTime - lastSignInRecordTime);
-      // assign to totalTimeToday
-      this.db.doc(`/users/${this.uid}`).update({
+      const calcTime = this.activeUser.totalTimeToday + ((new Date()).getHours() - parseInt(this.activeUser.attendance[this.activeUser.attendance.length - 1].time.split(':')[0])); // calculate total time spent
+      this.db.doc(`/users/${this.uid}`).update({ // assign to totalTimeToday
         totalTimeToday: calcTime,
       });
     }
@@ -116,7 +109,7 @@ export class AttendanceComponent implements OnInit {
     const filePath = `${this.activeUser.activeSite}/${n}`;
     const fileRef = this.storage.ref(filePath);
     const partialPath = isMaterial ? 'material' : 'progress';
-    const task = this.storage.upload(`${this.activeUser.activeSite}/${partialPath}/${n}`, file);
+    const task = this.storage.upload(`${this.activeUser.activeSite.site + ', ' + this.activeUser.activeSite.client}/${partialPath}/${n}`, file);
     task.snapshotChanges().pipe(finalize(() => {
         this.downloadURL = fileRef.getDownloadURL();
         this.downloadURL.subscribe(url => {

@@ -1,3 +1,4 @@
+<!-- Main Container -->
 <div *ngIf="allow" class="row main-nav">
   <div *ngIf="!isEmployees" class="col-2 client-list h-92 card p-3 apply-gradient">
     <!-- add customization here for search filter + client designation sort + add button -->
@@ -137,15 +138,23 @@
       <div class="card-header">
         <div *ngIf="selectedItem">
           <div class="row">
-            <div class="col-6">
+            <div class="col-6 pt-2">
               <h3>{{selectedItem['name']}}</h3>
             </div>
             <div class="col-6 text-end">
+              <div class="m-r-1e icon-info fa-2x" data-bs-toggle="tooltip" title="Information">
+                <select (change)="changeEvent()"
+                        (click)="getDateFromMonth()" [(ngModel)]="currentDate"
+                        class="border-0 border-2 border-bottom m-r-1e f-s-1 fs-18 bg-transparent"
+                        name="currentDate">
+                  <option *ngFor="let i of getDateFromMonth()" value="{{i}}">{{i}}</option>
+                </select>
+              </div>
               <div (click)="updateDynamicDetailSelection(4)" class="m-r-1e icon-info fa-2x" data-bs-toggle="tooltip"
                    title="Information">
                 <i class="fa fa-info fs-18 arrow-pointer text-dark"></i>
               </div>
-              <div class="m-r-1e icon-info fa-2x" data-bs-toggle="tooltip" title="Delete Site" (click)="deleteSite()">
+              <div (click)="deleteSite()" class="m-r-1e icon-info fa-2x" data-bs-toggle="tooltip" title="Delete Site">
                 <i class="fa fa-trash fs-18 arrow-pointer text-dark"></i>
               </div>
             </div>
@@ -206,7 +215,7 @@
       <p class="text-white">Please Wait...</p>
     </ngx-spinner>
     <!-- dynamic column for data display -->
-    <div class="card h-43 overflow-y-scroll">
+    <div class="card h-39 overflow-y-scroll">
       <div class="card-body">
         <!-- for employee/contractor attendance display -->
         <div *ngIf="displayEmployeeDetail" class="employee-detail-list">
@@ -272,14 +281,21 @@
                            type="square-jelly-box">
                 <p class="text-white">Please Wait...</p>
               </ngx-spinner>
-              <div *ngFor="let img of renderImages();let i=index" class="col-4">
-                <a (click)="openImageModel(img,i)" class="arrow-pointer" data-bs-target="#materials-progress-modal"
-                   data-bs-toggle="modal">
-                  <img alt="Error occurred in loading image" src={{img}}/>
-                </a>
-              </div>
-              <div *ngIf="renderImages().length < 1">
-                <span class="text-black-50">(No images available)</span>
+              <div class="p-0">
+                <div *ngFor="let img of renderImages();let i=index" class="col-4 card p-0 mt-2 pull-left">
+                  <div class="card-body">
+                    <a (click)="openImageModel(img,i)" class="arrow-pointer" data-bs-target="#materials-progress-modal"
+                       data-bs-toggle="modal">
+                      <img alt="Error occurred in loading image" src={{img.url}}/>
+                    </a>
+                  </div>
+                  <div class="card-footer text-center">
+                    {{makeDate(img.date)}}
+                  </div>
+                </div>
+                <div *ngIf="renderImages().length < 1">
+                  <span class="text-black-50">(No images available)</span>
+                </div>
               </div>
             </div>
           </div>
@@ -367,23 +383,26 @@
                   <span class="text-black-50">({{selectedItem.visitors.length}})</span>
                 </span>
           </div>
-          <div *ngIf="selectedSiteEmployeeList.length < 1" class="row mb-3 g-0">
-            (No Visitors yet)
-          </div>
-          <div *ngIf="selectedSiteEmployeeList.length > 0" class="row g-3 mb-3 mt-1">
+          <div class="row g-3 mb-3 mt-1">
             <table class="table table-striped table-hover">
               <thead>
               <tr>
                 <th scope="col">Name</th>
-                <th scope="col" class="text-center">Sign In</th>
-                <th scope="col" class="text-center">Sign Out</th>
+                <th class="text-center" scope="col">Sign In</th>
+                <th class="text-center" scope="col">Sign Out</th>
               </tr>
               </thead>
               <tbody>
+
+              <tr *ngIf="selectedItem.visitors.length < 1">
+                <td class="text-center" colspan="3">(No visitors yet)</td>
+              </tr>
+
               <tr *ngFor="let visitor of selectedItem.visitors">
                 <td>{{visitor.name}}</td>
                 <td class="text-center">{{visitor.signInTime}}</td>
-                <td class="text-center">{{visitor.signOutTime !== undefined && visitor.signOutTime !== null ? visitor.signOutTime : '-'}}</td>
+                <td
+                  class="text-center">{{visitor.signOutTime !== undefined && visitor.signOutTime !== null ? visitor.signOutTime : '-'}}</td>
               </tr>
               </tbody>
             </table>
@@ -401,7 +420,7 @@
   <!-- Employee Screen -->
   <div class="employee-container">
     <div class="row">
-      <div *ngIf="isEmployees" class="col-3 employee-sidebar h-92 apply-gradient m-t-3 m-l-3 m-b-3 p-0">
+      <div *ngIf="isEmployees" class="col-3 employee-sidebar h-92 apply-gradient m-l-3 m-b-3 p-0">
         <div class="filter">
           <div class="filter-list">
             <div class="filter-item">
@@ -462,8 +481,8 @@
         </div>
       </div>
       <div *ngIf="isEmployees" class="col-9 employee-main-content h-92 p-0">
-        <div class="employee-card-container h-92 apply-gradient m-3">
-          <div *ngIf="tempSelectedEmployees.length > 0" class="card-container">
+        <div class="employee-card-container h-92 apply-gradient m-l-3">
+          <div *ngIf="tempSelectedEmployees.length > 0" class="card-container mt-0">
             <div class="row">
               <div *ngFor="let item of tempSelectedEmployees;let j=index" class="card col-3">
                 <div class="card-body p-l-r-0 p-t-b-0_5" data-bs-target="#employeeDetailModal" data-bs-toggle="modal">
@@ -531,7 +550,7 @@
   </div>
 </div>
 
-<!-- Update Employee's Site -->
+<!-- Update Employee's Site Modal -->
 <div aria-hidden="true" aria-labelledby="changeSiteModalLabel" class="modal fade" data-bs-backdrop="static"
      data-bs-keyboard="true"
      id="changeSiteModal" tabindex="-1">
@@ -567,7 +586,7 @@
   </div>
 </div>
 
-<!-- Add New Site -->
+<!-- Add New Site Modal -->
 <div aria-hidden="true" aria-labelledby="addSiteModal" class="modal fade" data-bs-backdrop="static"
      data-bs-keyboard="true"
      id="addSiteModal" tabindex="-1">
@@ -629,7 +648,7 @@
   </div>
 </div>
 
-<!-- Add User -->
+<!-- Add User Modal -->
 <div aria-hidden="true" aria-labelledby="addUserModal" class="modal fade" data-bs-backdrop="static"
      data-bs-keyboard="true"
      id="addUserModal" tabindex="-1">
@@ -755,7 +774,7 @@
   </div>
 </div>
 
-<!-- Add Client -->
+<!-- Add Client Modal -->
 <div aria-hidden="true" aria-labelledby="addClientModal" class="modal fade" data-bs-backdrop="static"
      data-bs-keyboard="true"
      id="addClientModal" tabindex="-1">
@@ -800,7 +819,7 @@
   </div>
 </div>
 
-<!-- Employee Detail Model -->
+<!-- Employee Detail Modal -->
 <div aria-hidden="true" aria-labelledby="employeeDetailModal-label" class="modal fade" id="employeeDetailModal"
      role="dialog" tabindex="-1">
   <div class="modal-dialog  modal-lg" role="document">
@@ -826,7 +845,7 @@
                         <tr>
                           <th class="col-6" scope="col"><h5>{{item.name}}</h5></th>
                           <th class="col-6" scope="col">
-                            <div class="">
+                            <div>
                               <!-- active - green - Sign In -->
                               <label *ngIf="selectedSiteEmployeeStatus === 'Sign In'"
                                      class="col-form-label text-success">
@@ -852,7 +871,7 @@
                           <td><i aria-hidden="true" class="fa fa-phone"></i>&nbsp;{{item.mobile}}&nbsp;<span
                             *ngIf="item.mobile === undefined || item.mobile === null  || item.mobile === ''">-</span>
                           </td>
-                          <td>{{item.email}}</td>
+                          <td><i aria-hidden="true" class="fa fa-envelope"></i>&nbsp;{{item.email}}</td>
                         </tr>
                         <tr>
                           <th>{{item.designation}}</th>
@@ -860,8 +879,10 @@
                           </th>
                         </tr>
                         <tr>
-                          <td *ngIf="item.activeSite" colspan="2"><i aria-hidden="true" class="fa fa-map-marker"></i>&nbsp;{{item.activeSite.site}}
-                            ,{{item.activeSite.address}}-{{item.activeSite.pincode}}</td>
+                          <td *ngIf="item.activeSite" colspan="2"><i aria-hidden="true" class="fa fa-map-marker"></i>&nbsp;
+                            <span>{{item.activeSite.site}}, {{item.activeSite.address}}
+                              - {{item.activeSite.pincode}}</span>
+                          </td>
                           <td
                             *ngIf="item.activeSite === undefined || item.activeSite === null  || item.activeSite=='' ">
                             -

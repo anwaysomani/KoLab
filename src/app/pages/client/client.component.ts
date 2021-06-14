@@ -106,6 +106,7 @@ export class ClientComponent implements OnInit {
   submitted = false;
   mobNumberPattern = '^((\\+91-?)|0)?[0-9]{10}$';
   displayVisitorInfo = false;
+  activeSiteDate = new Date().getDate();
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
@@ -362,10 +363,12 @@ export class ClientComponent implements OnInit {
       } else {
         this.selectedSiteEmployeeStatus = '';
       }
-      if (det.attendance.length > 3) {
-        // get last three records
-        this.employeeAttendance = this.employeeAttendance.slice(this.employeeAttendance.length - 3);
-      }
+
+      this.employeeAttendance = [];
+      this.employeeAttendance = det.attendance.filter((entity: any) => {
+        return Number(entity.date) === Number(this.currentDate);
+      });
+
       this.loader.addClientLoader = false;
     });
   }
@@ -441,8 +444,27 @@ export class ClientComponent implements OnInit {
     this.storage.ref(`${filePath}/` + (toFetchVal ? 'material' : 'progress')).listAll().toPromise()
       .then((ref) => {
         for (const i of ref.items) {
-          i.getDownloadURL().then((url: string) => {
-            this.allImageListing.push(url);
+          i.getMetadata().then((det: any) => {
+            let varEntity = '';
+            i.getDownloadURL().then((url: string) => {
+              varEntity = url;
+            }).then(() => {
+              if (Number(this.currentDate) !== Number(new Date().getDate())) {
+                if (Number(new Date(det.timeCreated)) === Number(this.currentDate)) {
+                  // @ts-ignore
+                  this.allImageListing.push({
+                    url: varEntity,
+                    date: det.timeCreated
+                  });
+                }
+              } else {
+                // @ts-ignore
+                this.allImageListing.push({
+                  url: varEntity,
+                  date: det.timeCreated
+                });
+              }
+            });
           });
         }
         this.loader.addClientLoader = false;
@@ -609,7 +631,6 @@ export class ClientComponent implements OnInit {
 
   /* delete site */
   deleteSite(): void {
-    console.log(this.selectedClient);
     this.db.doc(`clients/${this.selectedClient.name}`).get().subscribe((d) => {
       // @ts-ignore
       const entity = d.data().sites;
@@ -622,5 +643,26 @@ export class ClientComponent implements OnInit {
         sites: entity,
       });
     });
+  }
+
+  /* get date for month */
+  getDateFromMonth(): Array<number> {
+    const arr = [];
+    for (let i = 1; i <= Number(new Date().getDate()); i++) {
+      arr.push(i);
+    }
+
+    return arr;
+  }
+
+  /* date change for site */
+  changeEvent(): void {
+    this.activeSiteDate = Number(this.currentDate);
+    this.updateDynamicDetailSelection(6);
+  }
+
+  makeDate(viewDate: string): string {
+    const dt = new Date(viewDate);
+    return dt.getDate() + '-' + dt.getMonth() + '-' + dt.getFullYear();
   }
 }
