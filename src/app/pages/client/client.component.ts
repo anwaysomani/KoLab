@@ -300,6 +300,7 @@ export class ClientComponent implements OnInit {
       addedOn: new Date(),
       refNo: '',
       visitors: [],
+      contractors: [],
     };
     // @ts-ignore
     this.selectedClient.sites.push(newSite);

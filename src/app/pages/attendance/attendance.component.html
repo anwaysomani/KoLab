@@ -1,4 +1,5 @@
-<div class="text-center m-3">
+<div class="text-center m-3" id="accordion">
+  <!-- your site -->
   <div class="card mb-4">
     <div class="card-header">
       <h5 class="text-uppercase">Your Site</h5>
@@ -16,6 +17,8 @@
       <h6>({{entireDate}})</h6>
     </div>
   </div>
+
+  <!-- site updates -->
   <div
     *ngIf="activeUser !== undefined && activeUser.designation !== undefined && activeUser.designation === 'Supervisor'"
     class="card mb-4">
@@ -51,6 +54,7 @@
     </div>
   </div>
 
+  <!-- visitors -->
   <div
     *ngIf="activeUser !== undefined && activeUser.designation !== undefined && activeUser.designation === 'Supervisor'"
     class="card mb-4">
@@ -62,7 +66,8 @@
 
       <!-- visitors -->
       <div class="form-group mb-3">
-        <input [(ngModel)]="newVisitor" class="form-control" id="newVisitor" name="new-visitor" placeholder="Enter visitor name here">
+        <input [(ngModel)]="newVisitor" class="form-control" id="newVisitor" name="new-visitor"
+               placeholder="Enter visitor's name here">
       </div>
       <button (click)="visitorEntry(this.newVisitor, true, 0)" [disabled]="newVisitor.length < 2"
               class="btn btn-outline-dark btn-lg">
@@ -81,6 +86,40 @@
     </div>
   </div>
 
+  <!-- contractor -->
+  <div
+    *ngIf="activeUser !== undefined && activeUser.designation !== undefined && activeUser.designation === 'Supervisor'"
+    class="card mb-4">
+    <!-- permission only if second level admin -->
+    <div class="card-header">
+      <h5 class="text-uppercase">Visiting Contractors</h5>
+    </div>
+    <div class="card-body">
+
+      <!-- visitors -->
+      <div class="form-group mb-3">
+        <input [(ngModel)]="newVisitingContractor" class="form-control" id="newVisitingContractor"
+               name="new-visiting-contractor" placeholder="Enter contractor's name here">
+      </div>
+      <button (click)="visitingContractorEntry(this.newVisitingContractor, true, 0)"
+              [disabled]="newVisitingContractor.length < 2"
+              class="btn btn-outline-dark btn-lg">
+        Add Contractor
+      </button>
+
+      <ul class="list-group list-group-flush mt-4">
+        <li *ngFor="let i of visitingContractorList; let index = index;"
+            class="list-group-item d-flex justify-content-between align-items-center">
+          <span>{{i.name}}</span>
+          <button (click)="visitingContractorEntry(i.name, false, index)" *ngIf="i.status === 'In'"
+                  class="badge text-dark">Out
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- actions -->
   <div class="card mb-4">
     <div class="card-header">
       <h5 class="text-uppercase">Actions</h5>
@@ -103,6 +142,8 @@
       </div>
     </div>
   </div>
+
+  <!-- leave -->
   <div *ngIf="getCurrentUserStatus() !== 'Sign In'" class="card mb-4">
     <div class="card-header">
       <h5 class="text-uppercase">Apply for leave</h5>
