@@ -158,6 +158,7 @@ export class AttendanceComponent implements OnInit {
         name,
         status: 'In',
         signInTime: date.getHours() + ':' + date.getMinutes(),
+        date: new Date().getDate()
       };
       this.visitorList.push(x);
     } else {
