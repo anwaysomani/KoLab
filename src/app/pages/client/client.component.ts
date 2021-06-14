@@ -686,6 +686,10 @@ export class ClientComponent implements OnInit {
   deleteUser(): void {
     this.db.doc(`users/${this.record.uid}`).delete().then(() => {
       this.showToaster(204);
+      this.getAllUsers().then((data) => {
+        // @ts-ignore
+        this.tempSelectedEmployees = data;
+      });
   }).catch((error) => {
       this.showToaster(error.status);
       console.error("Error removing document: ", error);
