@@ -613,6 +613,9 @@ export class ClientComponent implements OnInit {
     if (status === 200) {
       this.toastr.success('Record added successfully.');
     }
+    if (status === 204) {
+      this.toastr.success('Record successfully deleted!.');
+    }
   }
 
   /* add another popup for employee popup */
@@ -672,17 +675,11 @@ export class ClientComponent implements OnInit {
 
   /* delete site */
   deleteUser(): void {
-    this.db.doc(`users/${this.record.name}`).get().subscribe((d) => {
-      // @ts-ignore
-      const entity = d.data().sites;
-      // @ts-ignore
-     const index = entity.findIndex((er) => {
-        return er.name === this.record.name;
-      });
-      /* entity.splice(index, 1);
-      this.db.doc(`/clients/${this.record.name}`).update({
-        sites: entity,
-      }); */
-    });
+    this.db.doc(`users/${this.record.uid}`).delete().then(() => {
+      this.showToaster(201);
+  }).catch((error) => {
+      this.showToaster(error.status);
+      console.error("Error removing document: ", error);
+  });
   }
 }
