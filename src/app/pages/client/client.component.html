@@ -554,10 +554,19 @@
                         </div>
                       </div>
                     </div>
-                    <div class="subtitle font-body">
-                      <div class="mb-2 text-black-50">
-                        <i aria-hidden="true" class="fa fa-phone"></i>&nbsp;{{item.mobile}}&nbsp;
-                        <span *ngIf="item.mobile === undefined || item.mobile === null  || item.mobile === ''">-</span>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="subtitle font-body">
+                          <div class="mb-2 text-black-50">
+                            <i aria-hidden="true" class="fa fa-phone"></i>&nbsp;{{item.mobile}}&nbsp;
+                            <span *ngIf="item.mobile === undefined || item.mobile === null  || item.mobile === ''">-</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="mb-2 text-black-50 text-end deleteIcon">
+                          <i class="fa fa-trash fs-18 arrow-pointer text-dark" data-bs-target="#verifyDeleteUser" data-bs-toggle="modal"></i>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -961,8 +970,8 @@
                         </tr>
                         </tbody>
                       </table>
-                      <button type="button" data-bs-toggle="tooltip" title="Delete User" class="btn btn-primary"
-                        data-bs-target="#verifyDeleteUser" data-bs-toggle="modal">Delete User</button>
+                      <!-- <button type="button" data-bs-toggle="tooltip" title="Delete User" class="btn btn-primary"
+                        data-bs-target="#verifyDeleteUser" data-bs-toggle="modal">Delete User</button> -->
                     </div>
                   </div>
                   <a class="carousel-control-next" data-slide="next" data-toggle="tooltip"
