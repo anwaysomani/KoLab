@@ -25,6 +25,8 @@ export class AttendanceComponent implements OnInit {
   currentPincode = 0;
   newVisitor = '';
   visitorList: Array<any> = [];
+  newVisitingContractor = '';
+  visitingContractorList: Array<any> = [];
 
   constructor(private db: AngularFirestore, private storage: AngularFireStorage, private route: Router, private titleService: Title,
               private http: HttpClient) {
@@ -33,6 +35,7 @@ export class AttendanceComponent implements OnInit {
     this.db.doc(`/users/${this.uid}`).valueChanges().subscribe((det) => {
       this.activeUser = det;
       this.getVisitorListing();
+      this.getContractorListing();
     });
 
     const date = new Date();
@@ -186,4 +189,55 @@ export class AttendanceComponent implements OnInit {
 
     this.newVisitor = '';
   }
+
+  /* add/update contractor entry */
+  visitingContractorEntry(contractorName: string, status: boolean, index: number): void {
+    const date = new Date();
+
+    if (status) {
+      const x = {
+        name: contractorName,
+        status: 'In',
+        signInTime: date.getHours() + ':' + date.getMinutes(),
+        date: new Date().getDate()
+      };
+      this.visitingContractorList.push(x);
+    } else {
+      // @ts-ignore
+      this.visitingContractorList[index].status = 'Out';
+
+      // @ts-ignore
+      this.visitingContractorList[index].signOutTime = date.getHours() + ':' + date.getMinutes();
+    }
+
+    this.db.doc(`clients/${this.activeUser.activeSite.client}`).get().subscribe((d) => {
+      // @ts-ignore
+      const y = d.data().sites.findIndex((er) => {
+        return er.name === this.activeUser.activeSite.site;
+      });
+
+      // @ts-ignore
+      const sitesArr = d.data().sites;
+      sitesArr[y].contractors = this.visitingContractorList;
+
+      this.db.doc(`/clients/${this.activeUser.activeSite.client}`).update({
+        sites: sitesArr,
+      });
+    });
+
+    this.newVisitingContractor = '';
+  }
+
+  /* get contractors list */
+  getContractorListing(): void {
+    this.db.doc(`clients/${this.activeUser.activeSite.client}`).get().subscribe((d) => {
+      // @ts-ignore
+      const y = d.data().sites.findIndex((er) => {
+        return er.name === this.activeUser.activeSite.site;
+      });
+      // @ts-ignore
+      this.visitingContractorList = d.data().sites[y].contractors;
+    });
+  }
+
 }
