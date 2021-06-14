@@ -10,6 +10,7 @@ import {AngularFireStorage} from '@angular/fire/storage';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {map} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-client',
@@ -20,6 +21,7 @@ import {ToastrService} from 'ngx-toastr';
 export class ClientComponent implements OnInit {
 
   @ViewChild('addUserModal') closeAddExpenseModal: ElementRef | undefined;
+  @ViewChild('userForm') public userLoginForm:NgForm | undefined;
   entity: Array<any> = [];
   currMonYear: string;
   dates: number;
@@ -598,6 +600,8 @@ export class ClientComponent implements OnInit {
 
   /* clear popup fields */
   clearFields(skipField: any): void {
+    // @ts-ignore
+    this.userLoginForm.form.reset();
     this.employee.username = '';
     this.employee.emailAddress = '';
     if (skipField === 0) {
