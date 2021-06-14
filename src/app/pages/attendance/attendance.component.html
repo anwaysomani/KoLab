@@ -1,4 +1,5 @@
-<div class="text-center m-3">
+<div class="text-center m-3" id="accordion">
+  <!-- your site -->
   <div class="card mb-4">
     <div class="card-header">
       <h5 class="text-uppercase">Your Site</h5>
@@ -16,6 +17,8 @@
       <h6>({{entireDate}})</h6>
     </div>
   </div>
+
+  <!-- site updates -->
   <div
     *ngIf="activeUser !== undefined && activeUser.designation !== undefined && activeUser.designation === 'Supervisor'"
     class="card mb-4">
@@ -51,6 +54,7 @@
     </div>
   </div>
 
+  <!-- visitors -->
   <div
     *ngIf="activeUser !== undefined && activeUser.designation !== undefined && activeUser.designation === 'Supervisor'"
     class="card mb-4">
@@ -63,7 +67,7 @@
       <!-- visitors -->
       <div class="form-group mb-3">
         <input [(ngModel)]="newVisitor" class="form-control" id="newVisitor" name="new-visitor"
-               placeholder="Enter visitor name here">
+               placeholder="Enter visitor's name here">
       </div>
       <button (click)="visitorEntry(this.newVisitor, true, 0)" [disabled]="newVisitor.length < 2"
               class="btn btn-outline-dark btn-lg">
@@ -115,6 +119,7 @@
     </div>
   </div>
 
+  <!-- actions -->
   <div class="card mb-4">
     <div class="card-header">
       <h5 class="text-uppercase">Actions</h5>
@@ -137,6 +142,8 @@
       </div>
     </div>
   </div>
+
+  <!-- leave -->
   <div *ngIf="getCurrentUserStatus() !== 'Sign In'" class="card mb-4">
     <div class="card-header">
       <h5 class="text-uppercase">Apply for leave</h5>
