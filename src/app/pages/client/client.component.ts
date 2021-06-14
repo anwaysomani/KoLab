@@ -685,7 +685,7 @@ export class ClientComponent implements OnInit {
   /* delete site */
   deleteUser(): void {
     this.db.doc(`users/${this.record.uid}`).delete().then(() => {
-      this.showToaster(201);
+      this.showToaster(204);
   }).catch((error) => {
       this.showToaster(error.status);
       console.error("Error removing document: ", error);
