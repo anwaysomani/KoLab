@@ -668,4 +668,20 @@ export class ClientComponent implements OnInit {
     const dt = new Date(viewDate);
     return dt.getDate() + '-' + dt.getMonth() + '-' + dt.getFullYear();
   }
+
+  /* delete site */
+  deleteUser(): void {
+    this.db.doc(`users/${this.record.name}`).get().subscribe((d) => {
+      // @ts-ignore
+      const entity = d.data().sites;
+      // @ts-ignore
+     const index = entity.findIndex((er) => {
+        return er.name === this.record.name;
+      });
+      /* entity.splice(index, 1);
+      this.db.doc(`/clients/${this.record.name}`).update({
+        sites: entity,
+      }); */
+    });
+  }
 }
