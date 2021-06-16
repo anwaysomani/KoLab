@@ -1044,24 +1044,40 @@
       </div>
       <div class="modal-body">
         <div class="col-12">
-          <div class="row">
-            <table class="table table-hover table-striped text-black-50">
-              <thead>
-              <tr>
-                <th scope="col">Employee Name</th>
-                <th scope="col">SignIn Time</th>
-                <th scope="col">Proposed signOutTime</th>
-                <th scope="col">Reason</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr *ngFor="let item of employeeAttendance">
-                <td>{{item.date}}</td>
-                <td>{{item.time}}</td>
-                <td>{{item.status}}</td>
-              </tr>
-              </tbody>
-            </table>
+          <div class="">
+            <div class="card" *ngFor="let item of tempSelectedEmployees">
+              <div class="card-header">
+                <div class="row">
+                  <a class="col-6 text-decoration-unset" data-toggle="collapse" [href]="'#collapse'+item.uid" role="button" aria-expanded="false" aria-controls="collapseCard">                    
+                    {{item.name}}
+                  </a>
+                  <div class="col-6 custom-btn text-end">
+                    <button type="button" class="btn-accept btn-xs btn-outline-success btn m-r-1e"><span class="fa fa-check"></span></button>
+                    <button type="button" class="btn-deny btn-xs btn-outline-danger btn"><span class="fa fa-close"></span></button>
+                  </div>
+                </div>
+              </div>
+              <div class="collapse" [id]="'collapse'+item.uid">
+              <div class="card-body">
+                <div class="form-group row">
+                  <div class="col-2">
+                    <label class="col-form-label font-header" for="reason">REASON</label>
+                  </div>
+                  <div class="col-10 font-body">
+                    <label class="col-form-label font-header" for="reason">I forgot to punch out</label>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-2">
+                    <label class="col-form-label font-header" for="reason">Proposed Time</label>
+                  </div>
+                  <div class="col-10 font-body">
+                    <label class="col-form-label font-header" for="reason">3:22 Am</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
           </div>
         </div>
       </div>
