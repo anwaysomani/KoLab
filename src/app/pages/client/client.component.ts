@@ -110,6 +110,8 @@ export class ClientComponent implements OnInit {
   displayVisitorInfo = false;
   activeSiteDate = new Date().getDate();
   displayContractorInfo=false;
+  regularize:any;
+  approvalList:Array<any> = [];
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
@@ -699,5 +701,15 @@ export class ClientComponent implements OnInit {
       this.showToaster(error.status);
       console.error("Error removing document: ", error);
   });
+  }
+
+  showRegularize():void{
+    this.regularize = this.employeeList.filter((employee) => {
+        if(employee.discrepant!==undefined && employee.discrepant===true){
+            this.approvalList.push(employee);
+            return true;
+        }
+        return false;
+    })
   }
 }

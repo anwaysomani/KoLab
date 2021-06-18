@@ -519,7 +519,7 @@
                 </div>
               </div>
               <button type="button" data-bs-toggle="tooltip" title="Regularize" class="btn btn-primary"
-                        data-bs-target="#regularizeAttendance" data-bs-toggle="modal">Regularize</button>
+                        data-bs-target="#regularizeAttendance" data-bs-toggle="modal" (click)="showRegularize()">Regularize</button>
             </div>
           </div>
         </div>
@@ -1035,7 +1035,7 @@
 <!-- Regularize Attendance -->
 <div aria-hidden="true" aria-labelledby="regularizeAttendance-label" class="modal fade" data-bs-backdrop="static"
      data-bs-keyboard="true"
-     id="regularizeAttendance" tabindex="-1">
+     id="regularizeAttendance" tabindex="-1" *ngIf="this.regularize">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-black-50">
@@ -1045,7 +1045,7 @@
       <div class="modal-body">
         <div class="col-12">
           <div class="">
-            <div class="card" *ngFor="let item of tempSelectedEmployees">
+            <div class="card" *ngFor="let item of approvalList">
               <div class="card-header">
                 <div class="row">
                   <a class="col-6 text-decoration-unset" data-toggle="collapse" [href]="'#collapse'+item.uid" role="button" aria-expanded="false" aria-controls="collapseCard">                    
