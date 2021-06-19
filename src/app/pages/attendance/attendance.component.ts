@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {finalize} from 'rxjs/operators';
@@ -8,12 +8,14 @@ import {Title} from '@angular/platform-browser';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 
+
 @Component({
   selector: 'app-attendance',
   templateUrl: './attendance.component.html',
   styleUrls: ['./attendance.component.less']
 })
 export class AttendanceComponent implements OnInit {
+  @ViewChild('openModal') openModal:ElementRef | undefined;
   reason = '';
   date: number;
   activeUser: any;
@@ -27,15 +29,21 @@ export class AttendanceComponent implements OnInit {
   visitorList: Array<any> = [];
   newVisitingContractor = '';
   visitingContractorList: Array<any> = [];
+  regularizeAttendanceFlag=false;
+  signOutTime: Date = new Date();
+  bsInlineValue = new Date();
+  maxDate = new Date();
 
   constructor(private db: AngularFirestore, private storage: AngularFireStorage, private route: Router, private titleService: Title,
               private http: HttpClient) {
+    this.maxDate.setDate(this.maxDate.getDate() + 7);
     // @ts-ignore
     this.uid = JSON.parse(localStorage.getItem('user')).uid;
     this.db.doc(`/users/${this.uid}`).valueChanges().subscribe((det) => {
       this.activeUser = det;
       this.getVisitorListing();
       this.getContractorListing();
+      this.regularizeAttendanceFlag=this.activeUser.discrepant;      
     });
 
     const date = new Date();
@@ -46,6 +54,11 @@ export class AttendanceComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle('Employee Playground | ' + environment.brand);
     this.getCurrentPincode();
+    if(true){
+        setTimeout(() => {
+            this.openModal?.nativeElement.click();
+          }, 2000);
+    }    
   }
 
   /* check condition for button enable */
@@ -239,5 +252,23 @@ export class AttendanceComponent implements OnInit {
       this.visitingContractorList = d.data().sites[y].contractors;
     });
   }
-
+  regularize(): void {
+    const x = {
+        date: this.date,
+        time: this.signOutTime.getHours() + ":" + this.signOutTime.getMinutes(),
+        site: this.activeUser.activeSite,
+        status,
+        reason: this.reason
+      };
+      if (this.activeUser.attendance !== undefined) {
+        this.activeUser.attendance.push(x);
+      } else {
+        this.activeUser.attendance = [x];
+      }  
+    this.activeUser.discrepant=false;
+    this.db.doc(`/users/${this.uid}`).update({ 
+        discrepant: false,
+        attendance: this.activeUser.attendance
+      });
+  }
 }

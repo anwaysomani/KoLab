@@ -112,6 +112,8 @@ export class ClientComponent implements OnInit {
   displayContractorInfo=false;
   regularize:any;
   approvalList:Array<any> = [];
+  acceptDenyFlag=false;
+  selectedRegularizeRecords:any;
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
@@ -704,12 +706,28 @@ export class ClientComponent implements OnInit {
   }
 
   showRegularize():void{
+    this.approvalList.splice(0,this.approvalList.length);
     this.regularize = this.employeeList.filter((employee) => {
-        if(employee.discrepant!==undefined && employee.discrepant===true){
+        if(employee.isApproved!=undefined && employee.isApproved===false){
             this.approvalList.push(employee);
-            return true;
         }
-        return false;
-    })
+    });
   }
+    acceptDeny(acceptDeny: string, item: any): void {
+        this.acceptDenyFlag = (acceptDeny == 'ACCEPT' ? true : false);
+        var lastRecord = item.attendance[item.attendance.length - 1];
+        if (this.acceptDenyFlag) {
+            item.isApproved = true;
+            item.discrepant = false;
+            /* this.selectedRegularizeRecords=item.slice(); */
+            this.db.doc(`/users/${item.uid}`).update({
+                isApproved: true,
+                discrepant:false,
+            });
+        }
+        else {
+            item.isApproved = false;
+            item.discrepant = true;
+        }
+    }
 }
