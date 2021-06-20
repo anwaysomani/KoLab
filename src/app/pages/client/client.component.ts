@@ -707,18 +707,32 @@ export class ClientComponent implements OnInit {
 
   showRegularize():void{
     this.approvalList.splice(0,this.approvalList.length);
-    this.regularize = this.employeeList.filter((employee) => {
+      for (let i = 0; i < this.employeeList.length; i++) {
+          if (this.employeeList[i].attendance.length > 0) {
+              this.regularize = this.employeeList[i].attendance.filter((employee: any) => {
+                  if (employee.isApproved != undefined && employee.isApproved === false) {
+                      this.approvalList.push(employee);
+                  }
+              });
+          }
+      }
+    
+    /* this.regularize = this.employeeList.filter((employee) => {
         if(employee.isApproved!=undefined && employee.isApproved===false){
             this.approvalList.push(employee);
         }
-    });
+    }); */
   }
     acceptDeny(acceptDeny: string, item: any): void {
         this.acceptDenyFlag = (acceptDeny == 'ACCEPT' ? true : false);
         var lastRecord = item.attendance[item.attendance.length - 1];
         if (this.acceptDenyFlag) {
-            item.isApproved = true;
-            item.discrepant = false;
+            item.attendance.filter((record:any) => {
+                if(record.isApproved==false && record.discrepant==true){
+                    record.isApproved==true;
+                    record.discrepant==false;
+                }
+            });
             /* this.selectedRegularizeRecords=item.slice(); */
             this.db.doc(`/users/${item.uid}`).update({
                 isApproved: true,
