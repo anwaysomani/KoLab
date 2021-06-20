@@ -33,7 +33,8 @@ export class AttendanceComponent implements OnInit {
   signOutTime: Date = new Date();
   bsInlineValue = new Date();
   maxDate = new Date();
-    isApproved: any;
+  isApproved: any;
+  skipField = 0;
 
   constructor(private db: AngularFirestore, private storage: AngularFireStorage, private route: Router, private titleService: Title,
               private http: HttpClient) {
@@ -288,5 +289,12 @@ export class AttendanceComponent implements OnInit {
         /* discrepant: false, */
         attendance: this.activeUser.attendance
       });
+      this.clearFields(this.skipField);
+  }
+  /* clear popup fields */
+  clearFields(skipField: any): void {
+    // @ts-ignore
+    this.signOutTime='';
+    this.reason='';    
   }
 }

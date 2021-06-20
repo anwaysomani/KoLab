@@ -707,11 +707,11 @@ export class ClientComponent implements OnInit {
 
   showRegularize():void{
     this.approvalList.splice(0,this.approvalList.length);
-      for (let i = 0; i < this.employeeList.length; i++) {
-          if (this.employeeList[i].attendance.length > 0) {
-              this.regularize = this.employeeList[i].attendance.filter((employee: any) => {
+      for (let i = 0; i < this.tempSelectedEmployees.length; i++) {
+          if (this.tempSelectedEmployees[i].attendance.length > 0) {
+              this.regularize = this.tempSelectedEmployees[i].attendance.filter((employee: any) => {
                   if (employee.isApproved != undefined && employee.isApproved === false) {
-                      this.approvalList.push(employee);
+                      this.approvalList.push(this.tempSelectedEmployees[i]);
                   }
               });
           }
