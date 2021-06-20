@@ -20,9 +20,10 @@
       <span style="margin-left: 1vw;">
       <b></b>
       </span>
-      <button class="btn btn-primary w-25" style="margin-left: 2vw;" (click)="signOutUser()">
+      <button class="btn btn-primary w-25" style="margin-left: 2vw;margin-right: 1vw;" (click)="signOutUser()">
         Logout
       </button>
+        <span (click)="runCronJob()"><i aria-hidden="true" class="fa fa-cloud-upload"></i>&nbsp;Run Cron</span>
     </div>
   </div>
 </div>

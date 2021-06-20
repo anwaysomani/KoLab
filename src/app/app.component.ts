@@ -24,6 +24,7 @@ export class AppComponent {
   router: any;
   brand: string;
   allow: boolean;
+  http: any;
 
   constructor(private db: AngularFireDatabase, private route: Router, private spinner: NgxSpinnerService) {
     this.spinner.show();
@@ -41,5 +42,12 @@ export class AppComponent {
   signOutUser(): void {
     localStorage.clear();
     this.route.navigateByUrl('/login');
+  }
+
+  /* run cronJob */
+  async runCronJob() {
+    return await this.http.post(environment.funcUrl + 'attendanceRegularize', {
+      
+    }).toPromise();
   }
 }
