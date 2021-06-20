@@ -95,6 +95,68 @@ module.exports.addUser = functions.https.onRequest((req, res) => {
   });
 });
 
+/* revert status of all employees to sign out and change descrepancy and approve flag*/
+module.exports.attendanceRegularize = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+    admin
+      .firestore()
+      .collection("users")
+      .get()
+      .then((data) => {
+        const currDateTime = new Date();
+        const datadocs = data.docs;
+        const time = currDateTime.getHours() + ":" + currDateTime.getMinutes();
+        for (const i in datadocs) {
+          if (datadocs[i].data().currentStatus === "Sign In") {
+            const missPunchdate =
+              data.docs[i].data().attendance[
+                data.docs[i].data().attendance.length - 1
+              ].date;
+            /* console.log(missPunchdate,currDateTime.getDate()); */
+            if (missPunchdate == currDateTime.getDate()) {
+              const discrepant = true;
+              const isApproved = false;
+              const x = {
+                date: currDateTime.getDate(),
+                time,
+                site: datadocs[i].data().activeSite,
+                status: "Sign Out",
+                reason: "",
+                discrepant: discrepant,
+                isApproved: isApproved,
+              };
+              //datadocs[i].data().attendance[datadocs[i].data().attendance.length-1].status="Sign Out";
+              var attendance = datadocs[i].data().attendance;
+              attendance[attendance.length - 1].status = "Sign Out";
+              /* console.log(attendance) */
+              attendance.push(x);
+              datadocs[i].ref
+                .update({
+                  attendance: attendance,
+                  currentStatus: "Sign Out",
+                })
+                .then(() => {
+                  console.log("Document successfully updated!");
+                })
+                .catch((error) => {
+                  // The document probably doesn't exist.
+                  res.sendStatus(400);
+                  console.error("Error updating document: ", error);
+                });
+            }
+          }
+          if (datadocs[i].data().currentStatus === "On Leave") {
+            data.docs[i].ref.update({
+              currentStatus: "Sign Out",
+            });
+          }
+          //if (datadocs[i].data().currentStatus === "Sign Out") {}
+        }
+        res.sendStatus(200);
+      });
+  });
+});
+  
 /* revert status of all employees to sign out */
 module.exports.signOutAllEmployees = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
