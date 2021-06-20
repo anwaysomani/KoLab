@@ -33,6 +33,7 @@ export class AttendanceComponent implements OnInit {
   signOutTime: Date = new Date();
   bsInlineValue = new Date();
   maxDate = new Date();
+    isApproved: any;
 
   constructor(private db: AngularFirestore, private storage: AngularFireStorage, private route: Router, private titleService: Title,
               private http: HttpClient) {
@@ -43,7 +44,22 @@ export class AttendanceComponent implements OnInit {
       this.activeUser = det;
       this.getVisitorListing();
       this.getContractorListing();
-      this.regularizeAttendanceFlag=this.activeUser.discrepant;      
+      /* this.regularizeAttendanceFlag=this.activeUser.discrepant;
+        if (this.regularizeAttendanceFlag) {
+            setTimeout(() => {
+                this.openModal?.nativeElement.click();
+            }, 2000);
+        } */
+        if(this.activeUser.attendance.length>0){
+            this.activeUser.attendance.filter((records:any)=> {
+                if(records.discrepant==true){
+                    this.isApproved=records.isApproved;
+                    setTimeout(() => {
+                        this.openModal?.nativeElement.click();
+                    }, 2000);
+                }
+            })
+        }
     });
 
     const date = new Date();
@@ -54,11 +70,11 @@ export class AttendanceComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle('Employee Playground | ' + environment.brand);
     this.getCurrentPincode();
-    if(true){
+   /*  if(true){
         setTimeout(() => {
             this.openModal?.nativeElement.click();
           }, 2000);
-    }    
+    }   */  
   }
 
   /* check condition for button enable */
@@ -258,7 +274,9 @@ export class AttendanceComponent implements OnInit {
         time: this.signOutTime.getHours() + ":" + this.signOutTime.getMinutes(),
         site: this.activeUser.activeSite,
         status,
-        reason: this.reason
+        reason: this.reason,
+        discrepant:false,
+        isApproved:this.isApproved
       };
       if (this.activeUser.attendance !== undefined) {
         this.activeUser.attendance.push(x);
@@ -267,7 +285,7 @@ export class AttendanceComponent implements OnInit {
       }  
     this.activeUser.discrepant=false;
     this.db.doc(`/users/${this.uid}`).update({ 
-        discrepant: false,
+        /* discrepant: false, */
         attendance: this.activeUser.attendance
       });
   }

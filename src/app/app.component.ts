@@ -50,4 +50,9 @@ export class AppComponent {
       
     }).toPromise();
   }
+  xyz():void{
+      this.runCronJob().then(d=>{
+        console.log("Successfully called");
+      });
+  }
 }
