@@ -710,7 +710,7 @@ export class ClientComponent implements OnInit {
       for (let i = 0; i < this.tempSelectedEmployees.length; i++) {
           if (this.tempSelectedEmployees[i].attendance.length > 0) {
               this.regularize = this.tempSelectedEmployees[i].attendance.filter((employee: any) => {
-                  if (employee.isApproved != undefined && employee.isApproved === false) {
+                  if (employee.isApproved != undefined && employee.isApproved === true) {
                       this.approvalList.push(this.tempSelectedEmployees[i]);
                   }
               });
@@ -727,21 +727,27 @@ export class ClientComponent implements OnInit {
         this.acceptDenyFlag = (acceptDeny == 'ACCEPT' ? true : false);
         var lastRecord = item.attendance[item.attendance.length - 1];
         if (this.acceptDenyFlag) {
-            item.attendance.filter((record:any) => {
-                if(record.isApproved==false && record.discrepant==true){
-                    record.isApproved==true;
-                    record.discrepant==false;
-                }
-            });
+          for (let index = 0; index < item.attendance.length; index++) {
+            if(item.attendance[index].isApproved==true && item.attendance[index].discrepant==true){              
+              item.attendance[index].isApproved=false;
+              item.attendance[index].discrepant=false;
+            }
+            /* this.approvalList = this.approvalList.filter((value)=>{ 
+              return item.uid==value.uid;
+          }); */           
+          }
+          const element = item.attendance;
             /* this.selectedRegularizeRecords=item.slice(); */
             this.db.doc(`/users/${item.uid}`).update({
-                isApproved: true,
-                discrepant:false,
+                attendance:element
             });
-        }
-        else {
-            item.isApproved = false;
-            item.discrepant = true;
+            this.getAllUsers().then((data) => {
+              // @ts-ignore
+              this.tempSelectedEmployees = data;
+            });
+            if(element.length>0){
+              this.approvalList.splice(0,this.approvalList.length);
+            }
         }
     }
 }

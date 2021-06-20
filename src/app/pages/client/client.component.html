@@ -1064,7 +1064,8 @@
                     <label class="col-form-label font-header" for="reason">REASON</label>
                   </div>
                   <div class="col-10 font-body">
-                    <label class="col-form-label font-header" for="reason">I forgot to punch out</label>
+                    <label class="col-form-label font-header" for="reason" *ngIf="item.reason!=''">{{item.reason}}</label>
+                    <span *ngIf="item.reason==''">-</span>
                   </div>
                 </div>
                 <div class="form-group row">
@@ -1072,7 +1073,7 @@
                     <label class="col-form-label font-header" for="reason">Proposed Time</label>
                   </div>
                   <div class="col-10 font-body">
-                    <label class="col-form-label font-header" for="reason">3:22 Am</label>
+                    <label class="col-form-label font-header" for="reason">{{item.time}}</label>
                   </div>
                 </div>
               </div>

@@ -270,6 +270,9 @@ export class AttendanceComponent implements OnInit {
     });
   }
   regularize(): void {
+    if(this.reason!='' && this.reason.length>0 && this.signOutTime){
+        this.isApproved=true;
+    }
     const x = {
         date: this.date,
         time: this.signOutTime.getHours() + ":" + this.signOutTime.getMinutes(),
