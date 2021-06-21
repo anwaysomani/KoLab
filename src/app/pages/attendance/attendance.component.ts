@@ -279,11 +279,12 @@ export class AttendanceComponent implements OnInit {
         site: this.activeUser.activeSite,
         status,
         reason: this.reason,
-        discrepant:false,
+        discrepant:true,
         isApproved:this.isApproved
       };
       if (this.activeUser.attendance !== undefined) {
-        this.activeUser.attendance.push(x);
+        /* this.activeUser.attendance.push(x); */ 
+        this.activeUser.attendance[this.activeUser.attendance.length-1]=x;
       } else {
         this.activeUser.attendance = [x];
       }  

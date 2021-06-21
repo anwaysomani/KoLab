@@ -728,7 +728,7 @@ export class ClientComponent implements OnInit {
         var lastRecord = item.attendance[item.attendance.length - 1];
         if (this.acceptDenyFlag) {
           for (let index = 0; index < item.attendance.length; index++) {
-            if(item.attendance[index].isApproved==true && item.attendance[index].discrepant==true){              
+            if(item.attendance[index].isApproved==true){              // && item.attendance[index].discrepant==true
               item.attendance[index].isApproved=false;
               item.attendance[index].discrepant=false;
             }
@@ -740,10 +740,11 @@ export class ClientComponent implements OnInit {
             /* this.selectedRegularizeRecords=item.slice(); */
             this.db.doc(`/users/${item.uid}`).update({
                 attendance:element
-            });
-            this.getAllUsers().then((data) => {
-              // @ts-ignore
-              this.tempSelectedEmployees = data;
+            }).then(()=>{
+                this.getAllUsers().then((data) => {
+                    // @ts-ignore
+                    this.tempSelectedEmployees = data;
+                  });
             });
             if(element.length>0){
               this.approvalList.splice(0,this.approvalList.length);

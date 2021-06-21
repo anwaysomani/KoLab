@@ -136,11 +136,12 @@ module.exports.attendanceRegularize = functions.https.onRequest((req, res) => {
                   currentStatus: "Sign Out",
                 })
                 .then(() => {
+                  /* res.sendStatus(201); */
                   console.log("Document successfully updated!");
                 })
                 .catch((error) => {
                   // The document probably doesn't exist.
-                  res.sendStatus(400);
+                  /* res.sendStatus(400); */
                   console.error("Error updating document: ", error);
                 });
             }
