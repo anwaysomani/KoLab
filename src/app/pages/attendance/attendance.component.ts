@@ -45,6 +45,7 @@ export class AttendanceComponent implements OnInit {
       this.activeUser = det;
       this.getVisitorListing();
       this.getContractorListing();
+      this.pageState();
       /* this.regularizeAttendanceFlag=this.activeUser.discrepant;
         if (this.regularizeAttendanceFlag) {
             setTimeout(() => {
@@ -54,6 +55,7 @@ export class AttendanceComponent implements OnInit {
         if(this.activeUser.attendance.length>0){
             this.activeUser.attendance.filter((records:any)=> {
                 if(records.discrepant==true){
+                    /* this.isApproved=this.pageState(); */
                     this.isApproved=records.isApproved;
                     setTimeout(() => {
                         this.openModal?.nativeElement.click();
@@ -267,6 +269,16 @@ export class AttendanceComponent implements OnInit {
       });
       // @ts-ignore
       this.visitingContractorList = d.data().sites[y].contractors;
+    });
+  }
+
+  pageState(): void {
+    this.db.doc(`/users/${this.uid}`).get().subscribe((d) => {
+      // @ts-ignore
+      const y = d.data().attendance.findIndex((er) => {
+        return er.isApproved === this.isApproved;
+      });
+      
     });
   }
   regularize(): void {

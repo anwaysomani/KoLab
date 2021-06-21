@@ -114,10 +114,13 @@ export class ClientComponent implements OnInit {
   approvalList:Array<any> = [];
   acceptDenyFlag=false;
   selectedRegularizeRecords:any;
+  uid='';
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
     this.allow = localStorage.getItem('access') === '1';
+    // @ts-ignore
+    this.uid = JSON.parse(localStorage.getItem('user')).uid;
     if (!this.allow) {
       router.navigateByUrl('/login');
     }
@@ -129,6 +132,7 @@ export class ClientComponent implements OnInit {
     if (this.isEmployees) {
       this.userTypes = environment.userTypes;
       this.getUserListing();
+      this.pageState();
       this.titleService.setTitle('Employees | ' + environment.brand);
 
       this.getAllUsers().then((data) => {
@@ -722,6 +726,14 @@ export class ClientComponent implements OnInit {
             this.approvalList.push(employee);
         }
     }); */
+  }
+  pageState(): void {
+    this.db.doc(`/users/${this.uid}`).get().subscribe((d) => {
+      // @ts-ignore
+      const y = d.data().attendance.findIndex((er) => {
+        return er.isApproved;
+      });      
+    });
   }
     acceptDeny(acceptDeny: string, item: any): void {
         this.acceptDenyFlag = (acceptDeny == 'ACCEPT' ? true : false);
