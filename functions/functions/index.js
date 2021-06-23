@@ -112,7 +112,6 @@ module.exports.attendanceRegularize = functions.https.onRequest((req, res) => {
               data.docs[i].data().attendance[
                 data.docs[i].data().attendance.length - 1
               ].date;
-            /* console.log(missPunchdate,currDateTime.getDate()); */
             if (missPunchdate == currDateTime.getDate()) {
               const discrepant = true;
               const isApproved = false;
@@ -125,10 +124,8 @@ module.exports.attendanceRegularize = functions.https.onRequest((req, res) => {
                 discrepant: discrepant,
                 isApproved: isApproved,
               };
-              //datadocs[i].data().attendance[datadocs[i].data().attendance.length-1].status="Sign Out";
               var attendance = datadocs[i].data().attendance;
               attendance[attendance.length - 1].status = "Sign Out";
-              /* console.log(attendance) */
               attendance.push(x);
               datadocs[i].ref
                 .update({
@@ -136,13 +133,14 @@ module.exports.attendanceRegularize = functions.https.onRequest((req, res) => {
                   currentStatus: "Sign Out",
                 })
                 .then(() => {
-                  /* res.sendStatus(201); */
-                  console.log("Document successfully updated!");
+                  res.send(200, {
+                    "message": "Document successfully updated"
+                })
                 })
                 .catch((error) => {
-                  // The document probably doesn't exist.
-                  /* res.sendStatus(400); */
-                  console.error("Error updating document: ", error);
+                  res.send(500, {
+                    "message": "Error updating document:", error
+                })
                 });
             }
           }

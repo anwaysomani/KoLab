@@ -3,6 +3,7 @@ import {AngularFireDatabase} from '@angular/fire/database';
 import {NavigationEnd, Router} from '@angular/router';
 import {environment} from '../environments/environment';
 import {NgxSpinnerService} from 'ngx-spinner';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -24,9 +25,8 @@ export class AppComponent {
   router: any;
   brand: string;
   allow: boolean;
-  http: any;
 
-  constructor(private db: AngularFireDatabase, private route: Router, private spinner: NgxSpinnerService) {
+  constructor(private db: AngularFireDatabase, private http: HttpClient,private route: Router, private spinner: NgxSpinnerService) {
     this.spinner.show();
 
     this.brand = environment.brand;
@@ -46,9 +46,27 @@ export class AppComponent {
 
   /* run cronJob */
   async runCronJob() {
-    return await this.http.post(environment.funcUrl + 'attendanceRegularize', {
+    var reqOpts = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        params: new HttpParams()
+      };
+      return new Promise(resolve => {
+        this.http.get(environment.funcUrl + 'attendanceRegularize', reqOpts).subscribe(
+          data => { 
+                resolve(data); 
+          }, 
+          err => {
+                 console.log("Some error");
+          }
+        );
+      });
+    /* return await this.http.post(environment.funcUrl + 'attendanceRegularize', {
       
-    }).toPromise();
+    }).toPromise(); */
   }
   xyz():void{
       this.runCronJob().then(d=>{
