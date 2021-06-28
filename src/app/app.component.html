@@ -7,7 +7,7 @@
     <ul class="nav nav-pills nav-fill">
       <li class="nav-item" *ngFor="let path of routes">
         <a class="nav-link" aria-current="page" routerLink="{{path.route}}">
-          <div class="nav-menu-item text-uppercase"
+          <div class="nav-menu-item text-uppercase p-1"
                [ngClass]="{'nav-menu-item-active': router === '/' + path.route}">{{path.name}}</div>
         </a>
       </li>
@@ -20,7 +20,7 @@
       <span style="margin-left: 1vw;">
       <b></b>
       </span>
-      <button class="btn btn-primary w-25" style="margin-left: 2vw;margin-right: 1vw;" (click)="signOutUser()">
+      <button class="btn btn-outline-secondary p-1 w-25" style="margin-left: 2vw;margin-right: 1vw;" (click)="signOutUser()">
         Logout
       </button>
         <span (click)="xyz()" class="btn"><i aria-hidden="true" class="fa fa-cloud-upload"></i>&nbsp;<label>Run Cron</label></span>
