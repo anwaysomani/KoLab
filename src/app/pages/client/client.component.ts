@@ -10,7 +10,7 @@ import {AngularFireStorage} from '@angular/fire/storage';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {map} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
-import { NgForm } from '@angular/forms';
+import {NgForm} from '@angular/forms';
 
 @Component({
   selector: 'app-client',
@@ -21,7 +21,7 @@ import { NgForm } from '@angular/forms';
 export class ClientComponent implements OnInit {
 
   @ViewChild('addUserModal') closeAddExpenseModal: ElementRef | undefined;
-  @ViewChild('userForm') public userLoginForm:NgForm | undefined;
+  @ViewChild('userForm') public userLoginForm: NgForm | undefined;
   entity: Array<any> = [];
   currMonYear: string;
   dates: number;
@@ -109,12 +109,12 @@ export class ClientComponent implements OnInit {
   mobNumberPattern = '^((\\+91-?)|0)?[0-9]{10}$';
   displayVisitorInfo = false;
   activeSiteDate = new Date().getDate();
-  displayContractorInfo=false;
-  regularize:any;
-  approvalList:Array<any> = [];
-  acceptDenyFlag=false;
-  selectedRegularizeRecords:any;
-  uid='';
+  displayContractorInfo = false;
+  regularize: any;
+  approvalList: Array<any> = [];
+  acceptDenyFlag = false;
+  selectedRegularizeRecords: any;
+  uid = '';
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
@@ -157,6 +157,7 @@ export class ClientComponent implements OnInit {
       return ref;
     }).valueChanges().subscribe((det) => {
       this.clientList = det;
+      console.log(det);
       if (this.clientList.length > 0) {
         this.clientList[0].isSelected = true;
         this.selectClientItem(this.clientList[0]);
@@ -368,7 +369,8 @@ export class ClientComponent implements OnInit {
   selectEmployee(uid: string): void {
     this.loader.addClientLoader = true;
     this.updateDynamicDetailSelection(1);
-    this.db.collection('users').doc(uid).valueChanges().subscribe((det: any) => { // get selected employee detail
+    this.db.collection('users').valueChanges().subscribe((det: any) => { // get selected employee detail
+      console.log(det);
       this.selectedSiteEmployee = det.name;
       this.employeeAttendance = det.attendance;
       if (det.currentStatus) {
@@ -703,64 +705,71 @@ export class ClientComponent implements OnInit {
         // @ts-ignore
         this.tempSelectedEmployees = data;
       });
-  }).catch((error) => {
+    }).catch((error) => {
       this.showToaster(error.status);
-      console.error("Error removing document: ", error);
-  });
+      console.error('Error removing document: ', error);
+    });
   }
 
-  showRegularize():void{
-    this.approvalList.splice(0,this.approvalList.length);
-      for (let i = 0; i < this.tempSelectedEmployees.length; i++) {
-          if (this.tempSelectedEmployees[i].attendance.length > 0) {
-              this.regularize = this.tempSelectedEmployees[i].attendance.filter((employee: any) => {
-                  if (employee.isApproved != undefined && employee.isApproved === true) {
-                      this.approvalList.push(this.tempSelectedEmployees[i]);
-                  }
-              });
+  showRegularize(): void {
+    this.approvalList.splice(0, this.approvalList.length);
+    for (let i = 0; i < this.tempSelectedEmployees.length; i++) {
+      if (this.tempSelectedEmployees[i].attendance.length > 0) {
+        this.regularize = this.tempSelectedEmployees[i].attendance.filter((employee: any) => {
+          if (employee.isApproved != undefined && employee.isApproved === true) {
+            this.approvalList.push(this.tempSelectedEmployees[i]);
           }
+        });
       }
-    
+    }
+
     /* this.regularize = this.employeeList.filter((employee) => {
         if(employee.isApproved!=undefined && employee.isApproved===false){
             this.approvalList.push(employee);
         }
     }); */
   }
+
   pageState(): void {
     this.db.doc(`/users/${this.uid}`).get().subscribe((d) => {
       // @ts-ignore
       const y = d.data().attendance.findIndex((er) => {
         return er.isApproved;
-      });      
+      });
     });
   }
-    acceptDeny(acceptDeny: string, item: any): void {
-        this.acceptDenyFlag = (acceptDeny == 'ACCEPT' ? true : false);
-        var lastRecord = item.attendance[item.attendance.length - 1];
-        if (this.acceptDenyFlag) {
-          for (let index = 0; index < item.attendance.length; index++) {
-            if(item.attendance[index].isApproved==true){              // && item.attendance[index].discrepant==true
-              item.attendance[index].isApproved=false;
-              item.attendance[index].discrepant=false;
-            }
-            /* this.approvalList = this.approvalList.filter((value)=>{ 
-              return item.uid==value.uid;
-          }); */           
-          }
-          const element = item.attendance;
-            /* this.selectedRegularizeRecords=item.slice(); */
-            this.db.doc(`/users/${item.uid}`).update({
-                attendance:element
-            }).then(()=>{
-                this.getAllUsers().then((data) => {
-                    // @ts-ignore
-                    this.tempSelectedEmployees = data;
-                  });
-            });
-            if(element.length>0){
-              this.approvalList.splice(0,this.approvalList.length);
-            }
+
+  acceptDeny(acceptDeny: string, item: any): void {
+    this.acceptDenyFlag = (acceptDeny === 'ACCEPT');
+    const lastRecord = item.attendance[item.attendance.length - 1];
+    if (this.acceptDenyFlag) {
+      for (let index = 0; index < item.attendance.length; index++) {
+        if (item.attendance[index].isApproved === true) {
+          item.attendance[index].isApproved = false;
+          item.attendance[index].discrepant = false;
         }
+        /* this.approvalList = this.approvalList.filter((value)=>{
+          return item.uid==value.uid;
+      }); */
+      }
+      const element = item.attendance;
+      /* this.selectedRegularizeRecords=item.slice(); */
+      this.db.doc(`/users/${item.uid}`).update({
+        attendance: element
+      }).then(() => {
+        this.getAllUsers().then((data) => {
+          // @ts-ignore
+          this.tempSelectedEmployees = data;
+        });
+      });
+      if (element.length > 0) {
+        this.approvalList.splice(0, this.approvalList.length);
+      }
     }
+  }
+
+  // employeeAttendanceSort(): Array<any> {
+  //   // selectedSiteEmployeeList
+  //
+  // }
 }
