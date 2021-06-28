@@ -115,6 +115,7 @@ export class ClientComponent implements OnInit {
   acceptDenyFlag = false;
   selectedRegularizeRecords: any;
   uid = '';
+  datepickerModel: Date | undefined;
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {

@@ -25,28 +25,25 @@
       <div class="col-9 pull-left apply-gradient h-92 card p-3">
         <!-- project manager -->
         <div class="f-w-b text-uppercase">Project Manager/s</div>
-        <div class="col-sm-9 col-form-label arrow-pointer item-selection font-body">
-          <table class="table table-hover table-striped">
-            <tbody>
-            <tr *ngFor="let item of selectedSiteContractorList">
-              <td>{{item.name}}</td>
-              <td>{{item.currentStatus}}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="col-3">
-            <form class="form-inline">
-                <div class="form-group">
-                  <div class="input-group">
-                    <input class="form-control" placeholder="dd/mm/yyyy"
-                           name="d2" #c2="ngModel" [(ngModel)]="model2" ngbDatepicker #d2="ngbDatepicker">
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-secondary calendar" (click)="d2.toggle()" type="button"></button>
-                    </div>
-                  </div>
-                </div>
-              </form>
+        <div class="row">
+            <div class="col-sm-9 col-form-label arrow-pointer item-selection font-body">
+                <table class="table table-hover table-striped">
+                    <tbody>
+                        <tr *ngFor="let item of selectedSiteContractorList">
+                            <td>{{item.name}}</td>
+                            <td>{{item.currentStatus}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-2 col-form-label arrow-pointer font-body calendar-input">
+                <table class="table table-hover table-striped">
+                    <input type="text" placeholder="yyyy-mm-dd" class="form-control" bsDatepicker
+                        [bsConfig]="{ containerClass: 'theme-dark-blue', showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right' }"
+                        (change)="changeEvent()" [(ngModel)]="datepickerModel" name="currentDate">
+                        <span class="calendar-icon"><i class="fa fa-calendar"></i></span>
+                </table>
+            </div>
         </div>
         <hr>
 
