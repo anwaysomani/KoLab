@@ -35,6 +35,19 @@
             </tbody>
           </table>
         </div>
+        <div class="col-3">
+            <form class="form-inline">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input class="form-control" placeholder="dd/mm/yyyy"
+                           name="d2" #c2="ngModel" [(ngModel)]="model2" ngbDatepicker #d2="ngbDatepicker">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary calendar" (click)="d2.toggle()" type="button"></button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+        </div>
         <hr>
 
         <!-- employees -->
@@ -88,8 +101,41 @@
         </div>
         <hr>
 
+        <!-- visitors -->
+        <div class="f-w-b text-uppercase">Contractor/s</div>
+        <div class="mb-3">
+          <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th class="text-center" scope="col">Sign In</th>
+              <th class="text-center" scope="col">Sign Out</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr *ngIf="getContractors().length < 1">
+              <td class="text-center" colspan="3">(No contractors yet)</td>
+            </tr>
+
+            <tr *ngFor="let contractor of getContractors()">
+              <td>{{contractor.name}}</td>
+              <td class="text-center">{{contractor.signInTime}}</td>
+              <td
+                class="text-center">{{contractor.signOutTime !== undefined && contractor.signOutTime !== null ? contractor.signOutTime : '-'}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <hr>
+
         <!-- work progress -->
-        <div class="f-w-b text-uppercase">Work Progress</div>
+        <div class="f-w-b text-uppercase progress-materials">
+            <button (click)="selectMaterials('Progress')"
+                class="btn btn-block btn-outline-dark btn-rounded w-15">
+                <span class="font-header pull-left">Work Progress&nbsp;<i class="fa fa-arrow-right"></i></span>
+            </button>
+        </div>
         <div *ngFor="let img of renderImages();let i=index" class="col-4 card p-0 mt-2 pull-left">
           <div class="card-body">
             <a (click)="openImageModel(img,i)" class="arrow-pointer" data-bs-target="#materials-progress-modal"
@@ -101,7 +147,13 @@
             {{makeDate(img.date)}}
           </div>
         </div>
-
+        <!-- materials -->
+        <div class="f-w-b text-uppercase m-t-1e progress-materials">
+            <button (click)="selectMaterials('Materials')"
+                class="btn btn-block btn-outline-dark btn-rounded w-15">
+                <span class="font-header pull-left">Materials&nbsp;<i class="fa fa-arrow-right"></i></span>
+            </button>
+        </div>
 
       </div>
     </div>
