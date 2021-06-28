@@ -115,6 +115,14 @@ export class ClientComponent implements OnInit {
   acceptDenyFlag=false;
   selectedRegularizeRecords:any;
   uid='';
+  slideConfig = {"slidesToShow": 1,
+  "slidesToScroll": 1,
+  "autoplay":false,
+  "nextArrow": "<div class='nav-btn next-slide'></div>",
+  "prevArrow": "<div class='nav-btn prev-slide'></div>",
+  "dots": true,
+  "infinite": false,  
+};
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
@@ -763,4 +771,22 @@ export class ClientComponent implements OnInit {
             }
         }
     }
+    
+      
+      slickInit(e:any) {
+        console.log('slick initialized');
+      }
+      
+      breakpoint(e:any) {
+        console.log('breakpoint');
+      }
+      
+      afterChange(e:any) {
+        console.log('afterChange');
+      }
+      
+      beforeChange(e:any) {
+        console.log('beforeChange');
+      }
+    
 }
