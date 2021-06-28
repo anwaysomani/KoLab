@@ -11,7 +11,7 @@ export const environment = {
     databaseURL: 'https://kolab-04-default-rtdb.asia-southeast1.firebasedatabase.app'
   },
   allowSubsLogin: false,
-  brand: 'XYZ ERE Cons.',
+  brand: 'Name One',
   funcUrl: 'https://us-central1-kolab-04.cloudfunctions.net/',
   userTypes: [{
     displayName: 'Admins',
