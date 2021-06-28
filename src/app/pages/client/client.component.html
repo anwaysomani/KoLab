@@ -10,7 +10,7 @@
           </div>
           <div *ngIf="client['sites'].length > 0">
             <div (click)="onSelect(site)" *ngFor="let site of client['sites']"
-                 [class.selected]="site === selectedItem" class="card-body card-wrapper mb-2 arrow-pointer">
+                 [class.selected]="site === selectedItem" [ngClass]="{'highlight-panel': site === selectedItem}" class="card-body card-wrapper mb-2 arrow-pointer">
               <span>{{site.name}}</span>
             </div>
           </div>

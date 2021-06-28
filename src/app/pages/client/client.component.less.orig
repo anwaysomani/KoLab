@@ -77,12 +77,6 @@
     border-left: 1em solid @border-left-color;
   }
 }
-.highlight-panel{
-    border-left: @border-left-width solid @border-left-color;
-    border-right:0.1em solid #92a7c5;
-    border-top:0.1em solid #92a7c5;
-    border-bottom:0.1em solid #92a7c5;
-}
 
 .display-day {
   font-size: 0.9em;
@@ -114,7 +108,7 @@
 }
 
 .h-92 {
-  height: 88vh !important;
+  height: 90vh !important;
 }
 
 .h-65 {
@@ -529,27 +523,33 @@ td:empty::after {
   display: none;
 }
 
-.deleteIcon{
+.deleteIcon {
   opacity: 0.2;
 }
-.deleteIcon:hover{
+.deleteIcon:hover {
   opacity: 1;
 }
 
-.custom-btn{
+.custom-btn {
   font-style: normal;
   line-height: 28px;
+<<<<<<< Updated upstream
   .btn-accept ,.btn-deny{
     border-radius:50%;
-    padding: 0;    
+=======
+  .btn-accept,
+  .btn-deny {
+    border-radius: 50%;
+>>>>>>> Stashed changes
+    padding: 0;
   }
-  .btn-xs{
+  .btn-xs {
     width: 2em;
     height: 2em;
     min-width: 2em;
   }
 }
 
-.text-decoration-unset{
+.text-decoration-unset {
   text-decoration: unset;
 }
