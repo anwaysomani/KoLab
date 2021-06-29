@@ -4,11 +4,15 @@
   <div class="row" *ngIf="!isEmployees">
     <div class="col-12">
       <div class="col-3 pull-left apply-gradient h-92 overflow-y-scroll card left-sidebar">
+        <button #addClientModal class="btn btn-outline-dark btn-block w-100" data-bs-target="#addClientModal"
+            data-bs-toggle="modal">
+            <i class="fa fa-user-plus"></i>&nbsp;Add Client
+        </button>
         <div *ngFor="let client of clientList" class="m-t-1e">
           <div class="text-black-50 text-uppercase p-l-1e menu-parent-color fs-18">
             {{client.name}}
           </div>
-          <div *ngIf="client['sites'].length > 0">
+          <div *ngIf="client['sites'].length > 0" class="card-footer">
             <div (click)="onSelect(site)" *ngFor="let site of client['sites']"
                  [class.selected]="site === selectedItem" [ngClass]="{'highlight-panel': site === selectedItem}" class="card-body card-wrapper mb-2 arrow-pointer">
               <span>{{site.name}}</span>
