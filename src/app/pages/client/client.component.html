@@ -1,7 +1,7 @@
 <!-- Main Container -->
 <div *ngIf="allow" class="container-fluid main-nav m-t-3">
 
-  <div class="row">
+  <div class="row" *ngIf="!isEmployees">
     <div class="col-12">
       <div class="col-3 pull-left apply-gradient h-92 overflow-y-scroll card">
         <div *ngFor="let client of clientList" class="m-t-1e">
