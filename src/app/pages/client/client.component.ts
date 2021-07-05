@@ -449,28 +449,7 @@ export class ClientComponent implements OnInit {
 
   /* get default display image on site window */
   renderDisplayImage(): void {
-    this.loader.addClientLoader = true;
-    const filePath = this.selectedItem.name + ', ' + this.selectedClient.name;
-    this.storage.ref(`${filePath}/material`).listAll().toPromise()
-      .then((ref) => {
-        if (ref.items.length > 0) {
-          ref.items[ref.items.length - 1].getDownloadURL().then((url: string) => {
-            this.defaultMaterialImage = url;
-          });
-        }
-        this.loader.addClientLoader = false;
-      });
-
-    this.storage.ref(`${filePath}/progress`).listAll().toPromise()
-      .then((ref) => {
-        if (ref.items.length > 0) {
-          ref.items[ref.items.length - 1].getDownloadURL().then((url: string) => {
-            this.defaultProgressImage = url;
-          });
-        }
-        this.loader.addClientLoader = false;
-      });
-    this.loader.addClientLoader = false;
+    this.selectMaterials('Progress');
   }
 
   /* client listing search */
