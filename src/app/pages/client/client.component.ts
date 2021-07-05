@@ -19,7 +19,8 @@ import {NgForm} from '@angular/forms';
 })
 
 export class ClientComponent implements OnInit {
-
+  brand = environment.brand;
+  activeUserName: any;
   @ViewChild('addUserModal') closeAddExpenseModal: ElementRef | undefined;
   @ViewChild('userForm') public userLoginForm: NgForm | undefined;
   entity: Array<any> = [];
@@ -73,8 +74,6 @@ export class ClientComponent implements OnInit {
   allow: boolean;
   searchText = '';
   prevClientItem = '';
-
-  displayEmployeeDetail = false;
   selectedSiteEmployeeList: Array<any> = [];
   selectedSiteContractorList: Array<any> = [];
   selectedSiteEmployee = '';
@@ -87,9 +86,6 @@ export class ClientComponent implements OnInit {
   imgHref?: any = '';
   imgId = 0;
   allImageListing: Array<string> = [];
-  materialImagesDisplay = false;
-  progressImagesDisplay = false;
-  displayInfoView = false;
   defaultMaterialImage = '';
   defaultProgressImage = '';
   tempSelectedClients: Array<any> = [];
@@ -107,15 +103,14 @@ export class ClientComponent implements OnInit {
   skipField = 0;
   submitted = false;
   mobNumberPattern = '^((\\+91-?)|0)?[0-9]{10}$';
-  displayVisitorInfo = false;
   activeSiteDate = new Date().getDate();
-  displayContractorInfo = false;
   regularize: any;
   approvalList: Array<any> = [];
   acceptDenyFlag = false;
   selectedRegularizeRecords: any;
   uid = '';
   datepickerModel: Date | undefined;
+  mousing = false;
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
@@ -126,6 +121,7 @@ export class ClientComponent implements OnInit {
       router.navigateByUrl('/login');
     }
 
+    this.activeUserName = JSON.parse(localStorage.user).name;
     this.loader.pageLoader = true;
     this.currentDate = new Date().getDate();
     this.db = db;
@@ -165,7 +161,7 @@ export class ClientComponent implements OnInit {
         this.selectedItem = this.clientList[0].sites[0];
       }
       this.loader.pageLoader = false;
-      this.onSelect(this.selectedItem);
+      this.onSelect(this.selectedItem, this.selectedClient);
     }, (err) => {
       this.loader.pageLoader = false;
     });
@@ -223,14 +219,13 @@ export class ClientComponent implements OnInit {
   }
 
   /* add new user popup add click */
-  addUser(): void { // name, email address, designation
+  addUser(): void {
     this.loader.addUserLoader = true;
     this.skipField = this.isChecked ? 1 : 0;
     this.addUserService([this.employee.username, this.employee.emailAddress, this.employee.designation, this.employee.mobile]).then((data) => {
       this.loader.addUserLoader = false;
     }, (error) => {
       if (error.status === 200) {
-        // handle success user
         this.showToaster(error.status);
         setTimeout(() => {
           if (!this.isChecked) {
@@ -261,7 +256,6 @@ export class ClientComponent implements OnInit {
       designation: mod[2],
       password: mod[0].split(',')[0].toLowerCase() + '123',
       mobile: mod[3],
-
     }).toPromise();
   }
 
@@ -356,39 +350,6 @@ export class ClientComponent implements OnInit {
     this.updateSite.pincode = data.pincode;
   }
 
-  /* update state of widget04-details */
-  updateDynamicDetailSelection(state: number): void {
-    this.displayEmployeeDetail = (state === 1); // update view for employee
-    this.materialImagesDisplay = (state === 2); // update view for material images
-    this.progressImagesDisplay = (state === 3); // update view for progress images
-    this.displayInfoView = (state === 4); // update view for info
-    this.displayVisitorInfo = (state === 5);
-    this.displayContractorInfo = (state === 7);
-  }
-
-  /* update widget-04 for employee selection */
-  selectEmployee(uid: string): void {
-    this.loader.addClientLoader = true;
-    this.updateDynamicDetailSelection(1);
-    this.db.collection('users').valueChanges().subscribe((det: any) => { // get selected employee detail
-      console.log(det);
-      this.selectedSiteEmployee = det.name;
-      this.employeeAttendance = det.attendance;
-      if (det.currentStatus) {
-        this.selectedSiteEmployeeStatus = det.currentStatus;
-      } else {
-        this.selectedSiteEmployeeStatus = '';
-      }
-
-      this.employeeAttendance = [];
-      this.employeeAttendance = det.attendance.filter((entity: any) => {
-        return Number(entity.date) === Number(this.currentDate);
-      });
-
-      this.loader.addClientLoader = false;
-    });
-  }
-
   /* fetch and sort employee listing on site selection */
   sortEmployeeList(site: string): void {
     // from site, get data
@@ -397,26 +358,25 @@ export class ClientComponent implements OnInit {
     }).valueChanges().subscribe((det: Array<any>) => {
       this.selectedSiteEmployeeList = det.filter(s => s.designation === 'Employee');
       this.selectedSiteContractorList = det.filter(s => s.designation === 'Supervisor');
+      console.log(this.selectedSiteContractorList);
     }, (err) => {
       console.log(err);
     });
   }
 
   /* on item selected */
-  onSelect(item: any): void {
+  onSelect(item: any, client: any): void {
     this.selectedItem = item;
+    this.selectedClient = client;
     this.sortEmployeeList(item.name);
     this.renderDisplayImage();
-    this.updateDynamicDetailSelection(0);
   }
 
   /* update widget-04 for Material/Progress selection */
   selectMaterials(uid: string): void {
     if (uid === 'Materials') {
-      this.updateDynamicDetailSelection(2);
       this.materialView = true;
     } else if (uid === 'Progress') {
-      this.updateDynamicDetailSelection(3);
       this.materialView = false;
     }
     this.fetchRecentImages(this.materialView);
@@ -640,11 +600,6 @@ export class ClientComponent implements OnInit {
     this.submitted = true;
   }
 
-  /* check empty widget_04 config */
-  checkWidgetDisplayConfig(): boolean {
-    return !this.materialImagesDisplay && !this.progressImagesDisplay && !this.displayInfoView && !this.displayVisitorInfo;
-  }
-
   /* delete site */
   deleteSite(): void {
     this.db.doc(`clients/${this.selectedClient.name}`).get().subscribe((d) => {
@@ -675,7 +630,6 @@ export class ClientComponent implements OnInit {
   /* date change for site */
   changeEvent(): void {
     this.activeSiteDate = Number(this.currentDate);
-    this.updateDynamicDetailSelection(6);
   }
 
   /* get visitors listing */
@@ -769,8 +723,30 @@ export class ClientComponent implements OnInit {
     }
   }
 
-  // employeeAttendanceSort(): Array<any> {
-  //   // selectedSiteEmployeeList
-  //
-  // }
+  /* open side navigation bar */
+  openNavigationBar(): void {
+    this.mousing = !this.mousing;
+  }
+
+  /* get user sign in
+  * @param att - attendance array
+  * @param status - 1(sign in), 2(sign out)
+  */
+  getUserSignStatus(att: Array<any>, status: number): string {
+    if (att.length > 0) {
+      const x = att.filter(r => {
+        return r.date.toString() === this.currentDate.toString() && r.status === (status === 1 ? 'Sign In' : 'Sign Out');
+      });
+      return x.length > 0 ? x[0].time : '-';
+    } else {
+      return '-';
+    }
+  }
+
+  /* execute regularize */
+  executeRegularize(): void {
+    this.http.get(environment.funcUrl + 'attendanceRegularize/').toPromise().then((data) => {
+      console.log('Execute regularize');
+    });
+  }
 }

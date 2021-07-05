@@ -1,659 +1,272 @@
-<!-- Main Container -->
-<div *ngIf="allow" class="container-fluid main-nav m-t-3">
-
-  <div class="row" *ngIf="!isEmployees">
+<div *ngIf="allow">
+  <div *ngIf="!isEmployees" class="row">
     <div class="col-12">
-      <div class="col-3 pull-left apply-gradient h-92 overflow-y-scroll card left-sidebar">
-        <button #addClientModal class="btn btn-outline-dark btn-block w-100" data-bs-target="#addClientModal"
-            data-bs-toggle="modal">
-            <i class="fa fa-user-plus"></i>&nbsp;Add Client
-        </button>
-        <div *ngFor="let client of clientList" class="m-t-1e">
-          <div class="text-black-50 text-uppercase p-l-1e menu-parent-color fs-18">
-            {{client.name}}
-          </div>
-          <div *ngIf="client['sites'].length > 0" class="card-footer">
-            <div (click)="onSelect(site)" *ngFor="let site of client['sites']"
-                 [class.selected]="site === selectedItem" [ngClass]="{'highlight-panel': site === selectedItem}" class="card-body card-wrapper mb-2 arrow-pointer">
-              <span>{{site.name}}</span>
+
+      <!-- side navigation -->
+      <div class="col-1 pull-left">
+        <div class="nav-layout">
+          <nav [ngClass]="{'open': mousing}" class="menu bg-dark" id="menu">
+            <div class="actionsBar">
+              <div>
+                <button (click)="openNavigationBar()" id="menuBtn" type="button">
+                  <i class="fa fa-bars"></i>
+                </button>
+                <h3 [ngClass]="{'open2': mousing}" class="menuText p-t-0_3">{{brand}}</h3>
+              </div>
+            </div>
+            <ul class="optionsBar">
+              <li class="menuItem">
+                <a class="menuOption" href="/clients">
+                  <i class="fa fa-sitemap"></i>
+                  <h5 [ngClass]="{'open2': mousing}" class="menuText menu-item-text">Clients</h5>
+                </a>
+              </li>
+              <li class="menuItem">
+                <a class="menuOption" href="/employees">
+                  <i class="fa fa-users"></i>
+                  <h5 [ngClass]="{'open2': mousing}" class="menuText menu-item-text">Employees</h5>
+                </a>
+              </li>
+              <li class="menuBreak">
+                <hr>
+              </li>
+              <li *ngIf="mousing" class="mb-0 menuItem p-t-b-0_5 text-center text-muted">
+                <h5>ACTIONS</h5>
+              </li>
+              <li class="menuItem">
+                <a (click)="executeRegularize()" class="menuOption">
+                  <i class="fa fa-clock-o"></i>
+                  <h5 [ngClass]="{'open2': mousing}" class="menuText menu-item-text">Run Regularize</h5>
+                </a>
+              </li>
+              <li class="menuItem">
+                <a #addClientModal class="menuOption" data-bs-target="#addClientModal" data-bs-toggle="modal">
+                  <i class="fa fa-plus-square"></i>
+                  <h5 [ngClass]="{'open2': mousing}" class="menuText menu-item-text">Add Client</h5>
+                </a>
+              </li>
+              <li class="menuItem">
+                <a #siteReportModal class="menuOption" data-bs-target="#siteReportModal" data-bs-toggle="modal">
+                  <i class="fa fa-file-text-o"></i>
+                  <h5 [ngClass]="{'open2': mousing}" class="menuText menu-item-text">Site Report</h5>
+                </a>
+              </li>
+            </ul>
+            <div class="menuUser">
+              <a href="#">
+                <h5 [ngClass]="{'open2': mousing}" class="Username menuText">{{activeUserName}}</h5>
+                <p class="menuText"><i class="fas fa-chevron-right"></i></p>
+              </a>
+            </div>
+          </nav>
+        </div>
+      </div>
+
+      <!-- widget -->
+      <div class="col-2 h-100 overflow-y-overlay p-r-7 pull-left">
+        <div class="text-center">
+          <div class="row m-t-1e">
+            <div class="col-9 text-start">
+              <h5>SITES</h5>
+            </div>
+            <div class="col-3 text-end">
+              <span>
+                <button #addSiteModal class="border-0 btn p-0" data-bs-target="#addSiteModal"
+                        data-bs-toggle="modal">
+						<i class="fa fa-plus"></i>
+					</button>
+              </span>
             </div>
           </div>
-          <div *ngIf="client['sites'].length < 1">
-            <div class="card-footer text-center">
-              (No sites added yet)
+          <hr class="m-0">
+          <div *ngFor="let client of clientList" class="m-t-1e">
+            <div class="text-black-50 text-uppercase menu-parent-color fs-18 text-start mb-2">
+              {{client.name}}
+            </div>
+            <div *ngIf="client['sites'].length > 0">
+              <div (click)="onSelect(site, client)" *ngFor="let site of client['sites']"
+                   [class.selected]="site === selectedItem" [ngClass]="{'highlight-panel': site === selectedItem}"
+                   class="p-2 card-wrapper mb-2 arrow-pointer text-start">
+                <span>{{site.name}}</span>
+              </div>
+            </div>
+            <div *ngIf="client['sites'].length < 1">
+              <div class="text-center text-black-50">
+                (No sites added yet)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- details -->
+      <div class="col-9 pull-left">
+        <div class="apply-gradient h-100 card p-3 overflow-y-auto">
+          <!-- supervisor -->
+          <div class="f-w-b text-uppercase">Supervisor/s</div>
+          <div class="row">
+            <div class="col-10">
+              <div class="col-form-label arrow-pointer item-selection font-body">
+                <table class="table table-hover table-striped">
+                  <thead>
+                  <tr class="text-black-50">
+                    <th scope="col">Name</th>
+                    <th scope="col">Current Status</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let item of selectedSiteContractorList">
+                    <td>{{item.name}}</td>
+                    <td>{{item.currentStatus}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-2 text-center">
+              <select (change)="changeEvent()"
+                      (click)="getDateFromMonth()" [(ngModel)]="currentDate"
+                      class="border-0 border-2 border-bottom m-r-1e f-s-1 fs-18 bg-transparent"
+                      name="currentDate">
+                <option *ngFor="let i of getDateFromMonth()" value="{{i}}">{{i}}</option>
+              </select>
             </div>
           </div>
           <hr>
-        </div>
-      </div>
-      <div class="col-9 pull-left apply-gradient h-92 card p-3 overflow-y-auto">
-        <!-- project manager -->
-        <div class="f-w-b text-uppercase">Project Manager/s</div>
-        <div class="row">
-            <div class="col-sm-9 col-form-label arrow-pointer item-selection font-body">
-                <table class="table table-hover table-striped">
-                    <tbody>
-                        <tr *ngFor="let item of selectedSiteContractorList">
-                            <td>{{item.name}}</td>
-                            <td>{{item.currentStatus}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-sm-2 col-form-label arrow-pointer font-body calendar-input">
-                <table class="table table-hover table-striped">
-                    <input type="text" placeholder="yyyy-mm-dd" class="form-control" bsDatepicker
-                        [bsConfig]="{ containerClass: 'theme-dark-blue', showTodayButton: true, todayPosition: 'center',showClearButton: true, clearPosition: 'right' }"
-                        (change)="changeEvent()" [(ngModel)]="datepickerModel" name="currentDate">
-                        <span class="calendar-icon"><i class="fa fa-calendar"></i></span>
-                </table>
-            </div>
-        </div>
-        <hr>
 
-        <!-- employees -->
-        <div class="f-w-b text-uppercase">Employee/s</div>
-        <div *ngIf="selectedSiteEmployeeList.length < 1" class="row mb-3 g-0">
-          (No employees allocated yet)
-        </div>
-        <div *ngIf="selectedSiteEmployeeList.length > 0" class="mb-3 col-form-label">
-          <table class="table table-hover table-striped">
-            <thead>
-            <tr>
-              <th scope="col">Employee</th>
-              <th scope="col">Current Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let item of selectedSiteEmployeeList">
-              <td>{{item.name}}</td>
-              <td>{{item.currentStatus}}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <hr>
-
-        <!-- visitors -->
-        <div class="f-w-b text-uppercase">Visitor/s</div>
-        <div class="mb-3">
-          <table class="table table-striped table-hover">
-            <thead>
-            <tr>
-              <th scope="col">Name</th>
-              <th class="text-center" scope="col">Sign In</th>
-              <th class="text-center" scope="col">Sign Out</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            <tr *ngIf="getVisitors().length < 1">
-              <td class="text-center" colspan="3">(No visitors yet)</td>
-            </tr>
-
-            <tr *ngFor="let visitor of getVisitors()">
-              <td>{{visitor.name}}</td>
-              <td class="text-center">{{visitor.signInTime}}</td>
-              <td
-                class="text-center">{{visitor.signOutTime !== undefined && visitor.signOutTime !== null ? visitor.signOutTime : '-'}}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <hr>
-
-        <!-- visitors -->
-        <div class="f-w-b text-uppercase">Contractor/s</div>
-        <div class="mb-3">
-          <table class="table table-striped table-hover">
-            <thead>
-            <tr>
-              <th scope="col">Name</th>
-              <th class="text-center" scope="col">Sign In</th>
-              <th class="text-center" scope="col">Sign Out</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            <tr *ngIf="getContractors().length < 1">
-              <td class="text-center" colspan="3">(No contractors yet)</td>
-            </tr>
-
-            <tr *ngFor="let contractor of getContractors()">
-              <td>{{contractor.name}}</td>
-              <td class="text-center">{{contractor.signInTime}}</td>
-              <td
-                class="text-center">{{contractor.signOutTime !== undefined && contractor.signOutTime !== null ? contractor.signOutTime : '-'}}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <hr>
-
-        <!-- work progress -->
-        <div class="f-w-b text-uppercase progress-materials">
-            <button (click)="selectMaterials('Progress')"
-                class="btn btn-block btn-outline-dark btn-rounded w-15">
-                <span class="font-header pull-left">Work Progress&nbsp;<i class="fa fa-arrow-right"></i></span>
-            </button>
-        </div>
-        <div *ngFor="let img of renderImages();let i=index" class="col-4 card p-0 mt-2 pull-left">
-          <div class="card-body">
-            <a (click)="openImageModel(img,i)" class="arrow-pointer" data-bs-target="#materials-progress-modal"
-               data-bs-toggle="modal">
-              <img alt="Error occurred in loading image" src={{img.url}}/>
-            </a>
+          <!-- employees -->
+          <div class="f-w-b text-uppercase">Employee/s</div>
+          <div *ngIf="selectedSiteEmployeeList.length < 1" class="row mb-3 g-0">
+            (No employees allocated yet)
           </div>
-          <div class="card-footer text-center">
-            {{makeDate(img.date)}}
-          </div>
-        </div>
-        <!-- materials -->
-        <div class="f-w-b text-uppercase m-t-1e progress-materials">
-            <button (click)="selectMaterials('Materials')"
-                class="btn btn-block btn-outline-dark btn-rounded w-15">
-                <span class="font-header pull-left">Materials&nbsp;<i class="fa fa-arrow-right"></i></span>
-            </button>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-
-  <!--<div class="col-3 client-list h-92 apply-gradient p-4 overflow-scroll">
-    <div *ngFor="let client of clientList">
-      <div class="text-black-50 text-uppercase p-l-1e">
-        {{client.name}}
-      </div>
-      <div *ngIf="client['sites'].length > 0">
-      <div class="card-body" *ngFor="let site of client['sites']">
-        {{site.name}}
-      </div>
-      </div>
-      <div *ngIf="client['sites'].length < 1">
-        <div class="card-body text-center">
-          No sites added yet
-        </div>
-      </div>
-      <hr>
-    </div>
-  </div>-->
-
-  <!--<div class="col-8 h-92 apply-gradient overflow-y-scroll m-l-3 p-3">
-    <div class="text-uppercase font-xlarge">Project Manager</div>
-    <div class="col-sm-9 col-form-label arrow-pointer item-selection font-body">
-            <span (click)="selectEmployee(employee.uid)"
-                  *ngFor="let employee of selectedSiteContractorList">{{employee.name}}</span>
-      <span *ngIf="selectedSiteContractorList.length < 1">-</span>
-    </div>
-  </div>-->
-
-  <div *ngIf="!isEmployees && false" class="col-2 client-list h-92 card p-3 apply-gradient">
-    <!-- add customization here for search filter + client designation sort + add button -->
-    <ngx-spinner *ngIf="loader.pageLoader" [fullScreen]="true" bdColor="rgba(51, 51, 51, 0.8)" size="default"
-                 type="square-jelly-box">
-      <p class="text-white">Please Wait...</p>
-    </ngx-spinner>
-
-    <!-- TODO: confirm as inside impoosible condition -->
-    <!--<div *ngIf="isEmployees" class="container mt-1 mb-1 main-nav__list">
-      <ul class="nav nav-pills" id="pills-tab" role="tablist">
-        <li class="nav-item">
-          <a (click)="userCategorySelectionChange('Admin')" aria-controls="pills-admin" aria-selected="true"
-             class="nav-link context-menu-cursor active"
-             data-bs-toggle="pill" id="pills-admin-tab" role="tab">Admins</a>
-        </li>
-        <li class="nav-item">
-          <a (click)="userCategorySelectionChange('Supervisor')" aria-controls="pills-supervisor" aria-selected="false"
-             class="nav-link context-menu-cursor"
-             data-bs-toggle="pill" id="pills-supervisor-tab" role="tab">Supervisors</a>
-        </li>
-        <li class="nav-item">
-          <a (click)="userCategorySelectionChange('Employee')" aria-controls="pills-employee" aria-selected="false"
-             class="nav-link context-menu-cursor"
-             data-bs-toggle="pill" id="pills-employee-tab" role="tab">Employees</a>
-        </li>
-      </ul>
-    </div>-->
-
-    <div *ngIf="!isEmployees" class="w-100">
-      <button #addClientModal class="btn btn-outline-dark btn-block w-100" data-bs-target="#addClientModal"
-              data-bs-toggle="modal">
-        <i class="fa fa-user-plus"></i>&nbsp;Add Client
-      </button>
-    </div>
-
-    <div class="mb-2 mt-2 row input-group">
-      <div class="col-9 p-l-1e input-group_wrapper pt-0 pb-0 p-r-0 w-100">
-        <input (change)="clientSearch(searchText)" [(ngModel)]="searchText"
-               class="form-control apply-gradient searchText" name="searchText" placeholder="Search here">
-      </div>
-    </div>
-
-    <div class="list-group overflow-y-scroll">
-      <div *ngIf="(isEmployees ? employeeList : clientList).length > 0">
-        <span *ngIf="getFilteredClientList().length > 0">
-          <li (click)="loadDocInfo(item)" *ngFor="let item of getFilteredClientList()"
-              [ngClass]="{'highlight-row': item.isSelected}" aria-current="true"
-              class="arrow-pointer list-group-item list-group-item-action p-l-2e mb-2">
-            <div class="d-flex w-100 justify-content-between">
-              <span class="mb-1">{{item.name}}</span>
-              <span *ngIf="item.isSelected" class="highlighted-item-row">
-                &#x296C;
-              </span>
-            </div>
-         </li>
-        </span>
-        <span *ngIf="getFilteredClientList().length < 1">
-          <li (click)="loadDocInfo(item)" *ngFor="let item of (isEmployees ? employeeList : clientList)"
-              [ngClass]="{'highlight-row': item.isSelected}" aria-current="true"
-              class="arrow-pointer list-group-item list-group-item-action p-l-2e mb-2">
-              <div class="d-flex w-100 justify-content-between">
-                <span class="mb-1 font-header f-w-b">{{item.name}}</span>
-                <span *ngIf="item.isSelected" class="highlighted-item-row">
-                  &#x296C;
-                </span>
-              </div>
-          </li>
-        </span>
-
-      </div>
-      <div *ngIf="(isEmployees ? employeeList : clientList).length < 1" aria-current="true"
-           class="text-center list-group-item list-group-item-action p-l-2e m-t-1e pt-0 pb-0">
-        <h5 class="mb-1">No clients registered yet</h5>
-      </div>
-    </div>
-  </div>
-
-  <!-- CLIENT's DETAILS -->
-  <div *ngIf="!isEmployees && false" class="col-3 h-92">
-    <div class="row m-0 main-section">
-
-      <div class="shadow p-3 bg-white rounded h-92 main-section-list apply-gradient">
-        <div class="row">
-          <div class="col-7">
-            <h3>SITES</h3>
-          </div>
-          <div class="col-5">
-            <div class=" text-end mb-3">
-              <button class="btn btn-outline-dark" data-bs-target="#addSiteModal" data-bs-toggle="modal">
-                <i aria-hidden="true" class="fa fa-plus"></i>&nbsp;Add Site
-              </button>
-            </div>
-          </div>
-        </div>
-        <hr class="mt-0">
-        <div *ngIf="selectedClient.sites !== undefined" class="row">
-          <div *ngIf="selectedClient.sites.length < 1" class="no-data-dropbox text-center">
-            <div class="no-data-content left-25">
-              <i class="fa fa-3x fa-dropbox"></i>
-              <span class="text-center no-data-icon" style="text-align: center">No Sites
-                Available</span>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="selectedClient['sites'] && selectedClient.sites.length > 0"
-             class="row" id="client-sites">
-          <div (click)="onSelect(item)" *ngFor="let item of selectedClient['sites']"
-               [class.selected]="item === selectedItem"
-               class="card-wrapper mb-2 arrow-pointer col-12">
-            <div [ngClass]="{'highlight-row': item === selectedItem}" class="sites-card-list">
-              <div class="card-header">
-                <span class="mb-0">
-                  <div class="col-12 arrow-pointer card-list font-header f-w-b">
-                    <label class="arrow-pointer">{{item['name']}}</label>
-                    <span *ngIf="item === selectedItem" class="highlighted-item-row pt-2 float-right">
-                      &#x296C;
-                    </span>
-                  </div>
-                  <div class="caption-box font-body">{{item['contractor']}}</div>
-                </span>
-              </div>
-
-            </div>
-          </div>
-        </div>
-        <div *ngIf="selectedClient.sites.length < 0" class="dataNotFound text-black-50 text-center">
-          No Client found.
-        </div>
-      </div>
-      <div class="row"></div>
-    </div>
-  </div>
-
-  <div *ngIf="!isEmployees && false"
-       class="col-7 shadow pt-3 bg-white rounded overflow-y-scroll right-sidebar apply-gradient h-92">
-    <!-- widget-3 -->
-    <div class="card h-43 mb-3">
-      <div class="card-header">
-        <div *ngIf="selectedItem">
-          <div class="row">
-            <div class="col-6 pt-2">
-              <h3>{{selectedItem['name']}}</h3>
-            </div>
-            <div class="col-6 text-end">
-              <div class="m-r-1e icon-info fa-2x" data-bs-toggle="tooltip" title="Information">
-                <select (change)="changeEvent()"
-                        (click)="getDateFromMonth()" [(ngModel)]="currentDate"
-                        class="border-0 border-2 border-bottom m-r-1e f-s-1 fs-18 bg-transparent"
-                        name="currentDate">
-                  <option *ngFor="let i of getDateFromMonth()" value="{{i}}">{{i}}</option>
-                </select>
-              </div>
-              <div (click)="updateDynamicDetailSelection(4)" class="m-r-1e icon-info fa-2x" data-bs-toggle="tooltip"
-                   title="Information">
-                <i class="fa fa-info fs-18 arrow-pointer text-dark"></i>
-              </div>
-              <div class="m-r-1e icon-info fa-2x" data-bs-toggle="tooltip" title="Delete Site">
-                <i class="fa fa-trash fs-18 arrow-pointer text-dark" data-bs-target="#verifyDeleteModal"
-                   data-bs-toggle="modal"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-body overflow-y-scroll">
-        <div class="mb-3">
-
-          <!-- materials -->
-          <button (click)="selectMaterials('Materials')"
-                  class="btn btn-block btn-outline-dark btn-rounded waves-effect w-23 m-r-1e">
-            <span class="font-header"><i class="fa fa-server"></i>&nbsp;Materials</span>
-          </button>
-
-          <!-- work progress -->
-          <button (click)="selectMaterials('Progress')"
-                  class="btn btn-block btn-outline-dark btn-rounded waves-effect w-23 m-r-1e">
-            <span class="font-header"><i class="fa fa-archive"></i>&nbsp;Progress</span>
-          </button>
-
-          <!-- visitors -->
-          <button (click)="this.updateDynamicDetailSelection(5)"
-                  class="btn btn-block btn-outline-dark btn-rounded waves-effect w-23 m-r-1e">
-            <span class="font-header"><i class="fa fa-users"></i>&nbsp;Visitors</span>
-          </button>
-
-          <!-- Contractor -->
-          <button (click)="this.updateDynamicDetailSelection(7)"
-                  class="btn btn-block btn-outline-dark btn-rounded waves-effect w-23">
-            <span class="font-header"><i class="fa fa-users"></i>&nbsp;Contractor</span>
-          </button>
-        </div>
-
-
-        <!-- employees -->
-        <label class="col-form-label-lg pt-0">
-          <span class="font-header f-w-b">Employees</span>
-        </label>
-        <div *ngIf="selectedSiteEmployeeList.length < 1" class="row mb-3 g-0">
-          (No employees allocated yet)
-        </div>
-        <div *ngIf="selectedSiteEmployeeList.length > 0" class="row g-3 mb-3">
-          <div (click)="selectEmployee(employee.uid)"
-               *ngFor="let employee of selectedSiteEmployeeList"
-               class="col-4 border-end border-bottom arrow-pointer item-selection font-body">
-            {{employee.name}}
-          </div>
-        </div>
-
-        <!-- project manager -->
-        <div class="mb-3 row">
-          <label class="col-sm-3 col-form-label"><span class="font-header f-w-b">Project Manager/s</span></label>
-          <div class="col-sm-9 col-form-label arrow-pointer item-selection font-body">
-            <span (click)="selectEmployee(employee.uid)"
-                  *ngFor="let employee of selectedSiteContractorList">{{employee.name}}</span>
-            <span *ngIf="selectedSiteContractorList.length < 1">-</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <ngx-spinner *ngIf="loader.addClientLoader" [fullScreen]="false" bdColor="rgba(51, 51, 51, 0.8)" size="default"
-                 type="square-jelly-box">
-      <p class="text-white">Please Wait...</p>
-    </ngx-spinner>
-    <!-- dynamic column for data display -->
-    <div class="card h-39 overflow-y-scroll">
-      <div class="card-body">
-        <!-- for employee/supervisor attendance display -->
-        <div *ngIf="displayEmployeeDetail" class="employee-detail-list">
-          <div class="row">
-            <div class="col-6">
-              <label class="col-form-label text-uppercase">{{selectedSiteEmployee}}</label>
-            </div>
-            <div class="col-6 text-end">
-              <!-- active - green - Sign In -->
-              <label *ngIf="selectedSiteEmployeeStatus === 'Sign In'" class="col-form-label text-success"><i
-                class="icon-dot">&#x26AC;&nbsp;</i>Active</label>
-              <!-- on leave - red - On Leave -->
-              <label *ngIf="selectedSiteEmployeeStatus === 'On Leave'" class="col-form-label text-danger"><i
-                class="icon-dot">&#x26AC;&nbsp;</i>On
-                Leave</label>
-              <!-- offline - grey - Sign Out -->
-              <label *ngIf="selectedSiteEmployeeStatus === '' || selectedSiteEmployeeStatus === 'Sign Out'"
-                     class="col-form-label text-black-50"><i
-                class="icon-dot">&#x26AC;&nbsp;</i>Offline</label>
-            </div>
-          </div>
-
-          <div *ngIf="employeeAttendance.length < 1" class="row mb-3 g-0">
-            (No attendance record found for this month)
-          </div>
-          <!-- display last three status -->
-          <div *ngIf="employeeAttendance.length > 0" class="row g-3 mb-3">
+          <div *ngIf="selectedSiteEmployeeList.length > 0" class="mb-3 col-form-label">
             <table class="table table-hover table-striped">
               <thead>
-              <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Time</th>
-                <th scope="col">Status</th>
+              <tr class="text-black-50">
+                <th scope="col">Employee</th>
+                <th scope="col">Current Status</th>
+                <th scope="col">Sign In</th>
+                <th scope="col">Sign Out</th>
               </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let item of employeeAttendance">
-                <td>{{item.date}}</td>
-                <td>{{item.time}}</td>
-                <td>{{item.status}}</td>
+              <tr *ngFor="let item of selectedSiteEmployeeList">
+                <td>{{item.name}}</td>
+                <td>{{item.currentStatus}}</td>
+                <td>{{getUserSignStatus(item.attendance, 1)}}</td>
+                <td>{{getUserSignStatus(item.attendance, 2)}}</td>
               </tr>
               </tbody>
             </table>
           </div>
-        </div>
+          <hr>
 
-        <!-- for materials list -->
-        <div *ngIf="materialImagesDisplay || progressImagesDisplay" class="image-list">
-          <div class="container image-list">
-            <div class="row">
-              <div class="col-12 mb-1 p-0">
-                <span class="text-uppercase">
-                  <span *ngIf="materialImagesDisplay" class="font-header f-w-b">Materials&nbsp;
-                    <span class="text-black-50">({{renderImages().length}})</span>
-                  </span>
-                  <span *ngIf="progressImagesDisplay" class="font-header f-w-b">Work Progress&nbsp;
-                    <span class="text-black-50">({{renderImages().length}})</span>
-                  </span>
-                </span>
+          <!-- visitors -->
+          <div class="f-w-b text-uppercase">Visitor/s</div>
+          <div class="mb-3">
+            <table class="table table-striped table-hover">
+              <thead>
+              <tr class="text-black-50">
+                <th scope="col">Name</th>
+                <th class="text-center" scope="col">Sign In</th>
+                <th class="text-center" scope="col">Sign Out</th>
+              </tr>
+              </thead>
+              <tbody>
+
+              <tr *ngIf="getVisitors().length < 1">
+                <td class="text-center" colspan="3">(No visitors yet)</td>
+              </tr>
+
+              <tr *ngFor="let visitor of getVisitors()">
+                <td>{{visitor.name}}</td>
+                <td class="text-center">{{visitor.signInTime}}</td>
+                <td
+                  class="text-center">{{visitor.signOutTime !== undefined && visitor.signOutTime !== null ? visitor.signOutTime : '-'}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <hr>
+
+          <!-- visitors -->
+          <div class="f-w-b text-uppercase">Contractor/s</div>
+          <div class="mb-3">
+            <table class="table table-striped table-hover">
+              <thead>
+              <tr class="text-black-50">
+                <th scope="col">Name</th>
+                <th class="text-center" scope="col">Sign In</th>
+                <th class="text-center" scope="col">Sign Out</th>
+              </tr>
+              </thead>
+              <tbody>
+
+              <tr *ngIf="getContractors().length < 1">
+                <td class="text-center" colspan="3">(No contractors yet)</td>
+              </tr>
+
+              <tr *ngFor="let contractor of getContractors()">
+                <td>{{contractor.name}}</td>
+                <td class="text-center">{{contractor.signInTime}}</td>
+                <td
+                  class="text-center">{{contractor.signOutTime !== undefined && contractor.signOutTime !== null ? contractor.signOutTime : '-'}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <hr>
+
+          <div class="row">
+            <div class="col-2">
+              <!-- work progress -->
+              <div class="f-w-b text-uppercase progress-materials arrow-pointer">
+                <a (click)="selectMaterials('Progress')"
+                   [ngClass]="{'btn-outline-dark': materialView}" class="btn-rounded w-15">
+                  <span class="font-header pull-left">Work Progress&nbsp;<i *ngIf="!materialView"
+                                                                            class="fa fa-arrow-right"></i></span>
+                </a>
               </div>
-              <ngx-spinner *ngIf="loader.addClientLoader" [fullScreen]="false" bdColor="rgba(51, 51, 51, 0.8)"
-                           size="default"
-                           type="square-jelly-box">
-                <p class="text-white">Please Wait...</p>
-              </ngx-spinner>
-              <div class="p-0">
+              <br>
+              <!-- materials -->
+              <div class="f-w-b text-uppercase m-t-1e progress-materials arrow-pointer">
+                <a (click)="selectMaterials('Materials')"
+                   [ngClass]="{'btn-outline-dark': !materialView}" class="btn-rounded w-15">
+                  <span class="font-header pull-left">Materials&nbsp;<i *ngIf="materialView"
+                                                                        class="fa fa-arrow-right"></i></span>
+                </a>
+              </div>
+            </div>
+            <!-- images -->
+            <div class="col-10">
+              <div class="col-4 p-0 mt-2 pull-left" *ngIf="renderImages().length < 1">
+                <span>(No Images Uploaded Yet)</span>
+              </div>
+              <div *ngIf="renderImages().length > 1">
                 <div *ngFor="let img of renderImages();let i=index" class="col-4 card p-0 mt-2 pull-left">
-                  <div class="card-body">
+                  <div class="card-body text-center">
                     <a (click)="openImageModel(img,i)" class="arrow-pointer" data-bs-target="#materials-progress-modal"
                        data-bs-toggle="modal">
                       <img alt="Error occurred in loading image" src={{img.url}}/>
                     </a>
                   </div>
-                  <div class="card-footer text-center">
+                  <div class="card-footer text-center border-0">
                     {{makeDate(img.date)}}
                   </div>
                 </div>
-                <div *ngIf="renderImages().length < 1">
-                  <span class="text-black-50">(No images available)</span>
-                </div>
               </div>
             </div>
           </div>
+
         </div>
-        <div aria-hidden="true" aria-labelledby="materials-progress-modal-label" class="modal fade"
-             id="materials-progress-modal"
-             role="dialog" tabindex="-1">
-          <div class="modal-dialog  modal-lg" role="document">
-            <div class="modal-content">
-              <div class="model-body">
-                <div class="row">
-                  <div class="col-7">
-                    <div class="carousel slide" data-interval="false" id="image-modal-carousel">
-                      <div class="carousel-inner" role="listbox">
-                        <div *ngFor="let image of renderImages() let i = index" [ngClass]="{'active': i == imgId }"
-                             class="carousel-item">
-                          <a class="carousel-control-prev" data-slide="prev" href="#image-modal-carousel" role="button">
-                            <span aria-hidden="true" class="carousel-control-prev-icon"></span>
-                            <span class="sr-only">Previous</span>
-                          </a>
-                          <img alt="{{image}}" class="d-block w-100 img-responsive" src={{image}}>
-                          <a class="carousel-control-next" data-slide="next" href="#image-modal-carousel" role="button">
-                            <span aria-hidden="true" class="carousel-control-next-icon"></span>
-                            <span class="sr-only">Next</span>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-5 pt-2 p-r-2e">
-                    <span class="font-header">
-                        NOTES
-                      </span>
-                    <hr>
-
-                    <div class="col-12 h-65 overflow-y-scroll">
-                      <div *ngFor="let i of selectedImageNotes" class="card m-b-3">
-                        <div class="card-header">
-                          {{getDateAndTime(i.date)}}
-                        </div>
-                        <div class="card-body">
-                          {{i.message}}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="row position-absolute bottom-0 w-50">
-                      <div class="col-8 m-b-3">
-                        <input [(ngModel)]="newNote" class="form-control" name="newNote"/>
-                      </div>
-                      <div class="col-4 font-xlarge">
-                        <span (click)="recordNote()" class="arrow-pointer">
-                          <i aria-hidden="true" class="fa fa-bullhorn"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- site info -->
-        <div *ngIf="displayInfoView" class="m-t-1e" id="InfoView">
-          <table class="table table-striped table-hover">
-            <tbody>
-            <tr>
-              <th class="text-uppercase" scope="col">Address</th>
-              <td>{{selectedItem['address']}}</td>
-            </tr>
-            <tr>
-              <th class="text-uppercase" scope="col">Pincode</th>
-              <td>{{selectedItem['pincode']}}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- visitors info -->
-        <div *ngIf="displayVisitorInfo" id="VisitorInfo">
-          <div class="col-12 mb-1 p-0">
-                <span class="text-uppercase">
-                  <span class="font-header f-w-b">Visitors</span>
-                  <span class="text-black-50">({{getVisitors().length}})</span>
-                </span>
-          </div>
-          <div class="row g-3 mb-3 mt-1">
-            <table class="table table-striped table-hover">
-              <thead>
-              <tr>
-                <th scope="col">Name</th>
-                <th class="text-center" scope="col">Sign In</th>
-                <th class="text-center" scope="col">Sign Out</th>
-              </tr>
-              </thead>
-              <tbody>
-
-              <tr *ngIf="getVisitors().length < 1">
-                <td class="text-center" colspan="3">(No visitors yet)</td>
-              </tr>
-
-              <tr *ngFor="let visitor of getVisitors()">
-                <td>{{visitor.name}}</td>
-                <td class="text-center">{{visitor.signInTime}}</td>
-                <td
-                  class="text-center">{{visitor.signOutTime !== undefined && visitor.signOutTime !== null ? visitor.signOutTime : '-'}}</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Contractors info -->
-        <div *ngIf="displayContractorInfo" id="ContractorInfo">
-          <div class="col-12 mb-1 p-0">
-                <span class="text-uppercase">
-                  <span class="font-header f-w-b">Contractor</span>
-                  <span class="text-black-50">({{getContractors().length}})</span>
-                </span>
-          </div>
-          <div class="row g-3 mb-3 mt-1">
-            <table class="table table-striped table-hover">
-              <thead>
-              <tr>
-                <th scope="col">Name</th>
-                <th class="text-center" scope="col">Sign In</th>
-                <th class="text-center" scope="col">Sign Out</th>
-              </tr>
-              </thead>
-              <tbody>
-
-              <tr *ngIf="getVisitors().length < 1">
-                <td class="text-center" colspan="3">(No visitors yet)</td>
-              </tr>
-
-              <tr *ngFor="let visitor of getVisitors()">
-                <td>{{visitor.name}}</td>
-                <td class="text-center">{{visitor.signInTime}}</td>
-                <td
-                  class="text-center">{{visitor.signOutTime !== undefined && visitor.signOutTime !== null ? visitor.signOutTime : '-'}}</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <span *ngIf="checkWidgetDisplayConfig()" class="text-black-50 top-50 left-35 position-relative font-header">
-          <i class="fas fa-skull-crossbones"></i>
-          Please select any item from above.
-        </span>
       </div>
     </div>
   </div>
 
-  <!-- Employee Screen -->
+  <!-- employee screen -->
   <div class="employee-container">
     <div class="row">
-      <div *ngIf="isEmployees" class="col-3 employee-sidebar h-92 apply-gradient m-l-3 m-b-3 p-0">
+      <div *ngIf="isEmployees" class="col-3 employee-sidebar h-100 apply-gradient m-l-3 m-b-3 p-0">
         <div class="filter">
           <div class="filter-list">
             <div class="filter-item">
@@ -710,16 +323,15 @@
                 </div>
               </div>
               <button (click)="showRegularize()" class="btn btn-outline-dark w-100 m-b-3"
-                      data-bs-target="#regularizeAttendance"
-                      data-bs-toggle="modal" data-bs-toggle="tooltip" title="Regularize">
+                      data-bs-target="#regularizeAttendance" data-bs-toggle="modal" title="Regularize">
                 Regularize
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div *ngIf="isEmployees" class="col-9 employee-main-content h-92 p-0">
-        <div class="employee-card-container h-92 apply-gradient m-l-3">
+      <div *ngIf="isEmployees" class="col-9 employee-main-content h-100 p-0">
+        <div class="employee-card-container h-100 apply-gradient m-l-3">
           <div *ngIf="tempSelectedEmployees.length > 0" class="card-container mt-0">
             <div class="row">
               <div *ngFor="let item of tempSelectedEmployees;let j=index" class="card col-3">
@@ -733,13 +345,13 @@
                         <div class="row">
                           <div class="col-6"></div>
                           <div class="col-6 text-end">
-                            <!-- active - green - Sign In -->
+                            <!-- green - Sign In -->
                             <label *ngIf="item.currentStatus === 'Sign In'" class="col-form-label text-success"><i
                               class="fa fa-circle" data-bs-toggle="tooltip" title="Active"></i></label>
-                            <!-- on leave - red - On Leave -->
+                            <!-- red - On Leave -->
                             <label *ngIf="item.currentStatus === 'On Leave'" class="col-form-label text-danger"><i
                               class="fa fa-circle" data-bs-toggle="tooltip" title="On Leave"></i></label>
-                            <!-- offline - grey - Sign Out -->
+                            <!-- grey - Sign Out -->
                             <label
                               *ngIf="item.currentStatus === '' || (item.currentStatus !== 'On Leave' && item.currentStatus !== 'Sign In')"
                               class="col-form-label text-black-50"><i class="fa fa-circle" data-bs-toggle="tooltip"
@@ -799,7 +411,7 @@
   </div>
 </div>
 
-<!-- Update Employee's Site Modal -->
+<!-- update employee's site modal -->
 <div aria-hidden="true" aria-labelledby="changeSiteModalLabel" class="modal fade" data-bs-backdrop="static"
      data-bs-keyboard="true"
      id="changeSiteModal" tabindex="-1">
@@ -835,7 +447,7 @@
   </div>
 </div>
 
-<!-- Add New Site Modal -->
+<!-- add new site modal -->
 <div aria-hidden="true" aria-labelledby="addSiteModal" class="modal fade" data-bs-backdrop="static"
      data-bs-keyboard="true"
      id="addSiteModal" tabindex="-1">
@@ -897,7 +509,7 @@
   </div>
 </div>
 
-<!-- Add User Modal -->
+<!-- add user modal -->
 <div aria-hidden="true" aria-labelledby="addUserModal" class="modal fade" data-bs-backdrop="static"
      data-bs-keyboard="true"
      id="addUserModal" tabindex="-1">
@@ -1023,7 +635,7 @@
   </div>
 </div>
 
-<!-- Add Client Modal -->
+<!-- add client modal -->
 <div aria-hidden="true" aria-labelledby="addClientModal" class="modal fade" data-bs-backdrop="static"
      data-bs-keyboard="true"
      id="addClientModal" tabindex="-1">
@@ -1068,7 +680,7 @@
   </div>
 </div>
 
-<!-- Employee Detail Modal -->
+<!-- employee detail modal -->
 <div aria-hidden="true" aria-labelledby="employeeDetailModal-label" class="modal fade" id="employeeDetailModal"
      role="dialog" tabindex="-1">
   <div class="modal-dialog  modal-lg" role="document">
@@ -1086,7 +698,6 @@
                     <span class=" fa fa-angle-left fa-2x"></span>
                     <span class="sr-only">Previous</span>
                   </a>
-                  <!-- Show Employeedetails in pop up -->
                   <div class="card apply-gradient">
                     <div class="card-body">
                       <table class="table">
@@ -1095,17 +706,17 @@
                           <th class="col-6" scope="col"><h5>{{item.name}}</h5></th>
                           <th class="col-6" scope="col">
                             <div>
-                              <!-- active - green - Sign In -->
+                              <!-- green - Sign In -->
                               <label *ngIf="selectedSiteEmployeeStatus === 'Sign In'"
                                      class="col-form-label text-success">
                                 <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="Active"></i>Active
                               </label>
-                              <!-- on leave - red - On Leave -->
+                              <!-- red - On Leave -->
                               <label *ngIf="selectedSiteEmployeeStatus === 'On Leave'"
                                      class="col-form-label text-danger">
                                 <i class="fa fa-circle p-05e" data-bs-toggle="tooltip" title="On Leave"></i>On Leave
                               </label>
-                              <!-- offline - grey - Sign Out -->
+                              <!-- grey - Sign Out -->
                               <label
                                 *ngIf="selectedSiteEmployeeStatus === '' || (selectedSiteEmployeeStatus !== 'On Leave' && selectedSiteEmployeeStatus !== 'Sign In')"
                                 class="col-form-label text-black-50">
@@ -1166,8 +777,6 @@
                         </tr>
                         </tbody>
                       </table>
-                      <!-- <button type="button" data-bs-toggle="tooltip" title="Delete User" class="btn btn-primary"
-                        data-bs-target="#verifyDeleteUser" data-bs-toggle="modal">Delete User</button> -->
                     </div>
                   </div>
                   <a class="carousel-control-next" data-slide="next" data-toggle="tooltip"
@@ -1186,7 +795,7 @@
   </div>
 </div>
 
-<!-- Verify Delete Site -->
+<!-- verify delete site -->
 <div *ngIf="this.selectedItem !== undefined && this.selectedItem !== null" aria-hidden="true"
      aria-labelledby="verifyDeleteModal-label" class="modal fade"
      id="verifyDeleteModal" role="dialog" tabindex="-1">
@@ -1209,7 +818,7 @@
   </div>
 </div>
 
-<!-- Verify Delete User -->
+<!-- verify delete user -->
 <div *ngIf="this.record !== undefined && this.record !== null" aria-hidden="true"
      aria-labelledby="verifyDeleteUser-label" class="modal fade"
      id="verifyDeleteUser" role="dialog" tabindex="-1">
@@ -1231,11 +840,9 @@
   </div>
 </div>
 
-<!-- Regularize Attendance -->
-<div *ngIf="this.approvalList.length>0" aria-hidden="true" aria-labelledby="regularizeAttendance-label"
-     class="modal fade"
-     data-bs-backdrop="static"
-     data-bs-keyboard="true" id="regularizeAttendance" tabindex="-1">
+<!-- regularize attendance -->
+<div aria-hidden="true" aria-labelledby="regularizeAttendance-label" class="modal fade"
+     data-bs-keyboard="true" id="regularizeAttendance" role="dialog" tabindex="-1">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-black-50">
@@ -1290,8 +897,251 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
-        <!-- <button (click)="updateUserSite()" class="btn btn-primary" data-bs-dismiss="modal" type="button">Regularize
-        </button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- site report -->
+<div aria-hidden="true" aria-labelledby="siteReport-label" class="modal fade"
+     data-bs-keyboard="true" id="siteReportModal" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-fullscreen" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-black-50">
+        <a aria-label="Close" data-bs-dismiss="modal" type="button">
+          <i class="fa fa-arrow-left"></i>&nbsp;
+        </a>
+        <h5 class="modal-title" id="siteReport-label">Site Report</h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-body">
+        <!--  -->
+        <form class="row g-3">
+
+          <!-- select date -->
+          <div class="col-auto">
+            <input class="form-control-plaintext" id="reportDate" readonly type="text" value="Date">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" id="reportDate1" type="date">
+          </div>
+
+          <!-- select site -->
+          <div class="col-auto">
+            <input class="form-control-plaintext" id="reportSite" readonly type="text" value="Site">
+          </div>
+          <div class="col-auto">
+            <input class="form-control" id="reportSite1" placeholder="" type="password">
+          </div>
+
+          <div class="col-auto">
+            <button class="btn btn-outline-dark mb-3" type="submit">Generate Report</button>
+          </div>
+        </form>
+
+        <hr>
+
+        <!-- report -->
+        <div class="col-12">
+
+          <!-- employees -->
+          <div class="pull-left p-t-b-0_5">
+            <h3 class="text-black-50 table-caption-rotate">EMPLOYEES</h3>
+          </div>
+          <div class="col-11 pull-left">
+            <table class="table table-hoverable">
+              <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Handle</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- project supervisor -->
+          <div class="pull-left p-t-b-0_5">
+            <h3 class="text-black-50 table-caption-rotate">SUPERVISOR</h3>
+          </div>
+          <div class="col-11 pull-left">
+            <table class="table table-hoverable">
+              <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Handle</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- visitors -->
+          <div class="pull-left p-t-b-0_5">
+            <h3 class="text-black-50 table-caption-rotate">VISITORS</h3>
+          </div>
+          <div class="col-11 pull-left">
+            <table class="table table-hoverable">
+              <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Handle</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- contractors -->
+          <div class="pull-left p-t-b-0_5">
+            <h3 class="text-black-50 table-caption-rotate">CONTRACTORS</h3>
+          </div>
+          <div class="col-11 pull-left">
+            <table class="table table-hoverable">
+              <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Handle</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- date picker -->
+<div aria-hidden="true" aria-labelledby="datePicker-label" class="modal fade"
+     data-bs-keyboard="true" id="datePicker" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-fullscreen" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-black-50">
+        <a aria-label="Close" data-bs-dismiss="modal" type="button">
+          <i class="fa fa-arrow-left"></i>&nbsp;
+        </a>
+        <h5 class="modal-title" id="datePicker-label">Select Date</h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-body">
+
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
       </div>
     </div>
   </div>
