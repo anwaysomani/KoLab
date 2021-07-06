@@ -188,3 +188,25 @@ module.exports.signOutAllEmployees = functions.https.onRequest((req, res) => {
   });
 });
 
+module.exports.supervisorReports = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {    
+    const attendanceArray = [];
+    let supervisors = [];
+    admin
+      .firestore()
+      .collection("users")
+      .get()
+      .then((data) => {
+        // eslint-disable-next-line guard-for-in
+        for (const i in data.docs) {
+            supervisors = data.docs[i].data().attendance.filter((item) => {
+            return item.date == req.body.date && item.site.site==req.body.site.site && item.site.client==req.body.site.client;
+          });
+        }
+        res.send(supervisors);
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error);
+      });
+  });
+});

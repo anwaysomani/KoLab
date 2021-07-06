@@ -109,8 +109,11 @@ export class ClientComponent implements OnInit {
   acceptDenyFlag = false;
   selectedRegularizeRecords: any;
   uid = '';
-  datepickerModel: Date | undefined;
+  datepickerModel = new Date();
   mousing = false;
+  clientSiteList:Array<any> = [];
+  reportClient ='';
+  reportSite ='';
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
@@ -727,5 +730,40 @@ export class ClientComponent implements OnInit {
     this.http.get(environment.funcUrl + 'attendanceRegularize/').toPromise().then((data) => {
       console.log('Execute regularize');
     });
+  }
+
+  /* get site listing for change site popup */
+  getReportsClientSite(): void {
+    this.getClientList();
+  }
+
+  getClientList():void {
+    this.db.collection('clients').valueChanges().subscribe((det) => {
+        this.clientSiteList = [];
+        /* tslint:disable-next-line:prefer-for-of */
+        for (let i = 0; i < det.length; i++) {
+          /* tslint:disable-next-line:prefer-for-of */ // @ts-ignore
+          for (let j = 0; j < det[i].sites.length; j++) {
+            this.clientSiteList.push({
+              // @ts-ignore
+              ...det[i].sites[j],
+              // @ts-ignore
+              client: det[i].name
+            });
+          }
+        }
+        console.log(this.clientSiteList);
+      });
+  }
+  /* add user to db */
+
+  // tslint:disable-next-line:typedef
+  async generateSupervisorReport() {
+    return await this.http.post(environment.funcUrl + 'supervisorReports/', {
+      /* designation: applyFilter.designation, */
+      date: this.datepickerModel,
+      site:this.reportSite,
+      client:this.reportClient,
+    }).toPromise();
   }
 }
