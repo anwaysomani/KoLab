@@ -109,7 +109,7 @@ export class ClientComponent implements OnInit {
   acceptDenyFlag = false;
   selectedRegularizeRecords: any;
   uid = '';
-  datepickerModel = new Date();
+  datepickerModel = 1;
   mousing = false;
   clientSiteList:Array<any> = [];
   reportClient ='';
@@ -127,6 +127,7 @@ export class ClientComponent implements OnInit {
     this.activeUserName = JSON.parse(localStorage.user).name;
     this.loader.pageLoader = true;
     this.currentDate = new Date().getDate();
+    this.datepickerModel= new Date().getDate();
     this.db = db;
     this.isEmployees = (router.url === '/employees');
     if (this.isEmployees) {
@@ -575,6 +576,9 @@ export class ClientComponent implements OnInit {
     if (status === 204) {
       this.toastr.success('Record successfully deleted!.');
     }
+    if (status === 405) {
+        this.toastr.warning('Might take some time to genrate reports!.');
+      }
   }
 
   /* add another popup for employee popup */
@@ -758,12 +762,18 @@ export class ClientComponent implements OnInit {
   /* add user to db */
 
   // tslint:disable-next-line:typedef
-  async generateSupervisorReport() {
+  async generateReport() {
     return await this.http.post(environment.funcUrl + 'supervisorReports/', {
       /* designation: applyFilter.designation, */
       date: this.datepickerModel,
       site:this.reportSite,
       client:this.reportClient,
     }).toPromise();
+  }
+    
+  raiseReport(){
+      this.generateReport().then((data)=>{
+        this.showToaster(405);
+      })
   }
 }

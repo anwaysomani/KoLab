@@ -920,34 +920,28 @@
 
           <!-- select date -->
           <div class="col-1">
-            <label class="form-control-plaintext" id="reportDate" >Date</label>
+            <label class="form-control-plaintext text-end" id="reportDate">Date</label>
           </div>
-          <div class="col-auto">
-            <input class="form-control" id="reportDate1" type="date" [ngModel]="datepickerModel | date:'yyyy-MM-dd'" (ngModelChange)="datepickerModel = $event">
+          <div class="col-auto p-l-2e">
+            <!-- <input class="form-control" id="reportDate1" type="date" [ngModel]="datepickerModel | date:'yyyy-MM-dd'" (ngModelChange)="datepickerModel = $event"> -->
+            <select (click)="getDateFromMonth()" [(ngModel)]="datepickerModel"
+                      class="border-0 border-2 border-bottom m-r-1e f-s-1 fs-18 bg-transparent form-control-plaintext"
+                      name="datepickerModel">
+                <option *ngFor="let i of getDateFromMonth()" value="{{i}}">{{i}}</option>
+              </select>
           </div>
 
           <!-- select site -->
         <div class="col-1">
-            <label class="form-control-plaintext" id="reportSite">Site</label>
+            <label class="form-control-plaintext text-end" id="reportSite">Site</label>
         </div>
         <div class="col-auto">
             <select class="border-0 border-2 border-bottom m-r-1e  bg-transparent form-control-plaintext" name="reportSite" [(ngModel)]="reportSite">
-                <option *ngFor="let client of clientSiteList" value="{{client.name}}">{{client.name}}</option>
+                <option *ngFor="let client of clientSiteList" value="{{client.name}}">{{client.name}},{{client.client}}</option>
             </select>
         </div>
-
-        <!-- select client -->
-        <div class="col-1">
-            <label class="form-control-plaintext" id="reportClient">Client</label>
-        </div>
-        <div class="col-auto">
-            <select class="border-0 border-2 border-bottom m-r-1e  bg-transparent form-control-plaintext" name="reportClient" [(ngModel)]="reportClient">
-                <option *ngFor="let client of clientSiteList" value="{{client.client}}">{{client.client}}</option>
-            </select>
-        </div>
-
-          <div class="col-auto">
-            <button class="btn btn-outline-dark mb-3" type="submit" (click)="generateSupervisorReport()">Generate Report</button>
+          <div class="col-auto p-l-2e">
+            <button class="btn btn-outline-dark mb-3" type="submit" (click)="raiseReport()">Generate Report</button>
           </div>
         </form>
 
