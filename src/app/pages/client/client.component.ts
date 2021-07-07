@@ -117,6 +117,20 @@ export class ClientComponent implements OnInit {
   reportSiteClient ='';
   reportData: Array<any> = [];
   reportAttendance: Array<any> = [];
+  fileDetails: Array<any> = [];
+  showFileManagerView=true;
+  contractorReport: Array<any> = [];
+  supervisorReport: Array<any> = [];
+  employeeReport: Array<any> = [];
+  visitorReport: Array<any> = [];
+  materialReport: Array<any> = [];
+  workProgressReport: Array<any> = [];
+  supervisorDetails: Array<any> = [];
+  contractorDetails: Array<any> = [];
+  employeeDetails: Array<any> = [];
+  visitorDetails: Array<any> = [];
+  materialDetails: Array<any> = [];
+  workProgressDetails: Array<any> = [];
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
@@ -742,6 +756,8 @@ export class ClientComponent implements OnInit {
   /* get site listing for change site popup */
   getReportsClientSite(): void {
     this.getClientList();
+    this.getFileManagerDetails();
+    this.updateDynamicDetailSelection(1);
   }
 
   getClientList():void {
@@ -785,21 +801,97 @@ export class ClientComponent implements OnInit {
       })
   }
 
-  getReport():void{
+  getReport(file:Array<any>):void{
+    this.updateDynamicDetailSelection(0);
     this.loader.pageLoader = true;
     this.db.collection('reports').valueChanges().subscribe((det)=>{
         // @ts-ignore
-        this.reportData = det;
+        this.reportData = det.filter(record => {
+            // @ts-ignore
+            return record.clientName == file.clientName && record.siteName == file.siteName && record.date == file.date;
+        });
         for (let i=0;i<this.reportData.length;i++) {
-            this.reportData[i].attendance.filter((item:any)=>{
-                this.reportAttendance.push({
-                    time:item.time,
-                    status:item.status,
-                    name:this.reportData[i].name
+            this.supervisorReport=this.reportData[i].data.supervisor;
+            this.contractorReport=this.reportData[i].data.contractor;
+            this.employeeReport=this.reportData[i].data.employee;
+            this.visitorReport=this.reportData[i].data.visitor;
+            this.materialReport=this.reportData[i].data.material;
+            this.workProgressReport=this.reportData[i].data.workProgress;
+
+        }
+        /* Generate Supervisor records */
+        for (let i=0;i<this.supervisorReport.length;i++) {
+            this.supervisorReport=this.supervisorReport[i].attendance.filter((supervisor:any)=>{
+                this.supervisorDetails.push({
+                    time:supervisor.time,
+                    status:supervisor.status,
+                    name:this.supervisorReport[i].name
                 })
             });
         }
-       console.log(this.reportAttendance);
+        /* Generate contractor records */
+        for (let i=0;i<this.contractorReport.length;i++) {
+            this.contractorReport=this.contractorReport[i].attendance.filter((contractor:any)=>{
+                this.contractorDetails.push({
+                    time:contractor.time,
+                    status:contractor.status,
+                    name:this.contractorReport[i].name
+                })
+            });
+        }
+        /* Generate employee records */
+        for (let i=0;i<this.employeeReport.length;i++) {
+            this.employeeReport=this.employeeReport[i].attendance.filter((employee:any)=>{
+                this.employeeDetails.push({
+                    time:employee.time,
+                    status:employee.status,
+                    name:this.employeeReport[i].name
+                })
+            });
+        }
+        /* Generate visitor records */
+        for (let i=0;i<this.visitorReport.length;i++) {
+            this.visitorReport=this.visitorReport[i].attendance.filter((visitor:any)=>{
+                this.visitorDetails.push({
+                    time:visitor.time,
+                    status:visitor.status,
+                    name:this.visitorReport[i].name
+                })
+            });
+        }
+        /* Generate material records */
+        for (let i=0;i<this.materialReport.length;i++) {
+            this.materialReport=this.materialReport[i].attendance.filter((material:any)=>{
+                this.materialDetails.push({
+                    time:material.time,
+                    status:material.status,
+                    name:this.materialReport[i].name
+                })
+            });
+        }
+        /* Generate workProgress records */
+        for (let i=0;i<this.workProgressReport.length;i++) {
+            this.workProgressReport=this.workProgressReport[i].attendance.filter((workProgress:any)=>{
+                this.workProgressDetails.push({
+                    time:workProgress.time,
+                    status:workProgress.status,
+                    name:this.workProgressReport[i].name
+                })
+            });
+        }
+       console.log(this.supervisorReport);
     })
+  }
+
+  getFileManagerDetails():void{
+    this.loader.pageLoader = true;
+    this.db.collection('reports').valueChanges().subscribe((det)=>{
+        this.fileDetails = det;
+       console.log(this.fileDetails);
+    })
+  }
+
+  updateDynamicDetailSelection(state: number): void {
+    this.showFileManagerView = (state === 1); // update view for imageDrilldown
   }
 }

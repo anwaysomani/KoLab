@@ -946,15 +946,44 @@
         </form>
 
         <hr>
-
+        <div class="col-12" *ngIf="showFileManagerView">
+        
+            <!-- employees -->
+            <div class="pull-left p-t-b-0_5">
+                <h3 class="text-black-50 table-caption-rotate">File Manager</h3>
+            </div>
+            <div class="col-11 pull-left">
+                <table class="table table-hoverable">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Site Name</th>
+                            <th scope="col">Client Name</th>
+                            <th scope="col">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="fileDetails.length>0">
+                        <tr *ngFor="let file of fileDetails;let z = index" (click)="getReport(file)">
+                            <th scope="row">{{z+1}}</th>
+                            <td>{{file.siteName}}</td>
+                            <td>{{file.clientName}}</td>
+                            <td>{{file.date}}</td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="fileDetails.length<1">
+                        No data available
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <!-- report -->
-        <div class="col-12">
+        <div class="col-12" *ngIf="!showFileManagerView">
 
           <!-- employees -->
           <div class="pull-left p-t-b-0_5">
             <h3 class="text-black-50 table-caption-rotate">EMPLOYEES</h3>
           </div>
-          <div class="col-11 pull-left">
+          <div class="col-11 pull-left min-vh-10">
             <table class="table table-hoverable">
               <thead>
               <tr>
@@ -964,145 +993,103 @@
                 <th scope="col">Sign Out Time</th>
               </tr>
               </thead>
-              <tbody>
-              <tr *ngFor="let record of reportAttendance">
-                <th scope="row">1</th>
-                <td>{{record.name}}</td>
-                <td *ngIf="record.status=='Sign Out'">{{record.time}}</td>
-                <td *ngIf="record.status=='Sign In'">{{record.time}}</td>
-              </tr>
-              </tbody>
+            <tbody *ngIf="employeeDetails.length>0">
+                <tr *ngFor="let record of employeeDetails; ;let i = index">
+                    <th scope="row">{{i}}</th>
+                    <td>{{record.name}}</td>
+                    <td>{{record.status=='Sign In' ? record.time : '-'}}</td>
+                    <td>{{record.status=='Sign Out' ? record.time : '-'}}</td>
+                </tr>
+            </tbody>
             </table>
+            <div *ngIf="employeeDetails.length<1" class="mb-3 g-0 text-center text-black-50">
+                No Data available
+            </div>
           </div>
 
           <!-- project supervisor -->
           <div class="pull-left p-t-b-0_5">
             <h3 class="text-black-50 table-caption-rotate">SUPERVISOR</h3>
           </div>
-          <div class="col-11 pull-left">
+          <div class="col-11 pull-left min-vh-10">
             <table class="table table-hoverable">
-              <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Sign In Time</th>
-                <th scope="col">Sign Out Time</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              </tbody>
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Sign In Time</th>
+                        <th scope="col">Sign Out Time</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="supervisorDetails.length>0">
+                    <tr *ngFor="let record of supervisorDetails; ;let i = index">
+                        <th scope="row">{{i}}</th>
+                        <td>{{record.name}}</td>
+                        <td>{{record.status=='Sign In' ? record.time : '-'}}</td>
+                        <td>{{record.status=='Sign Out' ? record.time : '-'}}</td>
+                    </tr>
+                </tbody>
             </table>
+            <div *ngIf="supervisorDetails.length<1" class="mb-3 g-0 text-center text-black-50">
+                No Data available
+            </div>
           </div>
 
           <!-- visitors -->
           <div class="pull-left p-t-b-0_5">
             <h3 class="text-black-50 table-caption-rotate">VISITORS</h3>
           </div>
-          <div class="col-11 pull-left">
+        <div class="col-11 pull-left min-vh-10">
             <table class="table table-hoverable">
-              <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Sign In Time</th>
-                <th scope="col">Sign Out Time</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              </tbody>
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Sign In Time</th>
+                        <th scope="col">Sign Out Time</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="visitorDetails.length>0">
+                    <tr *ngFor="let record of visitorDetails; ;let i = index">
+                        <th scope="row">{{i}}</th>
+                        <td>{{record.name}}</td>
+                        <td>{{record.status=='Sign In' ? record.time : '-'}}</td>
+                        <td>{{record.status=='Sign Out' ? record.time : '-'}}</td>
+                    </tr>
+                </tbody>
             </table>
-          </div>
+            <div *ngIf="visitorDetails.length<1" class="mb-3 g-0 text-center text-black-50">
+                No Data available
+            </div>
+        </div>
 
           <!-- contractors -->
           <div class="pull-left p-t-b-0_5">
             <h3 class="text-black-50 table-caption-rotate">CONTRACTORS</h3>
           </div>
-          <div class="col-11 pull-left">
+        <div class="col-11 pull-left min-vh-10">
             <table class="table table-hoverable">
-              <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Sign In Time</th>
-                <th scope="col">Sign Out Time</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              </tbody>
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Sign In Time</th>
+                        <th scope="col">Sign Out Time</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="contractorDetails.length>0">
+                    <tr *ngFor="let record of contractorDetails; ;let i = index">
+                        <th scope="row">{{i}}</th>
+                        <td>{{record.name}}</td>
+                        <td>{{record.status=='Sign In' ? record.time : '-'}}</td>
+                        <td>{{record.status=='Sign Out' ? record.time : '-'}}</td>
+                    </tr>
+                </tbody>
             </table>
-          </div>
+            <div *ngIf="contractorDetails.length<1" class="mb-3 g-0 text-center text-black-50">
+                No Data available
+            </div>
+        </div>
         </div>
       </div>
       <div class="modal-footer">

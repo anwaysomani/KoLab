@@ -262,9 +262,7 @@ module.exports.supervisorReports = functions.https.onRequest((req, res) => {
             allEmployees.push({
               name: emp.name,
               attendance: employee,
-              designation: emp.designation,
-              contractors: contractors,
-              visitors: visitors,
+              designation: emp.designation
             });
           }
         }
@@ -288,7 +286,7 @@ module.exports.supervisorReports = functions.https.onRequest((req, res) => {
             material: [],
           },
         });
-        res.send(allEmployees);
+        /* res.send(allEmployees); */
       })
       .catch((error) => {
         console.log("Error getting documents: ", error);
