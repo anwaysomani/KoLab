@@ -287,8 +287,10 @@ module.exports.supervisorReports = functions.https.onRequest((req, res) => {
           },
         });
         /* res.send(allEmployees); */
+        res.sendStatus(405);
       })
       .catch((error) => {
+        res.sendStatus(412);
         console.log("Error getting documents: ", error);
       });
   });

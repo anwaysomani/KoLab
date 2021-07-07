@@ -594,7 +594,7 @@ export class ClientComponent implements OnInit {
       this.toastr.success('Record successfully deleted!.');
     }
     if (status === 405) {
-        this.toastr.warning('Might take some time to genrate reports!.');
+        this.toastr.warning('Might take some time to generate reports!.');
       }
   }
 
@@ -795,10 +795,14 @@ export class ClientComponent implements OnInit {
     
   raiseReport():void{
       this.loader.pageLoader = true;
-      this.generateReport().then((data)=>{
+      this.generateReport().then(()=>{
         this.showToaster(405);   
         this.loader.pageLoader = false;
       })
+      .catch((error) => {
+        this.showToaster(error.status);
+        console.error('Error generating reports: ', error);
+      });
   }
 
   getReport(file:Array<any>):void{
