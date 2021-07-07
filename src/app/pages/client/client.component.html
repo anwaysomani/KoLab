@@ -936,8 +936,8 @@
             <label class="form-control-plaintext text-end" id="reportSite">Site</label>
         </div>
         <div class="col-auto">
-            <select class="border-0 border-2 border-bottom m-r-1e  bg-transparent form-control-plaintext" name="reportSite" [(ngModel)]="reportSite">
-                <option *ngFor="let client of clientSiteList" value="{{client.name}}">{{client.name}},{{client.client}}</option>
+            <select class="border-0 border-2 border-bottom m-r-1e  bg-transparent form-control-plaintext" name="reportSite" [(ngModel)]="reportSiteClient">
+                <option *ngFor="let client of clientSiteList" value="{{client.name}},{{client.client}}">{{client.name}},{{client.client}}</option>
             </select>
         </div>
           <div class="col-auto p-l-2e">
@@ -959,35 +959,17 @@
               <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
+                <th scope="col">Name</th>
+                <th scope="col">Sign In Time</th>
+                <th scope="col">Sign Out Time</th>
               </tr>
               </thead>
               <tbody>
-              <tr>
+              <tr *ngFor="let record of reportAttendance">
                 <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
+                <td>{{record.name}}</td>
+                <td *ngIf="record.status=='Sign Out'">{{record.time}}</td>
+                <td *ngIf="record.status=='Sign In'">{{record.time}}</td>
               </tr>
               </tbody>
             </table>
@@ -1002,9 +984,9 @@
               <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
+                <th scope="col">Name</th>
+                <th scope="col">Sign In Time</th>
+                <th scope="col">Sign Out Time</th>
               </tr>
               </thead>
               <tbody>
@@ -1045,9 +1027,9 @@
               <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
+                <th scope="col">Name</th>
+                <th scope="col">Sign In Time</th>
+                <th scope="col">Sign Out Time</th>
               </tr>
               </thead>
               <tbody>
@@ -1088,9 +1070,9 @@
               <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
+                <th scope="col">Name</th>
+                <th scope="col">Sign In Time</th>
+                <th scope="col">Sign Out Time</th>
               </tr>
               </thead>
               <tbody>

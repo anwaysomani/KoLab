@@ -114,6 +114,9 @@ export class ClientComponent implements OnInit {
   clientSiteList:Array<any> = [];
   reportClient ='';
   reportSite ='';
+  reportSiteClient ='';
+  reportData: Array<any> = [];
+  reportAttendance: Array<any> = [];
 
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
@@ -763,6 +766,9 @@ export class ClientComponent implements OnInit {
 
   // tslint:disable-next-line:typedef
   async generateReport() {
+    var str_array=this.reportSiteClient.split(',');
+    this.reportSite=str_array[0];
+    this.reportClient=str_array[1];
     return await this.http.post(environment.funcUrl + 'supervisorReports/', {
       /* designation: applyFilter.designation, */
       date: this.datepickerModel,
@@ -771,9 +777,29 @@ export class ClientComponent implements OnInit {
     }).toPromise();
   }
     
-  raiseReport(){
+  raiseReport():void{
+      this.loader.pageLoader = true;
       this.generateReport().then((data)=>{
-        this.showToaster(405);
+        this.showToaster(405);   
+        this.loader.pageLoader = false;
       })
+  }
+
+  getReport():void{
+    this.loader.pageLoader = true;
+    this.db.collection('reports').valueChanges().subscribe((det)=>{
+        // @ts-ignore
+        this.reportData = det;
+        for (let i=0;i<this.reportData.length;i++) {
+            this.reportData[i].attendance.filter((item:any)=>{
+                this.reportAttendance.push({
+                    time:item.time,
+                    status:item.status,
+                    name:this.reportData[i].name
+                })
+            });
+        }
+       console.log(this.reportAttendance);
+    })
   }
 }

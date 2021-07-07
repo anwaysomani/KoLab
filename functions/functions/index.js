@@ -226,58 +226,64 @@ module.exports.signOutAllEmployees = functions.https.onRequest((req, res) => {
 module.exports.supervisorReports = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
     let employee = {};
-	let sites =[];
+    let sites = [];
+    var allEmployees = [];
     admin
       .firestore()
       .collection("users")
       .get()
       .then((data) => {
-        var allEmployees = [];
+        /* var allEmployees = []; */
         // eslint-disable-next-line guard-for-in
         for (const i in data.docs) {
           var emp = data.docs[i].data();
           employee = emp.attendance.filter((item) => {
             return (
               item.date == req.body.date &&
-              item.site.site == req.body.site.site &&
-              item.site.client == req.body.site.client
+              item.site.site == req.body.site &&
+              item.site.client == req.body.client
             );
+          });
+          let clientsCollection = admin.firestore().collection("clients");
+          clientsCollection.get().then((client) => {
+            for (const j in client.docs) {
+              sites = client.docs[j].data().sites.filter((site) => {
+                return site;
+              });
+            }
+          });
+          var contractors = sites.filter((data) => {
+            return data.contractors;
+          });
+          var visitors = sites.filter((data) => {
+            return data.visitors;
           });
           if (employee.length > 0) {
             allEmployees.push({
               name: emp.name,
               attendance: employee,
               designation: emp.designation,
+              contractors: contractors,
+              visitors: visitors,
             });
           }
         }
-		let clientsCollection = admin.firestore().collection("clients");
-		clientsCollection.get().then(client=>{
-			for (const j in client.docs) {
-				sites = client.docs[j].data().sites.filter(site=>{
-					return site;
-				});
-			}
-		})
+
         let reportsCollection = admin.firestore().collection("reports");
         reportsCollection.add({
-          siteName: req.body.site.site,
+          siteName: req.body.site,
           date: req.body.date,
-          clientName: req.body.site.client,
+          clientName: req.body.client,
           reportType: "A",
           data: {
-            employee: allEmployees.filter(data=>{
-                return data.designation=='Employee';
+            employee: allEmployees.filter((data) => {
+              return data.designation == "Employee";
             }),
-            supervisor: allEmployees.filter(data=>{
-                return data.designation=='Supervisor';
+            supervisor: allEmployees.filter((data) => {
+              return data.designation == "Supervisor";
             }),
-            contractor: sites.filter(data=>{
-                return data.contractors;
-            }),
-            visitor: sites.filter(data=>{
-                return data.visitors;
-            }),
+            contractor: contractors,
+            visitor: visitors,
             workProgress: [],
             material: [],
           },
