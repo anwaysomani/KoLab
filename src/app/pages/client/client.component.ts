@@ -111,14 +111,14 @@ export class ClientComponent implements OnInit {
   uid = '';
   datepickerModel = 1;
   mousing = false;
-  clientSiteList:Array<any> = [];
-  reportClient ='';
-  reportSite ='';
-  reportSiteClient ='';
+  clientSiteList: Array<any> = [];
+  reportClient = '';
+  reportSite = '';
+  reportSiteClient = '';
   reportData: Array<any> = [];
   reportAttendance: Array<any> = [];
   fileDetails: Array<any> = [];
-  showFileManagerView=true;
+  showFileManagerView = true;
   contractorReport: Array<any> = [];
   supervisorReport: Array<any> = [];
   employeeReport: Array<any> = [];
@@ -135,8 +135,9 @@ export class ClientComponent implements OnInit {
   constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
               private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
     this.allow = localStorage.getItem('access') === '1';
-    // @ts-ignore
-    this.uid = JSON.parse(localStorage.getItem('user')).uid;
+    if (JSON.parse(localStorage.getItem('user') as string) !== null) {
+      this.uid = JSON.parse(localStorage.getItem('user') as string).uid;
+    }
     if (!this.allow) {
       router.navigateByUrl('/login');
     }
@@ -144,7 +145,7 @@ export class ClientComponent implements OnInit {
     this.activeUserName = JSON.parse(localStorage.user).name;
     this.loader.pageLoader = true;
     this.currentDate = new Date().getDate();
-    this.datepickerModel= new Date().getDate();
+    this.datepickerModel = new Date().getDate();
     this.db = db;
     this.isEmployees = (router.url === '/employees');
     if (this.isEmployees) {
@@ -175,7 +176,6 @@ export class ClientComponent implements OnInit {
       return ref;
     }).valueChanges().subscribe((det) => {
       this.clientList = det;
-      console.log(det);
       if (this.clientList.length > 0) {
         this.clientList[0].isSelected = true;
         this.selectClientItem(this.clientList[0]);
@@ -379,7 +379,6 @@ export class ClientComponent implements OnInit {
     }).valueChanges().subscribe((det: Array<any>) => {
       this.selectedSiteEmployeeList = det.filter(s => s.designation === 'Employee');
       this.selectedSiteContractorList = det.filter(s => s.designation === 'Supervisor');
-      console.log(this.selectedSiteContractorList);
     }, (err) => {
       console.log(err);
     });
@@ -594,8 +593,8 @@ export class ClientComponent implements OnInit {
       this.toastr.success('Record successfully deleted!.');
     }
     if (status === 405) {
-        this.toastr.warning('Might take some time to generate reports!.');
-      }
+      this.toastr.warning('Might take some time to generate reports!.');
+    }
   }
 
   /* add another popup for employee popup */
@@ -637,16 +636,24 @@ export class ClientComponent implements OnInit {
 
   /* get visitors listing */
   getVisitors(): Array<any> {
-    return this.selectedItem.visitors.filter((item: any) => {
-      return Number(item.date) === Number(this.currentDate);
-    });
+    if (this.selectedItem !== undefined) {
+      return this.selectedItem.visitors.filter((item: any) => {
+        return Number(item.date) === Number(this.currentDate);
+      });
+    } else {
+      return [];
+    }
   }
 
   /* get visitors listing */
   getContractors(): Array<any> {
-    return this.selectedItem.contractors.filter((item: any) => {
-      return Number(item.date) === Number(this.currentDate);
-    });
+    if (this.selectedItem !== undefined) {
+      return this.selectedItem.contractors.filter((item: any) => {
+        return Number(item.date) === Number(this.currentDate);
+      });
+    } else {
+      return [];
+    }
   }
 
   /* construct date for entity */
@@ -749,7 +756,6 @@ export class ClientComponent implements OnInit {
   /* execute regularize */
   executeRegularize(): void {
     this.http.get(environment.funcUrl + 'attendanceRegularize/').toPromise().then((data) => {
-      console.log('Execute regularize');
     });
   }
 
@@ -760,142 +766,147 @@ export class ClientComponent implements OnInit {
     this.updateDynamicDetailSelection(1);
   }
 
-  getClientList():void {
+  getClientList(): void {
     this.db.collection('clients').valueChanges().subscribe((det) => {
-        this.clientSiteList = [];
-        /* tslint:disable-next-line:prefer-for-of */
-        for (let i = 0; i < det.length; i++) {
-          /* tslint:disable-next-line:prefer-for-of */ // @ts-ignore
-          for (let j = 0; j < det[i].sites.length; j++) {
-            this.clientSiteList.push({
-              // @ts-ignore
-              ...det[i].sites[j],
-              // @ts-ignore
-              client: det[i].name
-            });
-          }
+      this.clientSiteList = [];
+      /* tslint:disable-next-line:prefer-for-of */
+      for (let i = 0; i < det.length; i++) {
+        /* tslint:disable-next-line:prefer-for-of */ // @ts-ignore
+        for (let j = 0; j < det[i].sites.length; j++) {
+          this.clientSiteList.push({
+            // @ts-ignore
+            ...det[i].sites[j],
+            // @ts-ignore
+            client: det[i].name
+          });
         }
-        console.log(this.clientSiteList);
-      });
+      }
+    });
   }
+
   /* add user to db */
 
   // tslint:disable-next-line:typedef
   async generateReport() {
-    var str_array=this.reportSiteClient.split(',');
-    this.reportSite=str_array[0];
-    this.reportClient=str_array[1];
+    const str_array = this.reportSiteClient.split(',');
+    this.reportSite = str_array[0];
+    this.reportClient = str_array[1];
     return await this.http.post(environment.funcUrl + 'supervisorReports/', {
       /* designation: applyFilter.designation, */
       date: this.datepickerModel,
-      site:this.reportSite,
-      client:this.reportClient,
+      site: this.reportSite,
+      client: this.reportClient,
     }).toPromise();
   }
-    
-  raiseReport():void{
-      this.loader.pageLoader = true;
-      this.generateReport().then(()=>{
-        this.showToaster(405);   
-        this.loader.pageLoader = false;
-      })
+
+  raiseReport(): void {
+    this.loader.pageLoader = true;
+    this.generateReport().then(() => {
+      this.showToaster(405);
+      this.loader.pageLoader = false;
+    })
       .catch((error) => {
         this.showToaster(error.status);
-        console.error('Error generating reports: ', error);
       });
   }
 
-  getReport(file:Array<any>):void{
+  /* render report */
+  getReport(file: Array<any>): void {
     this.updateDynamicDetailSelection(0);
     this.loader.pageLoader = true;
-    this.db.collection('reports').valueChanges().subscribe((det)=>{
+    this.db.collection('reports').valueChanges().subscribe((det) => {
+      // @ts-ignore
+      this.reportData = det.filter(record => {
         // @ts-ignore
-        this.reportData = det.filter(record => {
-            // @ts-ignore
-            return record.clientName == file.clientName && record.siteName == file.siteName && record.date == file.date;
+        return record.clientName === file.clientName && record.siteName === file.siteName && record.date === file.date;
+      });
+      this.reportData.forEach(item => {
+        this.supervisorReport = item.data.supervisor;
+        this.contractorReport = item.data.contractor;
+        this.employeeReport = item.data.employee;
+        this.visitorReport = item.data.visitor;
+        this.materialReport = item.data.material;
+        this.workProgressReport = item.data.workProgress;
+      });
+
+      /* generate supervisor records */
+      this.supervisorReport.forEach(item => {
+        this.supervisorReport = item.attendance.filter((supervisor: any) => {
+          this.supervisorDetails.push({
+            time: supervisor.time,
+            status: supervisor.status,
+            name: item.name
+          });
         });
-        for (let i=0;i<this.reportData.length;i++) {
-            this.supervisorReport=this.reportData[i].data.supervisor;
-            this.contractorReport=this.reportData[i].data.contractor;
-            this.employeeReport=this.reportData[i].data.employee;
-            this.visitorReport=this.reportData[i].data.visitor;
-            this.materialReport=this.reportData[i].data.material;
-            this.workProgressReport=this.reportData[i].data.workProgress;
+      });
 
-        }
-        /* Generate Supervisor records */
-        for (let i=0;i<this.supervisorReport.length;i++) {
-            this.supervisorReport=this.supervisorReport[i].attendance.filter((supervisor:any)=>{
-                this.supervisorDetails.push({
-                    time:supervisor.time,
-                    status:supervisor.status,
-                    name:this.supervisorReport[i].name
-                })
-            });
-        }
-        /* Generate contractor records */
-        for (let i=0;i<this.contractorReport.length;i++) {
-            this.contractorReport=this.contractorReport[i].attendance.filter((contractor:any)=>{
-                this.contractorDetails.push({
-                    time:contractor.time,
-                    status:contractor.status,
-                    name:this.contractorReport[i].name
-                })
-            });
-        }
-        /* Generate employee records */
-        for (let i=0;i<this.employeeReport.length;i++) {
-            this.employeeReport=this.employeeReport[i].attendance.filter((employee:any)=>{
-                this.employeeDetails.push({
-                    time:employee.time,
-                    status:employee.status,
-                    name:this.employeeReport[i].name
-                })
-            });
-        }
-        /* Generate visitor records */
-        for (let i=0;i<this.visitorReport.length;i++) {
-            this.visitorReport=this.visitorReport[i].attendance.filter((visitor:any)=>{
-                this.visitorDetails.push({
-                    time:visitor.time,
-                    status:visitor.status,
-                    name:this.visitorReport[i].name
-                })
-            });
-        }
-        /* Generate material records */
-        for (let i=0;i<this.materialReport.length;i++) {
-            this.materialReport=this.materialReport[i].attendance.filter((material:any)=>{
-                this.materialDetails.push({
-                    time:material.time,
-                    status:material.status,
-                    name:this.materialReport[i].name
-                })
-            });
-        }
-        /* Generate workProgress records */
-        for (let i=0;i<this.workProgressReport.length;i++) {
-            this.workProgressReport=this.workProgressReport[i].attendance.filter((workProgress:any)=>{
-                this.workProgressDetails.push({
-                    time:workProgress.time,
-                    status:workProgress.status,
-                    name:this.workProgressReport[i].name
-                })
-            });
-        }
-       console.log(this.supervisorReport);
-    })
+      /* generate contractor records */
+      this.contractorReport.forEach(item => {
+        this.contractorReport = item.attendance.filter((contractor: any) => {
+          this.contractorDetails.push({
+            time: contractor.time,
+            status: contractor.status,
+            name: item.name
+          });
+        });
+      });
+
+      /* generate employee records */
+      this.employeeReport.forEach(item => {
+        this.employeeReport = item.attendance.filter((employee: any) => {
+          this.employeeDetails.push({
+            time: employee.time,
+            status: employee.status,
+            name: item.name
+          });
+        });
+      });
+
+      /* generate visitor records */
+      this.visitorReport.forEach(item => {
+        this.visitorReport = item.attendance.filter((visitor: any) => {
+          this.visitorDetails.push({
+            time: visitor.time,
+            status: visitor.status,
+            name: item.name
+          });
+        });
+      });
+
+      /* generate material records */
+      this.materialReport.forEach(item => {
+        this.materialReport = item.attendance.filter((material: any) => {
+          this.materialDetails.push({
+            time: material.time,
+            status: material.status,
+            name: item.name
+          });
+        });
+      });
+
+      /* generate work progress records */
+      this.workProgressReport.forEach(item => {
+        this.workProgressReport = item.attendance.filter((workProgress: any) => {
+          this.workProgressDetails.push({
+            time: workProgress.time,
+            status: workProgress.status,
+            name: item.name
+          });
+        });
+      });
+    });
   }
 
-  getFileManagerDetails():void{
+  /* get file manager list */
+  getFileManagerDetails(): void {
     this.loader.pageLoader = true;
-    this.db.collection('reports').valueChanges().subscribe((det)=>{
-        this.fileDetails = det;
-       console.log(this.fileDetails);
-    })
+    this.db.collection('reports').valueChanges().subscribe((det) => {
+      this.fileDetails = det;
+    });
   }
 
+  /* update selection display for details */
   updateDynamicDetailSelection(state: number): void {
-    this.showFileManagerView = (state === 1); // update view for imageDrilldown
+    this.showFileManagerView = (state === 1); // update view for file
   }
 }
