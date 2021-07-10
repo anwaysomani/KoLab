@@ -299,6 +299,7 @@ export class ClientComponent implements OnInit {
 
 	/* add new site for client */
 	addSite(): void {
+        this.selectedClient.sites.splice(0,this.selectedClient.sites.length);
 		const newSite = {
 			name: this.newSiteData.name,
 			address: this.newSiteData.address,

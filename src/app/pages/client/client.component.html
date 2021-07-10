@@ -271,6 +271,12 @@
         <div class="filter">
           <div class="filter-list">
             <div class="filter-item">
+                <div class="text-black-50 m-b-3 goBack">
+                    <a href="/clients" type="button" class="text-decoration-unset">
+                        <i class="fa fa-arrow-left"></i>&nbsp;
+                        <span class="fs-18">Back to Client</span>
+                    </a>
+                </div>
               <button #addUserModal class="btn btn-outline-dark w-100 m-b-3" data-bs-target="#addUserModal"
                       data-bs-toggle="modal">
                 <i aria-hidden="true" class="fa fa-plus"></i>&nbsp;Add Employee
@@ -471,7 +477,11 @@
                   <label class="form-label" for="client">Client</label>
                 </div>
                 <div class="col-10">
-                  <label>{{selectedClient.name}}</label>
+                  <select class="form-select" [(ngModel)]="selectedClient.name" name="clientName" required>
+                    <option *ngFor="let client of clientList" value="{{client.name}}" [selected]="selectedClient.name==client.name">
+                        {{client.name}}
+                    </option>
+                </select>
                 </div>
               </div>
               <div class="row mb-3">
