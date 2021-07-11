@@ -129,6 +129,12 @@ export class ClientComponent implements OnInit {
 	visitorDetails: Array<any> = [];
 	materialDetails: Array<any> = [];
 	workProgressDetails: Array<any> = [];
+    reportTypeList: Array<any> = [];
+    reportType={
+        displayName:'',
+        enableFields: [],
+    };
+    showReportTypeView = true;
 
 	constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
 							private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
@@ -709,9 +715,24 @@ export class ClientComponent implements OnInit {
 
 	/* get site listing for change site popup */
 	getReportsClientSite(): void {
+        this.reportTypeList=[
+            {
+                displayName:'EmployeeAttendance report',
+                enableFields:['Date']
+            },
+            {
+                displayName:'SingleSite report',
+                enableFields:['Date','Site']
+            },
+            {
+                displayName:'MultipleSite report',
+                enableFields:['Date','SiteList']
+            }
+        ];
+        
 		this.getClientList();
 		this.getFileManagerDetails();
-		this.updateDynamicDetailSelection(1);
+		this.updateDynamicDetailSelection(2);
 	}
 
 	getClientList(): void {
@@ -856,5 +877,15 @@ export class ClientComponent implements OnInit {
 	/* update selection display for details */
 	updateDynamicDetailSelection(state: number): void {
 		this.showFileManagerView = (state === 1); // update view for file
+        this.showReportTypeView = (state === 2); // update view for file
 	}
+
+    selectedReportType():void{
+        for (const report of this.reportTypeList) {
+            if(report.displayName== this.reportType.displayName){
+                this.reportType.enableFields = report.enableFields;
+                this.updateDynamicDetailSelection(1);
+            }
+        }        
+    }
 }

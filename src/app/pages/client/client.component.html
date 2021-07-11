@@ -271,10 +271,12 @@
         <div class="filter">
           <div class="filter-list">
             <div class="filter-item">
-                <div class="text-black-50 m-b-3 goBack">
-                    <a href="/clients" type="button" class="text-decoration-unset">
+                <div class="m-b-3 goBack">
+                    <a href="/clients" type="button" class="text-decoration-unset w-100 text-black-50">
                         <i class="fa fa-arrow-left"></i>&nbsp;
                         <span class="fs-18">Back to Client</span>
+
+                        <span class="pull-right"><i class="fa fa-close"></i>&nbsp;</span>
                     </a>
                 </div>
               <button #addUserModal class="btn btn-outline-dark w-100 m-b-3" data-bs-target="#addUserModal"
@@ -925,38 +927,66 @@
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
       </div>
       <div class="modal-body">
-        <form class="row g-3">
-
-          <!-- select date -->
-          <div class="col-1">
-            <label class="form-control-plaintext text-end" id="reportDate">Date</label>
-          </div>
-          <div class="col-auto p-l-2e">
-            <select (click)="getDateFromMonth()" [(ngModel)]="datepickerModel"
-                    class="border-0 border-2 border-bottom m-r-1e f-s-1 fs-18 bg-transparent form-control-plaintext"
-                    name="datepickerModel">
-              <option *ngFor="let i of getDateFromMonth()" value="{{i}}">{{i}}</option>
-            </select>
-          </div>
-
-          <!-- select site -->
-          <div class="col-1">
-            <label class="form-control-plaintext text-end" id="reportSite">Site</label>
-          </div>
-          <div class="col-auto">
-            <select [(ngModel)]="reportSiteClient"
-                    class="border-0 border-2 border-bottom m-r-1e  bg-transparent form-control-plaintext" name="reportSite">
-              <option *ngFor="let client of clientSiteList" value="{{client.name}},{{client.client}}">{{client.name}}
-                ,{{client.client}}</option>
-            </select>
-          </div>
-          <div class="col-auto p-l-2e">
-            <button (click)="raiseReport()" class="btn btn-outline-dark mb-3" type="submit">Generate Report</button>
-          </div>
+        <form class="">
+            <div class="row g-3" *ngIf="showReportTypeView">
+                <!-- select Report -->
+                <div class="col-1">
+                    <label class="form-control-plaintext text-end" id="reportSite">Report type</label>
+                </div>
+                <div class="col-auto">
+                    <select [(ngModel)]="reportType.displayName"
+                        class="border-0 border-2 border-bottom m-r-1e  bg-transparent form-control-plaintext" name="reportSite">
+                        <option *ngFor="let reportType of reportTypeList" value="{{reportType.displayName}}">
+                            {{reportType.displayName}}</option>
+                    </select>
+                </div>
+                <div class="col-auto p-l-2e">
+                    <button (click)="selectedReportType()" class="btn btn-outline-dark mb-3" type="submit">Proceed
+                        Further</button>
+                </div>
+            </div>
+            <div class="row" *ngIf="!showReportTypeView">
+                <div class="row">
+                <div *ngFor="let fields of reportType.enableFields" class="col-auto">
+                    <!-- select date -->
+                    <div *ngIf="fields=='Date'" class="row">
+                        <div class="col-1">
+                            <label class="form-control-plaintext text-end" id="reportDate">Date</label>
+                        </div>
+                        <div class="col-auto p-l-2e">
+                            <select (click)="getDateFromMonth()" [(ngModel)]="datepickerModel"
+                                class="border-0 border-2 border-bottom m-r-1e f-s-1 fs-18 bg-transparent form-control-plaintext"
+                                name="datepickerModel">
+                                <option *ngFor="let i of getDateFromMonth()" value="{{i}}">{{i}}</option>
+                            </select>
+                        </div>
+                    </div>
+        
+                    <!-- select site -->
+                    <div *ngIf="fields=='Site'" class="row">
+                        <div class="col-1">
+                            <label class="form-control-plaintext text-end" id="reportSite">Site</label>
+                        </div>
+                        <div class="col-auto">
+                            <select [(ngModel)]="reportSiteClient"
+                                class="border-0 border-2 border-bottom m-r-1e  bg-transparent form-control-plaintext"
+                                name="reportSite">
+                                <option *ngFor="let client of clientSiteList" value="{{client.name}},{{client.client}}">
+                                    {{client.name}}
+                                    ,{{client.client}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto p-l-2e">
+                    <button (click)="raiseReport()" class="btn btn-outline-dark mb-3" type="submit">Generate Report</button>
+                </div>
+            </div>
+            </div>
         </form>
 
         <hr>
-        <div *ngIf="showFileManagerView" class="col-12">
+        <div *ngIf="showFileManagerView || showReportTypeView" class="col-12">
 
           <!-- employees -->
           <div class="pull-left p-t-b-0_5">
@@ -989,7 +1019,7 @@
           </div>
         </div>
         <!-- report -->
-        <div *ngIf="!showFileManagerView" class="col-12">
+        <div *ngIf="!showFileManagerView && ! showReportTypeView" class="col-12">
 
           <!-- employees -->
           <div class="pull-left p-t-b-0_5">
