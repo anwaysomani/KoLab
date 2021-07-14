@@ -870,7 +870,7 @@ export class ClientComponent implements OnInit {
 		this.loader.pageLoader = true;
 		this.db.collection('reports').valueChanges().subscribe((det) => {
 			// @ts-ignore
-			this.fileDetails = det.sort((a, b) => a.date.localeCompare(b.date));
+			this.fileDetails = det.sort((a, b) => a.date.toLocaleString().localeCompare(b.date));
 		});
 	}
 
