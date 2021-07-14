@@ -560,6 +560,12 @@ export class ClientComponent implements OnInit {
 		if (status === 405) {
 			this.toastr.warning('Might take some time to generate reports!.');
 		}
+        if (status === 305) {
+			this.toastr.warning('Report already exists!.');
+		}
+        if (status === 412) {
+			this.toastr.warning('Something went wrong!.');
+		}
 	}
 
 	/* add another popup for employee popup */

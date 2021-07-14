@@ -276,7 +276,8 @@ module.exports.supervisorReports = functions.https.onRequest((req, res) => {
 							material: [],
 						},
 					});
-					res.sendStatus(200);
+					/* res.sendStatus(200); */
+                    res.sendStatus(405);
 				})
 				.catch((error) => {
 					res.sendStatus(412);
