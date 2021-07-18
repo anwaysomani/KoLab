@@ -243,12 +243,12 @@
               <div *ngIf="renderImages().length < 1" class="col-4 p-0 mt-2 pull-left">
                 <span>(No Images Uploaded Yet)</span>
               </div>
-              <div *ngIf="renderImages().length > 1">
-                <div *ngFor="let img of renderImages();let i=index" class="col-4 card p-0 mt-2 pull-left">
+              <div *ngIf="renderImages().length > 1" class="image-block">
+                <div *ngFor="let img of renderImages();let i=index" class="col-4 card p-0 mt-2 pull-left image-block-view">
                   <div class="card-body text-center">
                     <a (click)="openImageModel(img,i)" class="arrow-pointer" data-bs-target="#materials-progress-modal"
                        data-bs-toggle="modal">
-                      <img alt="Error occurred in loading image" src={{img.url}}/>
+                      <img alt="Error occurred in loading image" src={{img.url}} class="max-image-height-limit" />
                     </a>
                   </div>
                   <div class="card-footer text-center border-0">
@@ -445,7 +445,7 @@
               </div>
               <div class="col-10">
                 <label class="mb-1 font-header">{{client.name}},{{client.client}}</label>
-                <span class="mb-1 font-body display-block text-black-50">{{client.address}}-{{client.pincode}}</span>
+                <span class="mb-1 font-body display-block text-black-50">{{client.address}}&nbsp;-&nbsp;{{client.pincode}}</span>
               </div>
             </div>
           </li>
@@ -965,7 +965,7 @@
                             </select>
                         </div>
                     </div>
-        
+
                     <!-- select site -->
                     <div *ngIf="fields=='Site'" class="row">
                         <div class="col-1">
