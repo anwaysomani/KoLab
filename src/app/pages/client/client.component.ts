@@ -844,8 +844,8 @@ export class ClientComponent implements OnInit {
 				// @ts-ignore
 				return record.clientName === file.clientName && record.siteName === file.siteName && record.date === file.date;
 			});
-             // @ts-ignore
-            this.currentDate=file.date;
+             /* // @ts-ignore
+            this.currentDate=file.date; */
             this.selectMaterials('Progress');
             this.selectMaterials('Materials');
 			this.reportData.forEach(item => {
