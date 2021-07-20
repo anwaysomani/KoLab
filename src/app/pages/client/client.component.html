@@ -1136,6 +1136,44 @@
               No Data available
             </div>
           </div>
+          <!-- work progress -->
+          <div class="clear-left pull-left p-t-b-0_5">
+            <h3 class="text-black-50 table-caption-rotate">WORK-PROGRESS</h3>
+          </div>
+          <div class="col-11 pull-left min-vh-10 border-top">
+            <div *ngIf="renderWorkImagesReports().length < 1" class="mb-3 g-0 text-center text-black-50">
+                <span>No Data available</span>
+              </div>
+              <div *ngIf="renderWorkImagesReports().length > 1" class="image-block">
+                <div *ngFor="let img of renderWorkImagesReports();let i=index" class="col-3 card p-0 mt-2 image-block-view">
+                  <div class="card-body text-center">
+                    <a>
+                      <img alt="Error occurred in loading image" src={{img.url}} class="max-image-height-limit" />
+                    </a>
+                  </div>
+                </div>
+              </div>          
+          </div>
+
+          <!-- Material -->
+          <div class="clear-left pull-left p-t-b-0_5">
+            <h3 class="text-black-50 table-caption-rotate">MATERIAL-PROGRESS</h3>
+          </div>
+          <div class="col-11 pull-left min-vh-10 border-top">
+            <div *ngIf="renderMaterialImagesReports().length < 1" class="mb-3 g-0 text-center text-black-50">
+                <span>No Data available</span>
+              </div>
+              <div *ngIf="renderMaterialImagesReports().length > 1" class="image-block">
+                <div *ngFor="let img of renderMaterialImagesReports();let i=index" class="col-3 card p-0 mt-2 image-block-view">
+                  <div class="card-body text-center">
+                    <a>
+                      <img alt="Error occurred in loading image" src={{img.url}} class="max-image-height-limit" />
+                    </a>
+                  </div>
+                </div>
+              </div>          
+          </div>
+
         </div>
       </div>
     </div>

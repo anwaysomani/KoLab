@@ -142,6 +142,8 @@ export class ClientComponent implements OnInit {
 		designation: 'N'
 	};
 	modifyUserObj: any;
+    materialImageList: Array<any> = [];
+    workProgressImageList: Array<any> = [];
 
 	constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
 							      private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
@@ -419,6 +421,8 @@ export class ClientComponent implements OnInit {
 		this.loader.addClientLoader = true;
 		const filePath = this.selectedItem.name + ', ' + this.selectedClient.name;
 		this.allImageListing = [];
+        this.materialImageList = [];
+        this.workProgressImageList = [];
 		this.storage.ref(`${filePath}/` + (toFetchVal ? 'material' : 'progress')).listAll().toPromise()
 			.then((ref) => {
 				for (const i of ref.items) {
@@ -434,6 +438,13 @@ export class ClientComponent implements OnInit {
 										url: varEntity,
 										date: det.timeCreated
 									});
+                                    toFetchVal ? this.materialImageList.push({
+                                        url: varEntity,
+                                        date: det.timeCreated
+                                    }) : this.workProgressImageList.push({
+                                        url: varEntity,
+                                        date: det.timeCreated
+                                    });
 								}
 							} else {
 								// @ts-ignore
@@ -441,10 +452,19 @@ export class ClientComponent implements OnInit {
 									url: varEntity,
 									date: det.timeCreated
 								});
+                                toFetchVal ? this.materialImageList.push({
+                                    url: varEntity,
+                                    date: det.timeCreated
+                                }) : this.workProgressImageList.push({
+                                    url: varEntity,
+                                    date: det.timeCreated
+                                });
 							}
+                            
 						});
 					});
 				}
+                toFetchVal ? this.materialImageList = [...this.allImageListing] : this.workProgressImageList = [...this.allImageListing];
 				this.loader.addClientLoader = false;
 			});
 	}
@@ -452,6 +472,16 @@ export class ClientComponent implements OnInit {
 	/* render images to widget-04 */
 	renderImages(): Array<any> {
 		return this.allImageListing;
+	}
+
+    /* render images to widget-04 */
+	renderMaterialImagesReports(): Array<any> {
+		return this.materialImageList;
+	}
+
+    /* render images to widget-04 */
+	renderWorkImagesReports(): Array<any> {
+		return this.workProgressImageList;
 	}
 
 	/* get default display image on site window */
@@ -814,6 +844,10 @@ export class ClientComponent implements OnInit {
 				// @ts-ignore
 				return record.clientName === file.clientName && record.siteName === file.siteName && record.date === file.date;
 			});
+             // @ts-ignore
+            this.currentDate=file.date;
+            this.selectMaterials('Progress');
+            this.selectMaterials('Materials');
 			this.reportData.forEach(item => {
 				this.supervisorReport = item.data.supervisor;
 				this.contractorReport = item.data.contractor;
