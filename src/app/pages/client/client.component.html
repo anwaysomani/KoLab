@@ -7,11 +7,11 @@
         <div class="nav-layout">
           <nav [ngClass]="{'open': mousing}" class="menu bg-dark" id="menu">
             <div class="actionsBar">
-              <div>
+              <div class="brandNav">
                 <button (click)="openNavigationBar()" id="menuBtn" type="button">
                   <i class="fa fa-bars"></i>
                 </button>
-                <h3 [ngClass]="{'open2': mousing}" class="menuText p-t-0_3">{{brand}}</h3>
+                <h5 [ngClass]="{'open2': mousing}" class="menuText p-t-0_3">{{brand}}</h5>
               </div>
             </div>
             <ul class="optionsBar">
@@ -34,19 +34,19 @@
                 <h5>ACTIONS</h5>
               </li>
               <li class="menuItem">
-                <a (click)="executeRegularize()" class="menuOption">
+                <a (click)="executeRegularize()" class="menuOption arrow-pointer">
                   <i class="fa fa-clock-o"></i>
                   <h5 [ngClass]="{'open2': mousing}" class="menuText menu-item-text">Run Regularize</h5>
                 </a>
               </li>
               <li class="menuItem">
-                <a #addClientModal class="menuOption" data-bs-target="#addClientModal" data-bs-toggle="modal">
+                <a #addClientModal class="menuOption arrow-pointer" data-bs-target="#addClientModal" data-bs-toggle="modal">
                   <i class="fa fa-plus-square"></i>
                   <h5 [ngClass]="{'open2': mousing}" class="menuText menu-item-text">Add Client</h5>
                 </a>
               </li>
               <li class="menuItem">
-                <a #siteReportModal (click)="getReportsClientSite()" class="menuOption" data-bs-target="#siteReportModal"
+                <a #siteReportModal (click)="getReportsClientSite()" class="menuOption arrow-pointer" data-bs-target="#siteReportModal"
                    data-bs-toggle="modal">
                   <i class="fa fa-file-text-o"></i>
                   <h5 [ngClass]="{'open2': mousing}" class="menuText menu-item-text">Site Report</h5>
@@ -55,7 +55,7 @@
             </ul>
             <div class="menuUser">
               <a href="#">
-                <h5 [ngClass]="{'open2': mousing}" class="Username menuText">{{activeUserName}}</h5>
+                <h5 [ngClass]="{'open2': mousing}" class="Username menuText p-l-1e">{{activeUserName}}</h5>
                 <p class="menuText"><i class="fas fa-chevron-right"></i></p>
               </a>
             </div>
