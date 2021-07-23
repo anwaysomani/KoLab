@@ -142,11 +142,12 @@ export class ClientComponent implements OnInit {
 		designation: 'N'
 	};
 	modifyUserObj: any;
-    materialImageList: Array<any> = [];
-    workProgressImageList: Array<any> = [];
+	materialImageList: Array<any> = [];
+	workProgressImageList: Array<any> = [];
+	weatherKey = null;
 
 	constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
-							      private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
+							private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
 		this.allow = localStorage.getItem('access') === '1';
 		if (JSON.parse(localStorage.getItem('user') as string) !== null) {
 			this.uid = JSON.parse(localStorage.getItem('user') as string).uid;
@@ -193,6 +194,7 @@ export class ClientComponent implements OnInit {
 				this.clientList[0].isSelected = true;
 				this.selectClientItem(this.clientList[0]);
 				this.selectedItem = this.clientList[0].sites[0];
+				this.getCurrentWeather(this.selectedItem.pincode);
 			}
 			this.loader.pageLoader = false;
 			this.onSelect(this.selectedItem, this.selectedClient);
@@ -232,6 +234,8 @@ export class ClientComponent implements OnInit {
 		}
 	}
 
+	/* add user to db */
+
 	/* add new user popup add click */
 	addUser(): void {
 		this.loader.addUserLoader = true;
@@ -260,8 +264,6 @@ export class ClientComponent implements OnInit {
 		});
 	}
 
-	/* add user to db */
-
 	// tslint:disable-next-line:typedef
 	async addUserService(mod: Array<string>) {
 		return await this.http.post(environment.funcUrl + 'addUser/', {
@@ -272,6 +274,8 @@ export class ClientComponent implements OnInit {
 			mobile: mod[3],
 		}).toPromise();
 	}
+
+	/* get all users listing */
 
 	/* service for user listing */
 	getUserListing(): void {
@@ -285,8 +289,6 @@ export class ClientComponent implements OnInit {
 			this.loader.pageLoader = false;
 		});
 	}
-
-	/* get all users listing */
 
 	// tslint:disable-next-line:typedef
 	async getAllUsers() {
@@ -384,6 +386,7 @@ export class ClientComponent implements OnInit {
 		this.selectedClient = client;
 		this.sortEmployeeList(item.name);
 		this.renderDisplayImage();
+		this.getCurrentWeather(item.pincode);
 	}
 
 	/* update widget-04 for Material/Progress selection */
@@ -421,8 +424,8 @@ export class ClientComponent implements OnInit {
 		this.loader.addClientLoader = true;
 		const filePath = this.selectedItem.name + ', ' + this.selectedClient.name;
 		this.allImageListing = [];
-        this.materialImageList = [];
-        this.workProgressImageList = [];
+		this.materialImageList = [];
+		this.workProgressImageList = [];
 		this.storage.ref(`${filePath}/` + (toFetchVal ? 'material' : 'progress')).listAll().toPromise()
 			.then((ref) => {
 				for (const i of ref.items) {
@@ -438,13 +441,13 @@ export class ClientComponent implements OnInit {
 										url: varEntity,
 										date: det.timeCreated
 									});
-                                    toFetchVal ? this.materialImageList.push({
-                                        url: varEntity,
-                                        date: det.timeCreated
-                                    }) : this.workProgressImageList.push({
-                                        url: varEntity,
-                                        date: det.timeCreated
-                                    });
+									toFetchVal ? this.materialImageList.push({
+										url: varEntity,
+										date: det.timeCreated
+									}) : this.workProgressImageList.push({
+										url: varEntity,
+										date: det.timeCreated
+									});
 								}
 							} else {
 								// @ts-ignore
@@ -452,19 +455,19 @@ export class ClientComponent implements OnInit {
 									url: varEntity,
 									date: det.timeCreated
 								});
-                                toFetchVal ? this.materialImageList.push({
-                                    url: varEntity,
-                                    date: det.timeCreated
-                                }) : this.workProgressImageList.push({
-                                    url: varEntity,
-                                    date: det.timeCreated
-                                });
+								toFetchVal ? this.materialImageList.push({
+									url: varEntity,
+									date: det.timeCreated
+								}) : this.workProgressImageList.push({
+									url: varEntity,
+									date: det.timeCreated
+								});
 							}
-                            
+
 						});
 					});
 				}
-                toFetchVal ? this.materialImageList = [...this.allImageListing] : this.workProgressImageList = [...this.allImageListing];
+				toFetchVal ? this.materialImageList = [...this.allImageListing] : this.workProgressImageList = [...this.allImageListing];
 				this.loader.addClientLoader = false;
 			});
 	}
@@ -474,12 +477,12 @@ export class ClientComponent implements OnInit {
 		return this.allImageListing;
 	}
 
-    /* render images to widget-04 */
+	/* render images to widget-04 */
 	renderMaterialImagesReports(): Array<any> {
 		return this.materialImageList;
 	}
 
-    /* render images to widget-04 */
+	/* render images to widget-04 */
 	renderWorkImagesReports(): Array<any> {
 		return this.workProgressImageList;
 	}
@@ -791,6 +794,8 @@ export class ClientComponent implements OnInit {
 		this.updateDynamicDetailSelection(2);
 	}
 
+	/* add user to db */
+
 	getClientList(): void {
 		this.db.collection('clients').valueChanges().subscribe((det) => {
 			this.clientSiteList = [];
@@ -808,8 +813,6 @@ export class ClientComponent implements OnInit {
 			}
 		});
 	}
-
-	/* add user to db */
 
 	// tslint:disable-next-line:typedef
 	async generateReport() {
@@ -844,10 +847,10 @@ export class ClientComponent implements OnInit {
 				// @ts-ignore
 				return record.clientName === file.clientName && record.siteName === file.siteName && record.date === file.date;
 			});
-             /* // @ts-ignore
-            this.currentDate=file.date; */
-            this.selectMaterials('Progress');
-            this.selectMaterials('Materials');
+			/* // @ts-ignore
+		 this.currentDate=file.date; */
+			this.selectMaterials('Progress');
+			this.selectMaterials('Materials');
 			this.reportData.forEach(item => {
 				this.supervisorReport = item.data.supervisor;
 				this.contractorReport = item.data.contractor;
@@ -979,5 +982,14 @@ export class ClientComponent implements OnInit {
 			this.tempSelectedEmployees = data;
 		});
 		this.loader.addUserLoader = false;
+	}
+
+	/* get current weather */
+	getCurrentWeather(pincode: string): void {
+		this.weatherKey = null;
+		this.http.get('https://api.openweathermap.org/data/2.5/weather?zip=' + pincode + ',in&appid=' + environment.weatherApiKey).toPromise().then((data) => {
+			// @ts-ignore
+			this.weatherKey = data.weather[0].main;
+		});
 	}
 }

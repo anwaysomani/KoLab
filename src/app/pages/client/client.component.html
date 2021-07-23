@@ -135,6 +135,8 @@
                       name="currentDate">
                 <option *ngFor="let i of getDateFromMonth()" value="{{i}}">{{i}}</option>
               </select>
+							<br>
+							<p *ngIf="weatherKey" class="m-t-1e">Weather: <b>{{weatherKey}}</b></p>
             </div>
           </div>
           <hr>
@@ -1156,7 +1158,7 @@
                     </a>
                   </div>
                 </div>
-              </div>          
+              </div>
           </div>
 
           <!-- Material -->
@@ -1175,7 +1177,7 @@
                     </a>
                   </div>
                 </div>
-              </div>          
+              </div>
           </div>
 
         </div>
