@@ -11,6 +11,7 @@ import {AngularFireDatabase} from '@angular/fire/database';
 import {map} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
 import {NgForm} from '@angular/forms';
+import printJS from 'print-js';
 
 @Component({
 	selector: 'app-client',
@@ -992,4 +993,16 @@ export class ClientComponent implements OnInit {
 			this.weatherKey = data.weather[0].main;
 		});
 	}
+    printReport(): void {
+        printJS({
+            printable: 'reportDetailsSection',
+            type: 'html',
+            ignoreElements:[],
+            targetStyles: ['*'],
+            //header: 'Report Document',
+            showModal: true,
+            documentTitle: 'Print Site Report'
+        })
+    }
+  
 }
