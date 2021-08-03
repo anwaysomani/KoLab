@@ -1,6 +1,6 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const cors = require("cors")({origin: true});
+const cors = require("cors")({ origin: true });
 const nodemailer = require("nodemailer");
 admin.initializeApp();
 
@@ -134,8 +134,8 @@ module.exports.attendanceRegularize = functions.https.onRequest((req, res) => {
 					if (datadocs[i].data().currentStatus === "Sign In") {
 						const missPunchdate =
 							data.docs[i].data().attendance[
-							data.docs[i].data().attendance.length - 1
-								].date;
+								data.docs[i].data().attendance.length - 1
+							].date;
 						if (missPunchdate == currDateTime.getDate()) {
 							const discrepant = true;
 							const isApproved = false;
@@ -194,9 +194,11 @@ module.exports.signOutAllEmployees = functions.https.onRequest((req, res) => {
 					let dx = data.docs[i].data();
 					if (dx.currentStatus === "Sign In") {
 						// eslint-disable-next-line max-len
-						const lastSignInRecordTime = dx.attendance[dx.attendance.length - 1].time.split(":")[0];
+						const lastSignInRecordTime =
+							dx.attendance[dx.attendance.length - 1].time.split(":")[0];
 						const currentTime = new Date().getHours();
-						const calcTime = dx.totalTimeToday + (currentTime - lastSignInRecordTime);
+						const calcTime =
+							dx.totalTimeToday + (currentTime - lastSignInRecordTime);
 						const x = {
 							date: currTime.getDate(),
 							time,
@@ -218,70 +220,185 @@ module.exports.signOutAllEmployees = functions.https.onRequest((req, res) => {
 
 module.exports.supervisorReports = functions.https.onRequest((req, res) => {
 	cors(req, res, () => {
-		admin.firestore().collection("reports").where("siteName", "==", req.body.site)
+		admin
+			.firestore()
+			.collection("reports")
+			.where("siteName", "==", req.body.site)
 			.where("clientName", "==", req.body.client)
-			.where("date", "==", req.body.date).get().then((data) => {
-			if (data.size === 1) {
-				res.status(302);
-				res.send("Report already exists");
-			}
-			let employee = {}, sites = [];
-			var allEmployees = [];
-			admin.firestore().collection("users").get()
-				.then((data) => {
-					for (const i in data.docs) {
-						var emp = data.docs[i].data();
-						employee = emp.attendance.filter((item) => {
-							return (item.date === req.body.date && item.site.site === req.body.site && item.site.client === req.body.client);
-						});
-						let clientsCollection = admin.firestore().collection("clients");
-						clientsCollection.get().then((client) => {
-							for (const j in client.docs) {
-								sites = client.docs[j].data().sites.filter((site) => {
-									return site;
+			.where("date", "==", req.body.date)
+			.get()
+			.then((data) => {
+				if (data.size === 1) {
+					res.status(302);
+					res.send("Report already exists");
+				}
+				let employee = {},sites = [];
+				var allEmployees = [];
+				var contractors = [];
+				var visitors = [];
+
+				admin
+					.firestore()
+					.collection("users")
+					.get()
+					.then((data) => {
+						for (const i in data.docs) {
+							var emp = data.docs[i].data();
+							employee = emp.attendance.filter((item) => {
+								return (
+									item.date === req.body.date &&
+									item.site.site === req.body.site &&
+									item.site.client === req.body.client
+								);
+							});
+							if (employee.length > 0) {
+								allEmployees.push({
+									name: emp.name,
+									attendance: employee,
+									designation: emp.designation,
 								});
 							}
-						});
-						var contractors = sites.filter((data) => {
-							return data.contractors;
-						});
-						var visitors = sites.filter((data) => {
-							return data.visitors;
-						});
-						if (employee.length > 0) {
-							allEmployees.push({
-								name: emp.name,
-								attendance: employee,
-								designation: emp.designation
-							});
 						}
-					}
-
-					let reportsCollection = admin.firestore().collection("reports");
-					reportsCollection.add({
-						siteName: req.body.site,
-						date: req.body.date,
-						clientName: req.body.client,
-						reportType: "A",
-						data: {
-							employee: allEmployees.filter((data) => {
-								return data.designation === "Employee";
-							}),
-							supervisor: allEmployees.filter((data) => {
-								return data.designation === "Supervisor";
-							}),
-							contractor: contractors,
-							visitor: visitors,
-							workProgress: [],
-							material: [],
-						},
+						let clientsCollection = admin
+							.firestore()
+							.collection("clients")
+							.where("name", "==", req.body.client);
+						clientsCollection.get().then((client) => {
+							sites = client.docs[0].data().sites.filter((site) => {
+								return site.name === req.body.site;
+							});
+							contractors = sites[0].contractors.filter((data) => {
+								return data.date == req.body.date;
+							});
+							visitors = sites[0].visitors.filter((data) => {
+								return data.date == req.body.date;
+							});
+							let reportsCollection = admin.firestore().collection("reports");
+							reportsCollection.add({
+								siteName: req.body.site,
+								date: req.body.date,
+								clientName: req.body.client,
+								reportType: "A",
+								data: {
+									employee: allEmployees.filter((data) => {
+                                        console.log("data",data)
+										return data.designation === "Employee";
+									}),
+									supervisor: allEmployees.filter((data) => {
+										return data.designation === "Supervisor";
+									}),
+									contractor: contractors,
+									visitor: visitors,
+									workProgress: [],
+									material: [],
+								},
+							});
+							res.sendStatus(405);
+						});
+					})
+					.catch((error) => {
+						res.sendStatus(412);
+						//return res.send(error.message);
 					});
-					/* res.sendStatus(200); */
-                    res.sendStatus(405);
-				})
-				.catch((error) => {
-					res.sendStatus(412);
-				});
-		})
+			});
+	});
+});
+
+module.exports.attendanceReports = functions.https.onRequest((req, res) => {
+	cors(req, res, () => {
+		admin
+			.firestore()
+			.collection("attenDanceReports")
+			.where("startDate", "==", req.body.startDate)
+			.where("startDate", "==", req.body.endDate)
+			.get()
+			.then((data) => {
+				if (data.size === 1) {
+					res.status(302);
+					res.send("Report already exists");
+				}
+				let employee = {},
+					sites = [];
+				let employeesList = [];
+				let contractors = [];
+				let visitors = [];
+				admin
+					.firestore()
+					.collection("users")
+					.get()
+					.then((data) => {
+						for (const i in data.docs) {
+							var emp = data.docs[i].data();
+							employee = emp.attendance.filter((item) => {
+								return (
+									item.date >= parseInt(req.body.startDate) &&
+									item.date <= parseInt(req.body.endDate)
+								);
+							});
+
+							if (employee.length > 0) {
+								employeesList.push({
+									name: emp.name,
+									attendance: employee,
+									designation: emp.designation,
+								});
+							}
+						}
+
+						let clientsCollection = admin.firestore().collection("clients");
+						clientsCollection.get().then((client) => {
+							for (const i in client.docs) {
+								sites.push(
+									...client.docs[i].data().sites.filter((site) => {
+										return site;
+									})
+								);
+							}
+
+							for (const j in sites) {
+								contractors.push(
+									...sites[j].contractors.filter((item) => {
+										return (
+											item.date >= parseInt(req.body.startDate) &&
+											item.date <= parseInt(req.body.endDate)
+										);
+									})
+								);
+								visitors.push(
+									...sites[j].visitors.filter((item) => {
+										return (
+											item.date >= parseInt(req.body.startDate) &&
+											item.date <= parseInt(req.body.endDate)
+										);
+									})
+								);
+							}
+							let attendanceReportsCollection = admin
+								.firestore()
+								.collection("attendanceReport");
+							attendanceReportsCollection.add({
+								startDate: req.body.startDate,
+								endDate: req.body.endDate,
+								reportType: "B",
+								data: {
+									employee: employeesList.filter((data) => {
+										console.log("data", data);
+										return data.designation === "Employee";
+									}),
+									supervisor: employeesList.filter((data) => {
+										return data.designation === "Supervisor";
+									}),
+									contractor: contractors,
+									visitor: visitors,
+								},
+							});
+							res.sendStatus(405);
+						});
+					})
+					.catch((error) => {
+						console.log(error);
+						res.sendStatus(412);
+					});
+			});
 	});
 });

@@ -110,6 +110,8 @@ export class ClientComponent implements OnInit {
 	selectedRegularizeRecords: any;
 	uid = '';
 	datepickerModel = 1;
+    startDate = 1;
+    endDate = 1;
 	mousing = false;
 	clientSiteList: Array<any> = [];
 	reportClient = '';
@@ -778,7 +780,7 @@ export class ClientComponent implements OnInit {
 		this.reportTypeList = [
 			{
 				displayName: 'EmployeeAttendance report',
-				enableFields: ['Date']
+				enableFields: ['StartDate','EndDate']
 			},
 			{
 				displayName: 'SingleSite report',
@@ -828,14 +830,31 @@ export class ClientComponent implements OnInit {
 		}).toPromise();
 	}
 
+    async generateAttendanceReport() {
+		return await this.http.post(environment.funcUrl + 'attendanceReports/', {
+			startDate: this.startDate,
+			endDate: this.endDate,
+		}).toPromise();
+	}
+
 	raiseReport(): void {
 		this.loader.pageLoader = true;
-		this.generateReport().then(() => {
-			this.showToaster(405);
-			this.loader.pageLoader = false;
-		}).catch((error) => {
-			this.showToaster(error.status);
-		});
+        if(this.reportType.displayName==='EmployeeAttendance report'){
+            this.generateAttendanceReport().then(()=>{
+                this.showToaster(405);
+			    this.loader.pageLoader = false;
+            }).catch((error)=>{
+                this.showToaster(error.status);
+            });
+        }
+        else if(this.reportType.displayName==='SingleSite report'){
+            this.generateReport().then(() => {
+                this.showToaster(405);
+                this.loader.pageLoader = false;
+            }).catch((error) => {
+                this.showToaster(error.status);
+            });
+        }
 	}
 
 	/* render report */
@@ -873,14 +892,13 @@ export class ClientComponent implements OnInit {
 			});
 
 			/* generate contractor records */
-			this.contractorReport.forEach(item => {
-				this.contractorReport = item.attendance.filter((contractor: any) => {
+			this.contractorReport.forEach(item => {				
 					this.contractorDetails.push({
-						time: contractor.time,
-						status: contractor.status,
+						signInTime: item.signInTime,
+                        signOutTime: item.signOutTime,
+						status: item.status,
 						name: item.name
-					});
-				});
+					});				
 			});
 
 			/* generate employee records */
@@ -895,14 +913,13 @@ export class ClientComponent implements OnInit {
 			});
 
 			/* generate visitor records */
-			this.visitorReport.forEach(item => {
-				this.visitorReport = item.attendance.filter((visitor: any) => {
+			this.visitorReport.forEach(item => {				
 					this.visitorDetails.push({
-						time: visitor.time,
-						status: visitor.status,
+						signInTime: item.signInTime,
+                        signOutTime: item.signOutTime,
+						status: item.status,
 						name: item.name
-					});
-				});
+					});				
 			});
 
 			/* generate material records */
