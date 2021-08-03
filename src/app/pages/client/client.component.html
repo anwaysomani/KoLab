@@ -945,7 +945,7 @@
                 </div>
                 <div class="col-auto">
                     <select [(ngModel)]="reportType.displayName"
-                        class="border-0 border-2 border-bottom m-r-1e  bg-transparent form-control-plaintext" name="reportSite">
+                        class="border-0 border-2 border-bottom m-r-1e  bg-transparent form-control-plaintext" name="reportSite" (change)="selectReportTypeFileManager($event)">
                         <option *ngFor="let reportType of reportTypeList" value="{{reportType.displayName}}">
                             {{reportType.displayName}}</option>
                     </select>
@@ -1026,36 +1026,66 @@
 
         <hr>
         <div *ngIf="showFileManagerView || showReportTypeView" class="col-12">
-
-          <!-- employees -->
-          <div class="pull-left p-t-b-0_5">
-            <h3 class="text-black-50 table-caption-rotate">File Manager</h3>
-          </div>
-          <div class="col-11 pull-left">
-            <table class="table table-striped table-hover">
-              <thead>
-              <tr>
-                <th scope="col"></th>
-                <th scope="col">Site Name</th>
-                <th scope="col">Client Name</th>
-                <th scope="col">Date</th>
-              </tr>
-              </thead>
-              <tbody *ngIf="fileDetails.length>0">
-              <tr (click)="getReport(file)" *ngFor="let file of fileDetails;let z = index">
-                <th scope="row">
-                  <i aria-hidden="true" class="fa fa-file-text"></i>
-                </th>
-                <td>{{file.siteName}}</td>
-                <td>{{file.clientName}}</td>
-                <td>{{file.date}}</td>
-              </tr>
-              </tbody>
-              <tbody *ngIf="fileDetails.length<1">
-              No data available
-              </tbody>
-            </table>
-          </div>
+            <div *ngIf="reportType.displayName!=='EmployeeAttendance report'">
+                <!-- employees -->
+                <div class="pull-left p-t-b-0_5">
+                    <h3 class="text-black-50 table-caption-rotate">File Manager</h3>
+                </div>
+                <div class="col-11 pull-left">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Site Name</th>
+                                <th scope="col">Client Name</th>
+                                <th scope="col">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="fileDetails.length>0">
+                            <tr (click)="getReport(file)" *ngFor="let file of fileDetails;let z = index">
+                                <th scope="row">
+                                    <i aria-hidden="true" class="fa fa-file-text"></i>
+                                </th>
+                                <td>{{file.siteName}}</td>
+                                <td>{{file.clientName}}</td>
+                                <td>{{file.date}}</td>
+                            </tr>
+                        </tbody>
+                        <tbody *ngIf="fileDetails.length<1">
+                            No data available
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div *ngIf="reportType.displayName==='EmployeeAttendance report'">
+                <!-- employees -->
+                <div class="pull-left p-t-b-0_5">
+                    <h3 class="text-black-50 table-caption-rotate">File Manager</h3>
+                </div>
+                <div class="col-11 pull-left">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Start Date</th>
+                                <th scope="col">End Date</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="attendanceFileDetails.length>0">
+                            <tr (click)="getAttendanceReport(file)" *ngFor="let file of attendanceFileDetails;let z = index">
+                                <th scope="row">
+                                    <i aria-hidden="true" class="fa fa-file-text"></i>
+                                </th>
+                                <td>{{file.startDate}}</td>
+                                <td>{{file.endDate}}</td>
+                            </tr>
+                        </tbody>
+                        <tbody *ngIf="attendanceFileDetails.length<1">
+                            No data available
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <!-- report -->
         <div *ngIf="!showFileManagerView && ! showReportTypeView" class="col-12" id="reportDetailsSection">
@@ -1172,6 +1202,7 @@
             </div>
           </div>
           <!-- work progress -->
+          <div *ngIf="reportType.displayName==='SingleSite report'">
           <div class="clear-left p-t-b-0_5">
             <h3 class="text-black-50 ">WORK-PROGRESS</h3>
           </div>
@@ -1189,8 +1220,10 @@
                 </div>
               </div>
           </div>
+        </div>
 
           <!-- Material -->
+          <div *ngIf="reportType.displayName==='SingleSite report'">
           <div class="clear-left p-t-b-0_5">
             <h3 class="text-black-50 ">MATERIAL-PROGRESS</h3>
           </div>
@@ -1208,7 +1241,7 @@
                 </div>
               </div>
           </div>
-
+        </div>
         </div>
       </div>
     </div>

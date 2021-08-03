@@ -119,6 +119,7 @@ export class ClientComponent implements OnInit {
 	reportSiteClient = '';
 	reportData: Array<any> = [];
 	fileDetails: Array<any> = [];
+    attendanceFileDetails: Array<any> = [];
 	showFileManagerView = true;
 	contractorReport: Array<any> = [];
 	supervisorReport: Array<any> = [];
@@ -946,6 +947,66 @@ export class ClientComponent implements OnInit {
 		});
 	}
 
+    /* render attendance report */
+	getAttendanceReport(file: Array<any>): void {
+		this.updateDynamicDetailSelection(0);
+		this.loader.pageLoader = true;
+		this.db.collection('attendanceReport').valueChanges().subscribe((det) => {
+			// @ts-ignore
+			this.reportData = det.filter(record => {
+				// @ts-ignore
+				return record.clientName === file.clientName && record.siteName === file.siteName && record.date === file.date;
+			});
+			this.reportData.forEach(item => {
+				this.supervisorReport = item.data.supervisor;
+				this.contractorReport = item.data.contractor;
+				this.employeeReport = item.data.employee;
+				this.visitorReport = item.data.visitor;
+			});
+             /* generate supervisor records */
+			this.supervisorReport.forEach(item => {
+				this.supervisorReport = item.attendance.filter((supervisor: any) => {
+					this.supervisorDetails.push({
+						time: supervisor.time,
+						status: supervisor.status,
+						name: item.name
+					});
+				});
+			});
+
+			/* generate contractor records */
+			this.contractorReport.forEach(item => {				
+					this.contractorDetails.push({
+						signInTime: item.signInTime,
+                        signOutTime: item.signOutTime,
+						status: item.status,
+						name: item.name
+					});				
+			});
+
+			/* generate employee records */
+			this.employeeReport.forEach(item => {
+				this.employeeReport = item.attendance.filter((employee: any) => {
+					this.employeeDetails.push({
+						time: employee.time,
+						status: employee.status,
+						name: item.name
+					});
+				});
+			});
+
+			/* generate visitor records */
+			this.visitorReport.forEach(item => {				
+					this.visitorDetails.push({
+						signInTime: item.signInTime,
+                        signOutTime: item.signOutTime,
+						status: item.status,
+						name: item.name
+					});				
+			});
+		});
+	}
+
 	/* get file manager list */
 	getFileManagerDetails(): void {
 		this.loader.pageLoader = true;
@@ -954,6 +1015,25 @@ export class ClientComponent implements OnInit {
 			this.fileDetails = det.sort((a, b) => a.date.toLocaleString().localeCompare(b.date));
 		});
 	}
+
+    /* get file manager list */
+	getFileManagerAttendanceDetails(): void {
+		this.loader.pageLoader = true;
+		this.db.collection('attendanceReport').valueChanges().subscribe((det) => {
+			// @ts-ignore
+			this.attendanceFileDetails = det.sort((a, b) => a.date.toLocaleString().localeCompare(b.date));
+		});
+	}
+
+    selectReportTypeFileManager(event:any):void {
+        const eventValue = event.target.value;
+        if(eventValue==='EmployeeAttendance report'){
+            this.getFileManagerAttendanceDetails();
+        }
+        else{
+            this.getFileManagerDetails();
+        }
+    }
 
 	/* update selection display for details */
 	updateDynamicDetailSelection(state: number): void {
