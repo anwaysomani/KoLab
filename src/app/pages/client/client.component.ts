@@ -11,6 +11,7 @@ import {AngularFireDatabase} from '@angular/fire/database';
 import {map} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
 import {NgForm} from '@angular/forms';
+import printJS from 'print-js';
 
 @Component({
 	selector: 'app-client',
@@ -109,6 +110,8 @@ export class ClientComponent implements OnInit {
 	selectedRegularizeRecords: any;
 	uid = '';
 	datepickerModel = 1;
+    startDate = 1;
+    endDate = 1;
 	mousing = false;
 	clientSiteList: Array<any> = [];
 	reportClient = '';
@@ -116,6 +119,7 @@ export class ClientComponent implements OnInit {
 	reportSiteClient = '';
 	reportData: Array<any> = [];
 	fileDetails: Array<any> = [];
+    attendanceFileDetails: Array<any> = [];
 	showFileManagerView = true;
 	contractorReport: Array<any> = [];
 	supervisorReport: Array<any> = [];
@@ -777,7 +781,7 @@ export class ClientComponent implements OnInit {
 		this.reportTypeList = [
 			{
 				displayName: 'EmployeeAttendance report',
-				enableFields: ['Date']
+				enableFields: ['StartDate','EndDate']
 			},
 			{
 				displayName: 'SingleSite report',
@@ -827,14 +831,31 @@ export class ClientComponent implements OnInit {
 		}).toPromise();
 	}
 
+    async generateAttendanceReport() {
+		return await this.http.post(environment.funcUrl + 'attendanceReports/', {
+			startDate: this.startDate,
+			endDate: this.endDate,
+		}).toPromise();
+	}
+
 	raiseReport(): void {
 		this.loader.pageLoader = true;
-		this.generateReport().then(() => {
-			this.showToaster(405);
-			this.loader.pageLoader = false;
-		}).catch((error) => {
-			this.showToaster(error.status);
-		});
+        if(this.reportType.displayName==='EmployeeAttendance report'){
+            this.generateAttendanceReport().then(()=>{
+                this.showToaster(405);
+			    this.loader.pageLoader = false;
+            }).catch((error)=>{
+                this.showToaster(error.status);
+            });
+        }
+        else if(this.reportType.displayName==='SingleSite report'){
+            this.generateReport().then(() => {
+                this.showToaster(405);
+                this.loader.pageLoader = false;
+            }).catch((error) => {
+                this.showToaster(error.status);
+            });
+        }
 	}
 
 	/* render report */
@@ -872,14 +893,13 @@ export class ClientComponent implements OnInit {
 			});
 
 			/* generate contractor records */
-			this.contractorReport.forEach(item => {
-				this.contractorReport = item.attendance.filter((contractor: any) => {
+			this.contractorReport.forEach(item => {				
 					this.contractorDetails.push({
-						time: contractor.time,
-						status: contractor.status,
+						signInTime: item.signInTime,
+                        signOutTime: item.signOutTime,
+						status: item.status,
 						name: item.name
-					});
-				});
+					});				
 			});
 
 			/* generate employee records */
@@ -894,14 +914,13 @@ export class ClientComponent implements OnInit {
 			});
 
 			/* generate visitor records */
-			this.visitorReport.forEach(item => {
-				this.visitorReport = item.attendance.filter((visitor: any) => {
+			this.visitorReport.forEach(item => {				
 					this.visitorDetails.push({
-						time: visitor.time,
-						status: visitor.status,
+						signInTime: item.signInTime,
+                        signOutTime: item.signOutTime,
+						status: item.status,
 						name: item.name
-					});
-				});
+					});				
 			});
 
 			/* generate material records */
@@ -928,6 +947,66 @@ export class ClientComponent implements OnInit {
 		});
 	}
 
+    /* render attendance report */
+	getAttendanceReport(file: Array<any>): void {
+		this.updateDynamicDetailSelection(0);
+		this.loader.pageLoader = true;
+		this.db.collection('attendanceReport').valueChanges().subscribe((det) => {
+			// @ts-ignore
+			this.reportData = det.filter(record => {
+				// @ts-ignore
+				return record.clientName === file.clientName && record.siteName === file.siteName && record.date === file.date;
+			});
+			this.reportData.forEach(item => {
+				this.supervisorReport = item.data.supervisor;
+				this.contractorReport = item.data.contractor;
+				this.employeeReport = item.data.employee;
+				this.visitorReport = item.data.visitor;
+			});
+             /* generate supervisor records */
+			this.supervisorReport.forEach(item => {
+				this.supervisorReport = item.attendance.filter((supervisor: any) => {
+					this.supervisorDetails.push({
+						time: supervisor.time,
+						status: supervisor.status,
+						name: item.name
+					});
+				});
+			});
+
+			/* generate contractor records */
+			this.contractorReport.forEach(item => {				
+					this.contractorDetails.push({
+						signInTime: item.signInTime,
+                        signOutTime: item.signOutTime,
+						status: item.status,
+						name: item.name
+					});				
+			});
+
+			/* generate employee records */
+			this.employeeReport.forEach(item => {
+				this.employeeReport = item.attendance.filter((employee: any) => {
+					this.employeeDetails.push({
+						time: employee.time,
+						status: employee.status,
+						name: item.name
+					});
+				});
+			});
+
+			/* generate visitor records */
+			this.visitorReport.forEach(item => {				
+					this.visitorDetails.push({
+						signInTime: item.signInTime,
+                        signOutTime: item.signOutTime,
+						status: item.status,
+						name: item.name
+					});				
+			});
+		});
+	}
+
 	/* get file manager list */
 	getFileManagerDetails(): void {
 		this.loader.pageLoader = true;
@@ -936,6 +1015,25 @@ export class ClientComponent implements OnInit {
 			this.fileDetails = det.sort((a, b) => a.date.toLocaleString().localeCompare(b.date));
 		});
 	}
+
+    /* get file manager list */
+	getFileManagerAttendanceDetails(): void {
+		this.loader.pageLoader = true;
+		this.db.collection('attendanceReport').valueChanges().subscribe((det) => {
+			// @ts-ignore
+			this.attendanceFileDetails = det.sort((a, b) => a.date.toLocaleString().localeCompare(b.date));
+		});
+	}
+
+    selectReportTypeFileManager(event:any):void {
+        const eventValue = event.target.value;
+        if(eventValue==='EmployeeAttendance report'){
+            this.getFileManagerAttendanceDetails();
+        }
+        else{
+            this.getFileManagerDetails();
+        }
+    }
 
 	/* update selection display for details */
 	updateDynamicDetailSelection(state: number): void {
@@ -992,4 +1090,16 @@ export class ClientComponent implements OnInit {
 			this.weatherKey = data.weather[0].main;
 		});
 	}
+    printReport(): void {
+        printJS({
+            printable: 'reportDetailsSection',
+            type: 'html',
+            ignoreElements:[],
+            targetStyles: ['*'],
+            //header: 'Report Document',
+            showModal: true,
+            documentTitle: 'Print Site Report'
+        })
+    }
+  
 }
