@@ -19,6 +19,7 @@ Thumbs.db
 # project wireframe & designs
 *.xd
 designs
+backup
 
 # cache
 *.cache
