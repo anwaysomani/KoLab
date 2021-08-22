@@ -304,20 +304,70 @@ module.exports.supervisorReports = functions.https.onRequest((req, res) => {
 });
 
 /* generate report for attendance */
-module.exports.generateMonthAttendanceReport = functions.https.onRequest((req, res) => {
-  cors(req, res, () => {
-    admin
-      .firestore()
-      .collection("users")
-      .get()
-      .then((data) => {
-        for (const i in data.docs) {
-          let dx = data.docs[i].data();
-          // you will get an array of objects for attendance(total)
-          // simply attach your logic to that and return as required
-        }
-      });
-  });
-});
-
-
+module.exports.generateMonthAttendanceReport = functions.https.onRequest(
+	(req, res) => {
+		cors(req, res, () => {
+			admin
+				.firestore()
+				.collection("reports")
+				.where("startDate", "==", req.body.startDate)
+				.where("endDate", "==", req.body.endDate)
+				.get()
+				.then((data) => {
+					if (data.size === 1) {
+						res.status(302);
+						res.send("Report already exists");
+					}
+					let employeeList = [];
+					admin
+						.firestore()
+						.collection("users")
+						.get()
+						.then((data) => {
+							for (const i in data.docs) {
+								let dx = data.docs[i].data();
+								// you will get an array of objects for attendance(total)
+								// simply attach your logic to that and return as required
+								let employee = {};
+								if (dx.totalAttendance != undefined) {
+									employee = dx.totalAttendance.filter((item) => {
+										return (
+											item.date >= parseInt(req.body.startDate) &&
+											item.date <= parseInt(req.body.endDate)
+										);
+									});
+								}
+								if (employee.length > 0) {
+									employeeList.push({
+										name: dx.name,
+										totalAttendance: employee,
+										designation: dx.designation,
+									});
+								}
+							}
+							let monthlyAttendanceReport = admin
+								.firestore()
+								.collection("reports");
+							monthlyAttendanceReport.add({
+								startDate: req.body.startDate,
+								endDate: req.body.endDate,
+								reportType: "B",
+								data: {
+									employee: employeeList.filter((data) => {
+										return data.designation === "Employee";
+									}),
+									supervisor: employeeList.filter((data) => {
+										return data.designation === "Supervisor";
+									}),
+								},
+							});
+							res.sendStatus(405);
+						})
+						.catch((error) => {
+							console.log("error", error);
+							res.sendStatus(412);
+						});
+				});
+		});
+	}
+);

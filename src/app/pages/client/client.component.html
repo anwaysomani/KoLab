@@ -929,11 +929,18 @@
      data-backdrop="static" data-keyboard="false" id="siteReportModal" role="dialog" tabindex="-1">
   <div class="modal-dialog modal-fullscreen" role="document">
     <div class="modal-content">
-      <div class="modal-header text-black-50">
+      <div class="modal-header text-black-50" *ngIf="showReportTypeView">
         <a aria-label="Close" data-bs-dismiss="modal" type="button">
           <i class="fa fa-arrow-left"></i>&nbsp;
         </a>
         <h5 class="modal-title" id="siteReport-label">Site Report</h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-header text-black-50" *ngIf="!showReportTypeView" (click)="updateDynamicDetailSelection(2)">
+        <a aria-label="Close" type="button">
+          <i class="fa fa-arrow-left"></i>&nbsp;
+        </a>
+        <h5 class="modal-title" id="siteReport-label">Previous</h5>
         <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
       </div>
       <div class="modal-body">
@@ -953,6 +960,9 @@
                 <div class="col-auto p-l-2e">
                     <button (click)="selectedReportType()" class="btn btn-outline-dark mb-3" type="submit">Proceed
                         Further</button>
+                </div>
+                <div class="col-auto p-l-2e pull-right">
+                    <span style="margin-left: 52rem;">{{reportType.displayName==''?'SingleSite report':reportType.displayName}}</span>
                 </div>
             </div>
             <div class="row" *ngIf="!showReportTypeView">
@@ -1091,6 +1101,7 @@
         <div *ngIf="!showFileManagerView && ! showReportTypeView" class="col-12" id="reportDetailsSection">
 
           <!-- employees -->
+          <div *ngIf="reportType.displayName==='SingleSite report'">
           <div class="p-t-b-0_5">
             <h3 class="text-black-50 ">EMPLOYEES</h3>
           </div>
@@ -1117,8 +1128,9 @@
               No Data available
             </div>
           </div>
-
+          </div>
           <!-- project supervisor -->
+          <div *ngIf="reportType.displayName==='SingleSite report'">
           <div class="p-t-b-0_5">
             <h3 class="text-black-50 ">SUPERVISOR</h3>
           </div>
@@ -1145,8 +1157,10 @@
               No Data available
             </div>
           </div>
+          </div>
 
           <!-- visitors -->
+          <div *ngIf="reportType.displayName==='SingleSite report'">
           <div class="p-t-b-0_5">
             <h3 class="text-black-50 ">VISITORS</h3>
           </div>
@@ -1173,8 +1187,9 @@
               No Data available
             </div>
           </div>
-
+        </div>
           <!-- contractors -->
+          <div *ngIf="reportType.displayName==='SingleSite report'">
           <div class="p-t-b-0_5">
             <h3 class="text-black-50 ">CONTRACTORS</h3>
           </div>
@@ -1201,6 +1216,7 @@
               No Data available
             </div>
           </div>
+        </div>
           <!-- work progress -->
           <div *ngIf="reportType.displayName==='SingleSite report'">
           <div class="clear-left p-t-b-0_5">
@@ -1243,6 +1259,71 @@
           </div>
         </div>
         </div>
+        <div *ngIf="!showFileManagerView && ! showReportTypeView && reportType.displayName==='EmployeeAttendance report'" class="col-12" id="reportDetailsSection">
+
+            <!-- employees -->
+            <div class="p-t-b-0_5">
+              <h3 class="text-black-50 ">EMPLOYEES</h3>
+            </div>
+            <div class="col-12 pull-left min-vh-10">
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Total Time</th>
+                  <th scope="col">Working Hours Status</th>
+                </tr>
+                </thead>
+                <tbody *ngIf="employeeDetails.length>0">
+                <tr *ngFor="let record of employeeDetails; ;let i = index">
+                  <th scope="row">{{i}}</th>
+                  <td>{{record.name}}</td>
+                  <td>{{record.date}}</td>
+                  <td>{{record.totalTime}}</td>
+                  <td *ngIf="record.totalTime >= minimumWorkingHours"><span style="color: green;"><i class="fa fa-check"></i></span></td>
+                  <td *ngIf="record.totalTime < minimumWorkingHours"><span style="color: red;"><i class="fa fa-times"></i></span></td>
+                </tr>
+                </tbody>
+              </table>
+              <div *ngIf="employeeDetails.length<1" class="mb-3 g-0 text-center text-black-50">
+                No Data available
+              </div>
+            </div>
+  
+            <!-- project supervisor -->
+            <div class="p-t-b-0_5">
+              <h3 class="text-black-50 ">SUPERVISOR</h3>
+            </div>
+            <div class="col-12 pull-left min-vh-10">
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Total Time</th>
+                  <th scope="col">Working Hours Status</th>
+                </tr>
+                </thead>
+                <tbody *ngIf="supervisorDetails.length>0">
+                <tr *ngFor="let record of supervisorDetails; let i = index">
+                  <th scope="row">{{i}}</th>
+                  <td>{{record.name}}</td>
+                  <td>{{record.date}}</td>
+                  <td>{{record.totalTime}}</td>
+                  <td *ngIf="record.totalTime >= minimumWorkingHours"><span style="color: green;"><i class="fa fa-check"></i></span></td>
+                  <td *ngIf="record.totalTime < minimumWorkingHours"><span style="color: red;"><i class="fa fa-times"></i></span></td>
+                </tr>
+                </tbody>
+              </table>
+              <div *ngIf="supervisorDetails.length<1" class="mb-3 g-0 text-center text-black-50">
+                No Data available
+              </div>
+            </div>
+            
+          </div>
       </div>
     </div>
   </div>

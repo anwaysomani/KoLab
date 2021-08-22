@@ -24,5 +24,6 @@ export const environment = {
 		srch: 'Employee'
 	}],
 	googleApiKey: 'AIzaSyDk-hbLho-8FLf1Qn_LCx15lTSKFSbTj44',
-	weatherApiKey: '1310075a9f4641ccf729f7cb21278d11'
+	weatherApiKey: '1310075a9f4641ccf729f7cb21278d11',
+    minimumWorkingHours:8,
 };

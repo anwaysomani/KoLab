@@ -149,6 +149,7 @@ export class ClientComponent implements OnInit {
 	materialImageList: Array<any> = [];
 	workProgressImageList: Array<any> = [];
 	weatherKey = null;
+    minimumWorkingHours=environment.minimumWorkingHours;
 
 	constructor(private db: AngularFirestore, private router: Router, private afAuth: AngularFireAuth,
 							private http: HttpClient, private titleService: Title, private storage: AngularFireStorage, private fdb: AngularFireDatabase, private toastr: ToastrService) {
@@ -832,7 +833,7 @@ export class ClientComponent implements OnInit {
 	}
 
     async generateAttendanceReport() {
-		return await this.http.post(environment.funcUrl + 'attendanceReports/', {
+		return await this.http.post(environment.funcUrl + 'generateMonthAttendanceReport/', {
 			startDate: this.startDate,
 			endDate: this.endDate,
 		}).toPromise();
@@ -860,6 +861,7 @@ export class ClientComponent implements OnInit {
 
 	/* render report */
 	getReport(file: Array<any>): void {
+        this.employeeDetails.length=0;
 		this.updateDynamicDetailSelection(0);
 		this.loader.pageLoader = true;
 		this.db.collection('reports').valueChanges().subscribe((det) => {
@@ -949,79 +951,65 @@ export class ClientComponent implements OnInit {
 
     /* render attendance report */
 	getAttendanceReport(file: Array<any>): void {
+        this.employeeDetails.length=0;
 		this.updateDynamicDetailSelection(0);
 		this.loader.pageLoader = true;
-		this.db.collection('attendanceReport').valueChanges().subscribe((det) => {
+		this.db.collection('reports').valueChanges().subscribe((det) => {
 			// @ts-ignore
 			this.reportData = det.filter(record => {
 				// @ts-ignore
-				return record.clientName === file.clientName && record.siteName === file.siteName && record.date === file.date;
+				return record.endDate === file.endDate && record.startDate === file.startDate && record.reportType===file.reportType;
 			});
 			this.reportData.forEach(item => {
 				this.supervisorReport = item.data.supervisor;
-				this.contractorReport = item.data.contractor;
 				this.employeeReport = item.data.employee;
-				this.visitorReport = item.data.visitor;
 			});
              /* generate supervisor records */
 			this.supervisorReport.forEach(item => {
-				this.supervisorReport = item.attendance.filter((supervisor: any) => {
+				this.supervisorReport = item.totalAttendance.filter((totalTime: any) => {
 					this.supervisorDetails.push({
-						time: supervisor.time,
-						status: supervisor.status,
+						date: totalTime.date,
+						totaTime: totalTime.totaTime,
 						name: item.name
 					});
 				});
-			});
-
-			/* generate contractor records */
-			this.contractorReport.forEach(item => {				
-					this.contractorDetails.push({
-						signInTime: item.signInTime,
-                        signOutTime: item.signOutTime,
-						status: item.status,
-						name: item.name
-					});				
 			});
 
 			/* generate employee records */
 			this.employeeReport.forEach(item => {
-				this.employeeReport = item.attendance.filter((employee: any) => {
+				this.employeeReport = item.totalAttendance.filter((totalTime: any) => {
 					this.employeeDetails.push({
-						time: employee.time,
-						status: employee.status,
+						date: totalTime.date,
+						totalTime: totalTime.totalTime,
 						name: item.name
 					});
 				});
 			});
 
-			/* generate visitor records */
-			this.visitorReport.forEach(item => {				
-					this.visitorDetails.push({
-						signInTime: item.signInTime,
-                        signOutTime: item.signOutTime,
-						status: item.status,
-						name: item.name
-					});				
-			});
 		});
 	}
 
 	/* get file manager list */
 	getFileManagerDetails(): void {
 		this.loader.pageLoader = true;
-		this.db.collection('reports').valueChanges().subscribe((det) => {
+		this.db.collection('reports').valueChanges().subscribe((det:any) => {
+            // @ts-ignore
+			this.det = det.filter((item)=>{
+                return item.reportType=='A';
+            });
 			// @ts-ignore
-			this.fileDetails = det.sort((a, b) => a.date.toLocaleString().localeCompare(b.date));
+			this.fileDetails = this.det.sort((a, b) => a.date.toLocaleString().localeCompare(b.date));
 		});
 	}
 
     /* get file manager list */
 	getFileManagerAttendanceDetails(): void {
 		this.loader.pageLoader = true;
-		this.db.collection('attendanceReport').valueChanges().subscribe((det) => {
+		this.db.collection('reports').valueChanges().subscribe((det:any) => {
 			// @ts-ignore
-			this.attendanceFileDetails = det.sort((a, b) => a.date.toLocaleString().localeCompare(b.date));
+			this.attendanceFileDetails = det.filter((item)=>{
+                return item.reportType=='B';
+            });
 		});
 	}
 
